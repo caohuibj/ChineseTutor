@@ -4,7 +4,7 @@ These gates are normative acceptance checks for Issue #2.
 
 ## Gate 1 — Relation semantics are unambiguous
 
-Every edge must read naturally as:
+Every directed edge must read naturally as:
 
 ```text
 FROM relation TO
@@ -14,6 +14,7 @@ Examples:
 
 ```text
 translation requires contextual-word-sense
+memoir-genre-knowledge supports genre-judgment
 translation-five-step strategy_for translation
 reading-event-analysis transfers_to writing-material-selection
 ```
@@ -30,16 +31,16 @@ Reject `A relation A` for every relation type.
 
 ## Gate 3 — Hard prerequisite necessity test
 
-For `FROM requires TO`, ask:
+For `DEPENDENT requires PREREQUISITE`, ask:
 
-> Could a learner who genuinely lacks TO still satisfy the full observable-success semantics of FROM across authentic tasks without accidental guessing or hidden substitution?
+> Could a learner who genuinely lacks PREREQUISITE still satisfy the full observable-success semantics of DEPENDENT across authentic tasks without accidental guessing or hidden substitution?
 
 - yes → edge is too strong; use `supports` or refine target;
 - no → `requires` may be valid.
 
 ---
 
-## Gate 4 — Hard prerequisite applies to whole target semantics
+## Gate 4 — Hard prerequisite applies to whole dependent semantics
 
 Fail:
 
@@ -49,7 +50,7 @@ Fail:
 
 because only some poems require allusion knowledge.
 
-Prefer a narrower target or `supports`.
+Prefer a narrower dependent Ability or a support relation.
 
 ---
 
@@ -78,13 +79,27 @@ A requires B
 B requires C
 ```
 
-Do not automatically author `A requires C`.
+do not automatically author `A requires C`.
 
 Add it only if C is also a direct semantic prerequisite whose explicit edge improves diagnosis.
 
 ---
 
-## Gate 7 — Strategy endpoint types are valid
+## Gate 7 — `supports` direction and non-blocking semantics
+
+Canonical grammar:
+
+```text
+SUPPORT_NODE supports TARGET
+```
+
+A missing support node may influence scaffold/recommendation but cannot make TARGET categorically unavailable.
+
+Fail reversed records whose prose says “B supports A” while storage encodes `A supports B`.
+
+---
+
+## Gate 8 — Strategy endpoint types are valid
 
 `strategy_for` must be:
 
@@ -98,7 +113,7 @@ Fail Strategy→Knowledge, Ability→Ability as `strategy_for`, or TaskType IDs 
 
 ---
 
-## Gate 8 — Strategy is not used as a hard prerequisite target
+## Gate 9 — Strategy is not a hard-prerequisite target
 
 Reject by default:
 
@@ -108,11 +123,11 @@ Ability requires Strategy
 
 A Strategy is usually one valid route, not a semantic prerequisite. Use `strategy_for`.
 
-A Strategy itself may `require` component Knowledge/Abilities necessary to execute the procedure.
+A Strategy itself may `require` component Knowledge/Abilities needed to execute the procedure.
 
 ---
 
-## Gate 9 — `part_of` is derived, not hand-authored
+## Gate 10 — `part_of` is derived, not hand-authored
 
 If:
 
@@ -120,17 +135,17 @@ If:
 child.parent_node_id = parent
 ```
 
-then a graph view may expose:
+then graph views may expose:
 
 ```text
 child part_of parent
 ```
 
-Fail any independently maintained `part_of` record that could diverge from B1 taxonomy.
+Fail independently maintained `part_of` records that could diverge from B1 taxonomy.
 
 ---
 
-## Gate 10 — `contrasts_with` is canonical symmetric pair
+## Gate 11 — `contrasts_with` is one canonical symmetric pair
 
 Requirements:
 
@@ -143,29 +158,30 @@ Fail duplicate `(A,B)` + `(B,A)` records.
 
 ---
 
-## Gate 11 — `transfers_to` is directional, non-equivalent and non-blocking
+## Gate 12 — `transfers_to` is same-type, directional and non-blocking
+
+Allowed in B2:
+
+```text
+Ability -> Ability
+Strategy -> Strategy
+```
 
 Pass:
 
 ```text
-analyze typical event value transfers_to select typical writing material
+analyze typical-event value transfers_to select typical writing material
 ```
 
 Fail if the system interprets transfer as:
 
 - target already mastered;
 - target prerequisite satisfied automatically;
-- source and target are identical semantics.
+- source and target are identical semantics;
+- Strategy→Ability (use `strategy_for`);
+- Knowledge→Ability (usually use `supports`).
 
-If semantics are identical, use one shared LearningNode instead.
-
----
-
-## Gate 12 — `supports` never blocks readiness
-
-A missing support node may influence scaffold/recommendation, but cannot make the target categorically unavailable.
-
-If it must block, re-evaluate whether the relation is truly `requires`.
+If semantics are identical, use one shared LearningNode.
 
 ---
 
@@ -245,18 +261,18 @@ select typical writing material
   requires parse writing prompt constraints
 ```
 
-because the target's own semantics are defined relative to prompt/central constraints.
+because target semantics are defined relative to prompt/central constraints.
 
 ## Scenario D — Genre knowledge
 
 Expected broad relation:
 
 ```text
-judge modern genre from evidence
-  supports memoir genre features
+memoir genre features
+  supports judge modern genre from evidence
 ```
 
-not `requires`, because the broad Ability can be demonstrated on other genres without memoir knowledge. A narrower memoir-specific judgment node could have a hard prerequisite if later needed.
+not `requires`, because the broad Ability can be demonstrated on other genres without memoir knowledge. A narrower memoir-specific judgment node could later have a hard prerequisite.
 
 ## Scenario E — Reading→writing transfer
 
@@ -267,13 +283,13 @@ analyze typical-event value
   transfers_to select typical writing material
 ```
 
-Analysis and production are different nodes but share reusable structural insight.
+Analysis and production are different Abilities but share reusable structural insight.
 
 ---
 
 # B2 draft definition of done
 
-- [x] relation types and directions defined;
+- [x] relation types and natural directions defined;
 - [x] hard vs soft prerequisite rule defined;
 - [x] endpoint-type constraints defined;
 - [x] `part_of` source-of-truth conflict resolved;
@@ -283,5 +299,5 @@ Analysis and production are different nodes but share reusable structural insigh
 - [x] recommendation semantics described without learner-state leakage;
 - [x] current-asset seed edges added;
 - [x] QA gates added;
-- [ ] semantic self-review completed;
+- [x] first semantic self-review corrected support direction and cross-type transfer ambiguity;
 - [ ] stacked PR opened.
