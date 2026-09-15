@@ -1,0 +1,106 @@
+# I1 explicit gap register
+# Every recurring unmapped demand must point to a GitHub issue. No ad-hoc exam template is an accepted fix.
+
+gaps:
+  - gap_id: GAP-REPRESENTATION-TRANSFORMATION
+    category: ability
+    severity: high
+    recurring_evidence:
+      - 2023北京卷 多文本信息转为比较表格
+      - 2026全国II卷 原文转问答式科普摘要
+    issue: 29
+    proposed_resolution: canonicalize cross-representation/discourse transformation Ability
+    architecture_change_required: false
+
+  - gap_id: GAP-RULE-INDUCTION
+    category: ability
+    severity: high
+    recurring_evidence:
+      - 2024北京卷 从材料概括规律并说明复杂性
+      - 2025全国I卷 从材料抽取种植原则
+    issue: 30
+    proposed_resolution: canonicalize rule/principle induction Ability
+    architecture_change_required: false
+
+  - gap_id: GAP-RULE-APPLICATION
+    category: ability
+    severity: high
+    recurring_evidence:
+      - 2025全国I卷 原则迁移到新的牡丹种植方案
+      - 2025全国II卷 用理论评价实际语言表达
+    issue: 30
+    proposed_resolution: canonicalize novel-case rule application Ability distinct from induction
+    architecture_change_required: false
+
+  - gap_id: GAP-EVIDENCE-SUFFICIENCY
+    category: ability
+    severity: critical
+    recurring_evidence:
+      - 2023北京卷 文言不同解释的多证据判断
+      - 2024北京卷 规律复杂性/边界说明
+      - 2025全国II卷 理论评价案例
+      - 2026全国II卷 两个说法合理性评价
+    issue: 31
+    proposed_resolution: canonicalize evidence sufficiency / claim-validity evaluation Ability
+    architecture_change_required: false
+
+  - gap_id: GAP-QUESTION-FORMULATION
+    category: ability
+    severity: high
+    recurring_evidence:
+      - 2025全国I卷 从答案/信息反推合适问题并说明理由
+      - 2026全国I卷 依据新闻设计采访问题并说明理由
+    issue: 32
+    proposed_resolution: canonicalize purpose-driven question formulation Ability
+    architecture_change_required: false
+
+  - gap_id: GAP-CONSTRAINT-SOLUTION-SYNTHESIS
+    category: ability
+    severity: high
+    recurring_evidence:
+      - 2026北京卷 多材料综合形成方案
+      - 2025全国I卷 多原则约束下生成牡丹种植方案
+    issue: 33
+    proposed_resolution: canonicalize multi-constraint solution synthesis Ability
+    architecture_change_required: false
+
+  - gap_id: GAP-AUTHENTIC-HIGHER-ORDER-TASKTYPES
+    category: task_type
+    severity: medium
+    recurring_evidence:
+      - 2026全国I卷 采访问题设计
+      - 2026全国II卷 问答式科普摘要
+      - 2025全国II卷 文学细节微评点
+      - 近年北京/全国微写作与受众目的约束表达
+    issue: 34
+    proposed_resolution: expand stable COM/MRD higher-order TaskType inventory without year-specific types
+    architecture_change_required: false
+
+  - gap_id: GAP-GAOKAO-KNOWLEDGE-POPULATION
+    category: knowledge
+    severity: critical
+    recurring_evidence:
+      - 全国卷规范汉字/新词语境义/平实准确表达
+      - 论证概念与证据评价
+      - 文言词句/文化/制度知识
+      - 诗歌与文学知识
+      - 完整议论/叙事写作知识
+    issue: 35
+    proposed_resolution: populate reusable Knowledge families under B1 schema and B2 relations
+    architecture_change_required: false
+
+  - gap_id: GAP-AUTHENTIC-COMPLEXITY-LADDERS
+    category: material_coverage
+    severity: high
+    recurring_evidence:
+      - current audit has terminal Gaokao exemplars but uneven intermediate authentic coverage per node
+    issue: 36
+    proposed_resolution: build authentic task ladders across D2 complexity and variant diversity for high-value nodes
+    architecture_change_required: false
+
+architecture_gaps: []
+
+architecture_verdict: >-
+  The B1–G1 entity model is expressive enough for all representative demands audited in I1.
+  The remaining failures are graph-population, TaskType-inventory and authentic-material coverage gaps;
+  no new top-level entity type, learner-state axis, hint model or complexity dimension is required by this corpus.

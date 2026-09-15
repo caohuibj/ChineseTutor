@@ -1,0 +1,403 @@
+# I1 representative Gaokao coverage fixtures
+# Paraphrased demand-level fixtures. They are coverage evidence, not a replacement question bank.
+# Exact question numbers are omitted when the current project extraction does not expose them.
+
+source_basis:
+  project_synthesis:
+    title: 高考真题能力证据提取｜2022—2026北京＋2025—2026全国
+    notion_page_id: 3dcd2763-5a38-81ea-ac9b-cf095823958a
+  official_2025_national_analysis:
+    title: 2025教育部教育考试院高考语文试题评析
+    notion_page_id: 3dcd2763-5a38-81a5-a8ae-e2dac519e882
+  official_2026_national_analysis:
+    title: 2026教育部教育考试院高考语文试题评析
+    notion_page_id: 3dcd2763-5a38-812f-85fd-d26d22014092
+  beijing_paper_index:
+    title: 北京卷
+    notion_page_id: 3dbd2763-5a38-81db-a7f7-dd283c13c23a
+
+fixtures:
+  - audit_id: I1-BJ2023-MULTITEXT-TABLE
+    paper: 2023北京卷
+    domain: MRD
+    demand_label: 将多文本中的不同认知模式整理为共享维度下的表格比较
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 多文本比较与结构化呈现
+    knowledge_demands: [比较维度概念, 表格信息组织规则]
+    ability_demands:
+      existing_or_expressible:
+        - 定位并整合跨文本信息
+        - 建立可比维度
+        - 比较异同
+      candidate_gaps:
+        - GAP-REPRESENTATION-TRANSFORMATION
+    mother_strategies:
+      - CN-S-compare-dimension-evidence-significance
+      - CN-S-locate-classify-merge-compress
+    complexity:
+      band: C3
+      vector: {text_load: 2, information_hiddenness: 2, reasoning_depth: 2, material_heterogeneity: 2, knowledge_retrieval_distance: 1, response_openness: 1, expression_load: 2, time_pressure: 2}
+    coverage_status: mapped_with_candidate_node_gap
+    audit_note: 现有比较与整合策略能解释主要过程，但“把文本关系转换成另一种结构表示”应成为可观察的跨任务能力，而非只藏在题型里。
+
+  - audit_id: I1-BJ2024-MULTITEXT-RULE
+    paper: 2024北京卷
+    domain: MRD
+    demand_label: 从多文本概括规律，并说明规律适用时的复杂性/限制
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 规律归纳与边界说明
+    knowledge_demands: [因果条件关系, 规则与例外概念]
+    ability_demands:
+      existing_or_expressible:
+        - 信息整合
+        - 关系分析
+        - 用证据说明结论
+      candidate_gaps:
+        - GAP-RULE-INDUCTION
+        - GAP-EVIDENCE-SUFFICIENCY
+    mother_strategies:
+      - CN-S-locate-classify-merge-compress
+      - CN-S-relation-chain
+      - CN-S-claim-reason-evidence-warrant-boundary
+    complexity:
+      band: C4
+      vector: {text_load: 2, information_hiddenness: 2, reasoning_depth: 3, material_heterogeneity: 2, knowledge_retrieval_distance: 1, response_openness: 2, expression_load: 2, time_pressure: 2}
+    coverage_status: mapped_with_candidate_node_gap
+    audit_note: “概括信息”不足以解释从实例抽象稳定规则并控制边界的操作。
+
+  - audit_id: I1-BJ2026-MULTIMATERIAL-PLAN
+    paper: 2026北京卷
+    domain: MRD
+    demand_label: 综合多则材料形成满足若干条件的方案
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 多材料约束下的方案综合
+    knowledge_demands: [条件关系, 任务约束]
+    ability_demands:
+      existing_or_expressible:
+        - 多材料信息整合
+        - 约束识别
+      candidate_gaps:
+        - GAP-CONSTRAINT-SOLUTION-SYNTHESIS
+    mother_strategies:
+      - CN-S-locate-classify-merge-compress
+      - CN-S-parse-constraints-and-fit
+      - CN-S-relation-chain
+    complexity:
+      band: C4
+      vector: {text_load: 2, information_hiddenness: 2, reasoning_depth: 3, material_heterogeneity: 2, knowledge_retrieval_distance: 1, response_openness: 3, expression_load: 2, time_pressure: 2}
+    coverage_status: mapped_with_candidate_node_gap
+    audit_note: 不是普通概括；需要把多个约束变成一个可执行且自洽的输出。
+
+  - audit_id: I1-BJ2023-CLASSICAL-INTERPRETATION
+    paper: 2023北京卷
+    domain: CLA
+    demand_label: 在不同文言解释之间作判断，并调用多处材料论证
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 解释判断与多证据论证
+    knowledge_demands: [文言词句理解, 篇章观点关系]
+    ability_demands:
+      existing_or_expressible:
+        - 文言解码
+        - 比较不同解释
+        - 证据到结论推理
+      candidate_gaps:
+        - GAP-EVIDENCE-SUFFICIENCY
+    mother_strategies:
+      - CN-S-evidence-explanation-conclusion
+      - CN-S-compare-dimension-evidence-significance
+      - CN-S-claim-reason-evidence-warrant-boundary
+    complexity:
+      band: C4
+      vector: {text_load: 2, information_hiddenness: 3, reasoning_depth: 3, material_heterogeneity: 1, knowledge_retrieval_distance: 2, response_openness: 2, expression_load: 2, time_pressure: 2}
+    coverage_status: mapped_with_candidate_node_gap
+    audit_note: 架构可表达，但需要独立追踪“证据是否足以排除/支持解释”的评价能力。
+
+  - audit_id: I1-BJ2026-LITERARY-EXPRESSION
+    paper: 2026北京卷
+    domain: MRD
+    demand_label: 分析排比/反复式句群的具体表达效果
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 文学词句/句群赏析
+    knowledge_demands: [排比, 反复, 句群节奏与语义推进]
+    ability_demands:
+      existing_or_expressible:
+        - 识别写法
+        - 结合语境解释具体效果
+        - 回扣人物/情感/主旨
+      candidate_gaps: []
+    mother_strategies:
+      - CN-S-textual-appreciation
+      - CN-S-evidence-explanation-conclusion
+    complexity:
+      band: C2
+      vector: {text_load: 1, information_hiddenness: 2, reasoning_depth: 2, material_heterogeneity: 0, knowledge_retrieval_distance: 1, response_openness: 1, expression_load: 1, time_pressure: 2}
+    coverage_status: cleanly_mapped
+    audit_note: G1赏析母策略能覆盖，不需要“排比题模板”。
+
+  - audit_id: I1-BJ2026-LITERARY-ATTITUDE-CHANGE
+    paper: 2026北京卷
+    domain: MRD
+    demand_label: 梳理作者对人物认识/态度的变化过程
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 态度/认识变化轨迹梳理
+    knowledge_demands: [叙事顺序, 转折/因果关系]
+    ability_demands:
+      existing_or_expressible:
+        - 定位关键阶段证据
+        - 按时间/逻辑组织变化
+        - 概括各阶段认识
+      candidate_gaps: []
+    mother_strategies:
+      - CN-S-locate-classify-merge-compress
+      - CN-S-relation-chain
+    complexity:
+      band: C3
+      vector: {text_load: 2, information_hiddenness: 2, reasoning_depth: 2, material_heterogeneity: 1, knowledge_retrieval_distance: 0, response_openness: 1, expression_load: 2, time_pressure: 2}
+    coverage_status: cleanly_mapped
+    audit_note: 可由信息整合+关系链组合表达；暂不创建“态度变化五步法”。
+
+  - audit_id: I1-BJ2026-POETRY-SAME-IMAGE
+    paper: 2026北京卷
+    domain: POE
+    demand_label: 比较同一意象在不同诗歌中的作用与情感
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 诗歌意象比较
+    knowledge_demands: [意象, 诗歌语境, 情景关系]
+    ability_demands:
+      existing_or_expressible:
+        - CN-A-link-poetic-image-to-emotion
+        - 建立共享比较维度
+        - 分别解释意象在各诗中的语境功能
+      candidate_gaps: []
+    mother_strategies:
+      - CN-S-compare-dimension-evidence-significance
+      - CN-S-poetry-evidence-emotion
+      - CN-S-textual-appreciation
+    complexity:
+      band: C3
+      vector: {text_load: 1, information_hiddenness: 2, reasoning_depth: 2, material_heterogeneity: 2, knowledge_retrieval_distance: 2, response_openness: 2, expression_load: 2, time_pressure: 2}
+    coverage_status: cleanly_mapped
+    audit_note: 比较策略+诗歌证据链足够，不应另造“同意象比较模板”。
+
+  - audit_id: I1-NAT2025I-RULE-TO-PEONY
+    paper: 2025全国I卷
+    domain: MRD
+    demand_label: 从材料提取种植原则并迁移到新的牡丹种植方案
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 原则提取与新情境应用
+    knowledge_demands: [条件/原则关系, 方案约束]
+    ability_demands:
+      existing_or_expressible:
+        - 信息提取
+        - 约束识别
+      candidate_gaps:
+        - GAP-RULE-INDUCTION
+        - GAP-RULE-APPLICATION
+        - GAP-CONSTRAINT-SOLUTION-SYNTHESIS
+    mother_strategies:
+      - CN-S-locate-classify-merge-compress
+      - CN-S-relation-chain
+      - CN-S-parse-constraints-and-fit
+    complexity:
+      band: C4
+      vector: {text_load: 2, information_hiddenness: 2, reasoning_depth: 3, material_heterogeneity: 1, knowledge_retrieval_distance: 2, response_openness: 2, expression_load: 2, time_pressure: 2}
+    coverage_status: mapped_with_candidate_node_gap
+    audit_note: 是高价值的“从文本抽原则→新对象应用”能力链，不能归入一般信息概括。
+
+  - audit_id: I1-NAT2025I-REVERSE-QUESTION
+    paper: 2025全国I卷
+    domain: COM
+    demand_label: 从给定答案/信息反推恰当问题，并说明理由
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 反向问题建构
+    knowledge_demands: [问答对应关系, 信息缺口概念]
+    ability_demands:
+      existing_or_expressible:
+        - 理解答案约束
+      candidate_gaps:
+        - GAP-QUESTION-FORMULATION
+    mother_strategies:
+      - CN-S-parse-constraints-and-fit
+      - CN-S-relation-chain
+    complexity:
+      band: C3
+      vector: {text_load: 1, information_hiddenness: 2, reasoning_depth: 3, material_heterogeneity: 0, knowledge_retrieval_distance: 1, response_openness: 2, expression_load: 1, time_pressure: 2}
+    coverage_status: mapped_with_candidate_node_gap
+    audit_note: “会回答问题”与“根据目标生成有效问题”是不同可观察能力。
+
+  - audit_id: I1-NAT2025I-TEXTBOOK-COMPARISON
+    paper: 2025全国I卷
+    domain: META
+    demand_label: 将陌生材料与课内《种树郭橐驼传》建立可解释的比较
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 课内外比较迁移
+    knowledge_demands: [课内作品内容/思想, 比较维度]
+    ability_demands:
+      existing_or_expressible:
+        - 建立比较维度
+        - 调用课内知识到陌生材料
+        - 证据解释
+      candidate_gaps: []
+    mother_strategies:
+      - CN-S-compare-dimension-evidence-significance
+      - CN-S-evidence-explanation-conclusion
+    complexity:
+      band: C4
+      vector: {text_load: 2, information_hiddenness: 2, reasoning_depth: 2, material_heterogeneity: 2, knowledge_retrieval_distance: 3, response_openness: 2, expression_load: 2, time_pressure: 2}
+    coverage_status: cleanly_mapped
+    audit_note: 迁移是Attempt条件/证据，不需要单独“课内外迁移策略”。
+
+  - audit_id: I1-NAT2025II-THEORY-EVALUATION
+    paper: 2025全国II卷
+    domain: META
+    demand_label: 用材料中的理论/原则评价实际语言表达是否成立
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 理论到案例的评价
+    knowledge_demands: [材料理论概念, 评价标准]
+    ability_demands:
+      existing_or_expressible:
+        - 理解理论
+        - 找案例证据
+      candidate_gaps:
+        - GAP-RULE-APPLICATION
+        - GAP-EVIDENCE-SUFFICIENCY
+    mother_strategies:
+      - CN-S-claim-reason-evidence-warrant-boundary
+      - CN-S-evidence-explanation-conclusion
+    complexity:
+      band: C4
+      vector: {text_load: 2, information_hiddenness: 2, reasoning_depth: 3, material_heterogeneity: 1, knowledge_retrieval_distance: 2, response_openness: 2, expression_load: 2, time_pressure: 2}
+    coverage_status: mapped_with_candidate_node_gap
+    audit_note: 需要把“规则应用”和“评价证据充分性”作为可分诊断操作。
+
+  - audit_id: I1-NAT2025II-LITERARY-COMMENTARY
+    paper: 2025全国II卷
+    domain: MRD
+    demand_label: 仿照评点方式对文学细节作简评
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 文学微评点
+    knowledge_demands: [文学细节, 评点表达基本约定]
+    ability_demands:
+      existing_or_expressible:
+        - 抓细节
+        - 解释具体效果/意义
+        - 简洁评价表达
+      candidate_gaps: []
+    mother_strategies:
+      - CN-S-textual-appreciation
+      - CN-S-evidence-explanation-conclusion
+    complexity:
+      band: C3
+      vector: {text_load: 1, information_hiddenness: 2, reasoning_depth: 2, material_heterogeneity: 0, knowledge_retrieval_distance: 1, response_openness: 2, expression_load: 2, time_pressure: 2}
+    coverage_status: mapped_with_tasktype_gap
+    audit_note: 底层能力/策略可表达，但TaskType库需要高阶“文学微评点/评论”环境，而不是新增Strategy。
+
+  - audit_id: I1-NAT2026I-INTERVIEW-DESIGN
+    paper: 2026全国I卷
+    domain: COM
+    demand_label: 依据新闻材料设计采访问题并说明设计理由
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 采访问题设计
+    knowledge_demands: [采访目的, 新闻信息结构, 问题类型]
+    ability_demands:
+      existing_or_expressible:
+        - 识别沟通目标和信息缺口
+        - 结合材料证据
+      candidate_gaps:
+        - GAP-QUESTION-FORMULATION
+    mother_strategies:
+      - CN-S-parse-constraints-and-fit
+      - CN-S-claim-reason-evidence-warrant-boundary
+    complexity:
+      band: C4
+      vector: {text_load: 2, information_hiddenness: 2, reasoning_depth: 3, material_heterogeneity: 1, knowledge_retrieval_distance: 1, response_openness: 3, expression_load: 2, time_pressure: 2}
+    coverage_status: mapped_with_tasktype_gap
+    audit_note: 同时暴露Question formulation Ability和真实交流TaskType供给缺口。
+
+  - audit_id: I1-NAT2026II-QA-SUMMARY
+    paper: 2026全国II卷
+    domain: COM
+    demand_label: 将原文内容转换为问答式科普摘要
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 文体/表示转换摘要
+    knowledge_demands: [科普问答语体, 信息主次]
+    ability_demands:
+      existing_or_expressible:
+        - 信息提取与压缩
+        - 任务约束识别
+      candidate_gaps:
+        - GAP-REPRESENTATION-TRANSFORMATION
+    mother_strategies:
+      - CN-S-locate-classify-merge-compress
+      - CN-S-parse-constraints-and-fit
+    complexity:
+      band: C3
+      vector: {text_load: 2, information_hiddenness: 1, reasoning_depth: 2, material_heterogeneity: 1, knowledge_retrieval_distance: 1, response_openness: 2, expression_load: 2, time_pressure: 2}
+    coverage_status: mapped_with_candidate_node_gap
+    audit_note: 同2023北京表格转换共同支持“表示/文体转换”作为跨TaskType能力。
+
+  - audit_id: I1-NAT2026II-CLAIM-EVALUATION
+    paper: 2026全国II卷
+    domain: META
+    demand_label: 根据材料评价两个说法是否合理并说明理由
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 说法合理性/证据充分性评价
+    knowledge_demands: [主张, 证据, 条件, 边界]
+    ability_demands:
+      existing_or_expressible:
+        - 识别主张与相关证据
+      candidate_gaps:
+        - GAP-EVIDENCE-SUFFICIENCY
+    mother_strategies:
+      - CN-S-claim-reason-evidence-warrant-boundary
+      - CN-S-evidence-explanation-conclusion
+      - CN-S-compare-dimension-evidence-significance
+    complexity:
+      band: C4
+      vector: {text_load: 2, information_hiddenness: 3, reasoning_depth: 3, material_heterogeneity: 1, knowledge_retrieval_distance: 1, response_openness: 2, expression_load: 2, time_pressure: 2}
+    coverage_status: mapped_with_candidate_node_gap
+    audit_note: 这是证据充分性Ability最直接的终局验证场景之一。
+
+  - audit_id: I1-NAT2026-LANGUAGE-PRECISION
+    paper: 2026全国卷
+    domain: LAN
+    demand_label: 在真实生活语境中处理规范汉字、新词语境义与平实准确表达
+    question_no: multiple_items_in_official_analysis
+    tasktype_semantics: 语境语言精准运用
+    knowledge_demands: [规范汉字, 词义, 语法/搭配, 语体]
+    ability_demands:
+      existing_or_expressible:
+        - 依据语境选择准确表达
+        - 诊断并最小修改局部表达
+      candidate_gaps: []
+    mother_strategies:
+      - CN-S-diagnose-minimal-revise-check
+    complexity:
+      band: C1
+      vector: {text_load: 1, information_hiddenness: 1, reasoning_depth: 1, material_heterogeneity: 0, knowledge_retrieval_distance: 1, response_openness: 0, expression_load: 1, time_pressure: 2}
+    coverage_status: mapped_with_knowledge_gap
+    audit_note: 架构足够，但Gaokao完整知识图谱仍需系统补齐规范字词、语法、语体与新词语境义等Knowledge节点。
+
+  - audit_id: I1-BJ2026-WRITING-DUAL
+    paper: 2026北京卷
+    domain: WRT
+    demand_label: 分别通过思辨性与叙事性大作文完成受约束的完整建构
+    question_no: unknown_in_current_extraction
+    tasktype_semantics: 完整议论/叙事写作
+    knowledge_demands: [文体知识, 论证知识或叙事组织知识]
+    ability_demands:
+      existing_or_expressible:
+        - CN-A-parse-writing-prompt-constraints
+        - CN-A-select-typical-writing-material
+        - 观点建构/论据分析/边界控制
+        - 场景细节/变化/全文结构
+      candidate_gaps: []
+    mother_strategies:
+      - CN-S-parse-constraints-and-fit
+      - CN-S-claim-reason-evidence-warrant-boundary
+      - CN-S-narrative-construction
+    complexity:
+      band: C5
+      vector: {text_load: 1, information_hiddenness: 2, reasoning_depth: 3, material_heterogeneity: 0, knowledge_retrieval_distance: 2, response_openness: 3, expression_load: 3, time_pressure: 3}
+    coverage_status: mapped_with_knowledge_gap
+    audit_note: 母策略可表达主要建构过程，但高中议论知识、概念界定、论证类型和文学文化素材知识仍需系统Knowledge图谱支撑。
