@@ -1,0 +1,86 @@
+release: R1.6
+status: current_learner_pilot_slice_ready
+source_of_truth_switch: not_started
+v1_rollback_safe: true
+
+knowledge_added:
+  - node_id: CN-K-biography-genre-features
+    notion_page_id: 3dcd2763-5a38-8154-b855-f9463404779c
+    supports_edge_page_id: 3dcd2763-5a38-814c-9b47-cf3c360e6c35
+
+task_types_added:
+  - [TT-detail-effect-analysis, 3dcd2763-5a38-815a-8f43-d68df686c9dd]
+  - [TT-structural-function, 3dcd2763-5a38-81b1-9435-fdd714d43444]
+  - [TT-genre-evidence-judgment, 3dcd2763-5a38-8188-85cc-f295b3b90eda]
+  - [TT-title-meaning-function, 3dcd2763-5a38-81ab-afdb-c7973ff6112b]
+  - [TT-evidence-based-evaluation, 3dcd2763-5a38-814e-acae-dffa0a4a06a0]
+  - [TT-classical-contextual-word-sense, 3dcd2763-5a38-814d-b761-f8114770be08]
+  - [TT-writing-material-selection, 3dcd2763-5a38-814c-8100-c94190c3fddd]
+  - [TT-revision-choice-effect, 3dcd2763-5a38-8155-8e70-ced3776721b5]
+
+materials_added:
+  - [MAT-tengye-school-occurrence, 3dcd2763-5a38-81c7-943d-f72a85de066e]
+  - [MAT-huiyiluxun-school-occurrence, 3dcd2763-5a38-8198-bf92-e46cf349e683]
+  - [MAT-nanrendong-school-occurrence, 3dcd2763-5a38-81ac-a717-dfa608e867f5]
+  - [MAT-beautiful-colors-school-occurrence, 3dcd2763-5a38-81ae-892a-c3c92a53e9e8]
+  - [MAT-zhangzhongxing-genre-practice, 3dcd2763-5a38-818e-9d50-ffecf3865d5d]
+  - [MAT-last-condemned-general-school-occurrence, 3dcd2763-5a38-815d-a467-e178d7c8af9f]
+  - [MAT-biography-pair-school-bundle, 3dcd2763-5a38-8123-8755-f0a36c52bf34]
+  - [MAT-memoir-biography-fourtext-bundle, 3dcd2763-5a38-81d9-905c-d73319ba188b]
+  - [MAT-unforgettable-person-writing-prompt-school, 3dcd2763-5a38-8106-b41c-dd81be69b834]
+  - [MAT-memoir-pair-school-bundle, 3dcd2763-5a38-810b-9607-cc39688aec3d]
+
+questions_added:
+  - [Q-zhangzhongxing-genre-judgment, 3dcd2763-5a38-8171-8753-d02831241422]
+  - [Q-tengye-11-events-character, 3dcd2763-5a38-81ac-8769-e4ca589c77b4]
+  - [Q-tengye-12-detail-character-emotion, 3dcd2763-5a38-8129-9f66-f675c33ba1cc]
+  - [Q-tengye-13-structural-function, 3dcd2763-5a38-8183-95a3-daa6f7308ac4]
+  - [Q-tengye-14b-revision-effect, 3dcd2763-5a38-8176-b398-fbc0999f39fe]
+  - [Q-huiyiluxun-21-character-from-small-events, 3dcd2763-5a38-8159-a25d-c3f2ba80aeee]
+  - [Q-huiyiluxun-22-scene-detail-effect, 3dcd2763-5a38-81a8-8a84-ce60654d5aad]
+  - [Q-huiyiluxun-23-evaluation-reading-response, 3dcd2763-5a38-815f-a0d1-df4df82dc122]
+  - [Q-biography-32-quotation-character, 3dcd2763-5a38-81f6-b375-fb0c88fdfe19]
+  - [Q-biography-33-action-environment-spirit, 3dcd2763-5a38-81b4-83f2-f43deb3aea24]
+  - [Q-biography-34-title-comparison, 3dcd2763-5a38-81e9-adb1-c8c653cf65ce]
+  - [Q-fourtext-35-genre-perspective-evaluation, 3dcd2763-5a38-81e6-ac96-f33c16b270c6]
+  - [Q-zhouyafu-44-wendi-character, 3dcd2763-5a38-81c7-bf06-ec6bf4288f4b]
+  - [Q-zhouyafu-46a-zhouyafu-character, 3dcd2763-5a38-8166-9e6e-f8f314ee98db]
+  - [Q-linzexu-title-paradox, 3dcd2763-5a38-8149-8d67-cea1cb1a2178]
+  - [Q-zhouyafu-42-selected-contextual-words, 3dcd2763-5a38-8187-8e97-c7a93899b433]
+  - [Q-writing-unforgettable-person-material-selection, 3dcd2763-5a38-8179-b238-f3fa9c5cbbb8]
+  - [Q-memoir-pair-compare-selection-structure-language, 3dcd2763-5a38-81e5-85c4-f513d6b99d67]
+  - [Q-memoir-pair-compare-significance-adapted, 3dcd2763-5a38-810e-b977-f7b22fd07b51]
+
+adapted_question_ids:
+  - Q-zhouyafu-42-selected-contextual-words
+  - Q-writing-unforgettable-person-material-selection
+  - Q-memoir-pair-compare-significance-adapted
+
+active_requirements:
+  - [AR-project-character-judgment-r16, 3dcd2763-5a38-81dd-9c38-c8bf1a2ac0e7]
+  - [AR-project-comparison-significance-r16, 3dcd2763-5a38-813b-95de-e0c9489c8ef6]
+  - [AR-project-comparison-dimension-r16, 3dcd2763-5a38-8157-b7dc-eaf21ab0e038]
+  - [AR-project-detail-effect-diagnostic-r16, 3dcd2763-5a38-8106-844d-fef9e5379edc]
+  - [AR-project-classical-word-sense-diagnostic-r16, 3dcd2763-5a38-81ba-9099-fe35ba799288]
+  - [AR-project-writing-material-selection-diagnostic-r16, 3dcd2763-5a38-8161-94b5-eadaba0f9414]
+  - [AR-project-genre-judgment-diagnostic-r16, 3dcd2763-5a38-8137-be97-deb8bd80d84a]
+
+training_moves:
+  - id: TM-r16-01-comparison-significance-h0-baseline
+    notion_page_id: 3dcd2763-5a38-8180-a36a-cfd1a8180cda
+    status: selected
+    selected_question: Q-zhouyafu-46-comparison-function
+  - [TM-r16-02-comparison-significance-transfer, 3dcd2763-5a38-8139-818a-efbf107aabf0]
+  - [TM-r16-03-character-judgment-independent, 3dcd2763-5a38-81cd-9979-fd36d3371c14]
+  - [TM-r16-04-detail-effect-diagnostic, 3dcd2763-5a38-815f-9502-c7dc81a939ac]
+  - [TM-r16-05-classical-word-sense-diagnostic, 3dcd2763-5a38-8154-b1a0-f4fe46523595]
+  - [TM-r16-06-genre-judgment-diagnostic, 3dcd2763-5a38-8130-acf3-d2e9225e2f43]
+  - [TM-r16-07-writing-material-selection-diagnostic, 3dcd2763-5a38-8101-960f-d7d9ec7b3da1]
+
+pilot_supply:
+  r1_5_existing_questions: 2
+  r1_6_new_questions: 19
+  total_executable_questions: 21
+  selected_move_ready: true
+
+broad_i1_issues_left_open: [34, 35, 36]
