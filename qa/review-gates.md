@@ -101,14 +101,35 @@ It records family, source verification, horizon, due status, risk, reason, and t
 ## Gate 33 — Review history is replayable
 Given the evidence ledger and policy version, the derived temporal state should be reconstructable.
 
-## Gate 34 — Current Zhou Yafu-like reasoning can be implicitly reviewed
-A later independent unfamiliar character-reasoning item may refresh the shared reasoning node without a dedicated “review worksheet”.
+## Gate 34 — Current Zhou Yafu reasoning can be re-verified by transfer
+A delayed independent unfamiliar character-reasoning item may refresh the shared reasoning node without repeating the repaired Zhou Yafu question.
 
 ## Gate 35 — Lexical regression can block translation after evidence
 If fresh independent failures show word-sense regression and B2 marks it required for translation, F1 may escalate the prerequisite work.
 
 ## Gate 36 — Stable does not equal temporally current
 `readiness_status=stable` may coexist with `review_status=due`; the UI/logic must preserve both meanings.
+
+## Gate 37 — Historical evidence strength is not rewritten by age alone
+A strong old evidence set may have low freshness confidence without becoming historically weak.
+
+## Gate 38 — Unknown/M0 do not become maintenance review
+Unknown nodes route to diagnosis when needed; non-established nodes route to establish/scaffolded practice.
+
+## Gate 39 — C3 owns verification timestamp refresh
+F3 can identify qualifying evidence, but only the C3 projection layer updates `mastery_verified_at`, `automation_verified_at`, or `complexity_verified_at`.
+
+## Gate 40 — Hold can refresh verification
+A successful review may keep M2 unchanged while refreshing `mastery_verified_at`; no artificial level increase is required.
+
+## Gate 41 — M3 freshness requires transfer-shaped evidence
+A familiar routine item cannot by itself refresh an M3 claim.
+
+## Gate 42 — One ReviewDecision may combine compatible axes without conflation
+One probe may refresh multiple axes only if each axis is independently observable under that task condition.
+
+## Gate 43 — Retention-family cache is not canonical learner meaning
+The cached family can be recomputed from policy/canonical semantics; learner state does not redefine the node.
 
 ---
 
@@ -118,12 +139,14 @@ If fresh independent failures show word-sense regression and B2 marks it require
 - [x] retention families defined;
 - [x] configurable default horizons defined;
 - [x] axis-specific review clocks/debt defined;
+- [x] freshness confidence separated from historical evidence strength;
 - [x] implicit-review credit rules defined;
 - [x] cheapest-valid-verification policy defined;
 - [x] failed review routes through C2/C3;
+- [x] C3 hold-with-verification refresh defined;
 - [x] F1 integration defined;
 - [x] post-repair verification defined;
 - [x] review-flood controls defined;
 - [x] cross-domain regression scenarios added;
-- [ ] semantic self-review complete;
+- [x] semantic self-review complete;
 - [ ] stacked PR opened.
