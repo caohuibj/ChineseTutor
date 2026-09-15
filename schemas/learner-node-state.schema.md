@@ -1,6 +1,6 @@
 # LearnerNodeState canonical profile schema
 
-Status: **C1 normative draft**
+Status: **C1 normative draft — semantic self-review complete**
 
 This document defines the current personal state of one learner on one canonical `LearningNode`.
 
@@ -44,13 +44,15 @@ verified_complexity_band: null | C0 | C1 | C2 | C3 | C4 | C5
 
 `null` means **insufficient evidence / unknown**.
 
-`M0` means there is positive evidence that the construct is not yet established.
+`M0` / `A0` mean there is positive evidence of non-establishment / non-automatic access.
 
-This distinction is mandatory. Otherwise newly created graph nodes would appear as learner deficits before they were ever tested.
+This distinction is mandatory. Otherwise graph expansion toward full Gaokao coverage would create artificial learner deficits before nodes were ever tested.
 
 ---
 
 ## 3. Persisted current-state fields
+
+### 3.1 Primary estimate fields
 
 ```yaml
 learner_state_id: string
@@ -61,28 +63,46 @@ mastery: null | M0 | M1 | M2 | M3
 automation: null | A0 | A1 | A2 | A3
 verified_complexity_band: null | C0 | C1 | C2 | C3 | C4 | C5
 
-evidence_strength: none | weak | moderate | strong
+mastery_evidence_strength: none | weak | moderate | strong
+automation_evidence_strength: none | weak | moderate | strong
+complexity_evidence_strength: none | weak | moderate | strong
 state_source: legacy_backfill | attempt_derived | mixed | manual_override
 
-attempt_count: int
-independent_success_count: int
-transfer_success_count: int
-
 last_trained_at: datetime | null
-last_verified_at: datetime | null
+mastery_verified_at: datetime | null
+automation_verified_at: datetime | null
+complexity_verified_at: datetime | null
 
-forgetting_risk: unknown | low | medium | high
-primary_error_pattern: null | K | R | I | E | Q | M | C
-error_pattern_note: string | null
-
-attention_reason: string[]
 manual_override_reason: string | null
 state_updated_at: datetime
 ```
 
-### Derived operational view fields
+Evidence confidence and verification timestamps are per axis because mastery, automation and complexity can be supported by different observations.
 
-The following may be materialized/cache fields in Notion or code, but they are **derived**, not primary evidence:
+A single `last_verified_at` or `evidence_strength` would falsely imply that evidence for one dimension verifies all dimensions.
+
+### 3.2 Derived/cached evidence summaries
+
+The following may be stored as materialized/cache fields for operational convenience but are **not source-of-truth evidence**:
+
+```yaml
+attempt_count: int | null
+independent_success_count: int | null
+transfer_success_count: int | null
+
+forgetting_risk: unknown | low | medium | high
+primary_error_pattern: null | K | R | I | E | Q | M | C
+error_pattern_evidence_strength: none | weak | moderate | strong
+error_pattern_note: string | null
+
+attention_reason: string[]
+```
+
+`null` counts mean historical quantity is unknown (common during v1 backfill). `0` means the system positively knows there are zero counted events in the C2 event source.
+
+### 3.3 Derived operational view fields
+
+These may be materialized/cache fields in Notion or code, but they are derived from Profile + B2 graph + active goal/review context:
 
 ```yaml
 readiness_status: unknown | developing | stable
@@ -91,7 +111,7 @@ review_status: unknown | current | due | overdue
 attention_status: unknown | stable | developing | bottleneck | review_due
 ```
 
-The underlying dimensions remain separate because one node can simultaneously be weak, high-impact, and overdue for review.
+The dimensions remain separate because one node can simultaneously be developing, high-impact, and overdue for review.
 
 ---
 
@@ -103,7 +123,7 @@ Mastery measures **quality and independence of successful performance**, not spe
 
 ```text
 M0  not established; evidence shows the learner cannot yet perform/recall the construct reliably
-M1  succeeds with meaningful support or in very constrained familiar conditions
+M1  succeeds with meaningful support or in tightly familiar/constrained conditions
 M2  independently succeeds on representative routine/authentic tasks
 M3  demonstrates stable generalization/transfer across sufficiently varied unfamiliar contexts
 ```
@@ -128,7 +148,7 @@ M3  demonstrates stable generalization/transfer across sufficiently varied unfam
 
 - `M0`: cannot execute the procedure meaningfully even when named.
 - `M1`: executes it with step reminders or guided prompting.
-- `M2`: can execute the strategy correctly when choosing/using it on representative tasks.
+- `M2`: executes it correctly and can use it on representative tasks.
 - `M3`: flexibly adapts the strategy across varied tasks without rigid template behavior.
 
 A single success must not produce `M3`.
@@ -157,9 +177,9 @@ Mastery and automation are intentionally independent.
 Valid examples:
 
 ```text
-M2 / A1  understands and can perform, but still needs a reminder to invoke it
-M1 / A2  quickly invokes a familiar procedure, but execution quality is still weak
-M3 / A2  transfers well, but is not yet fully automatic under time pressure
+M2 / A1  can perform once activated, but still needs a reminder to invoke it
+M1 / A2  quickly invokes a familiar procedure, but execution quality remains weak
+M3 / A2  transfers well, but is not yet fully automatic under pressure
 ```
 
 A profile system that forces `M == A` fails C1.
@@ -172,7 +192,7 @@ A profile system that forces `M == A` fails C1.
 
 It is **not**:
 
-- the hardest question ever answered once;
+- the hardest question ever attempted or answered once;
 - an intrinsic property of the node;
 - a grade label;
 - guaranteed to increase monotonically.
@@ -194,9 +214,9 @@ If evidence is old, contradictory, or heavily scaffolded, the verified band may 
 
 ---
 
-## 7. Evidence strength
+## 7. Evidence strength is per axis
 
-C1 deliberately uses an ordinal evidence-strength field instead of false numerical precision:
+C1 deliberately uses ordinal evidence strength instead of false numerical precision:
 
 ```text
 none      no usable evidence
@@ -205,24 +225,24 @@ moderate  multiple reasonably independent/representative observations
 strong    diverse, recent, independent evidence including relevant transfer/retention checks
 ```
 
-C2 will define how TrainingAttempt events contribute to this field. C1 does not define a scoring formula.
-
-Important:
+C2 will define how TrainingAttempt events contribute to the three axis-specific fields:
 
 ```text
-high mastery + weak evidence
+mastery_evidence_strength
+automation_evidence_strength
+complexity_evidence_strength
 ```
 
-is allowed and should be displayed as uncertainty, not silently converted to strong mastery confidence.
-
-Example:
+Important states are valid:
 
 ```text
-mastery: M2
-evidence_strength: weak
+mastery M2 + mastery evidence strong
+automation A1 + automation evidence weak
 ```
 
-means “current best estimate is M2, but verification is insufficient.”
+This means ability quality is well supported while self-trigger behavior still needs verification.
+
+C1 does not define a scoring formula.
 
 ---
 
@@ -237,6 +257,8 @@ transfer_success_count
 exist for fast profile inspection and migration compatibility.
 
 After C2 exists, they must be computed from TrainingAttempt evidence rather than manually incremented as authoritative facts.
+
+During legacy migration they may be `null` because historical count is unknown.
 
 A count alone never proves mastery:
 
@@ -253,19 +275,24 @@ Evidence diversity and hint dependence matter.
 ### `last_trained_at`
 Most recent meaningful interaction involving the node. Training may include scaffolded practice and does not necessarily verify mastery.
 
-### `last_verified_at`
-Most recent evidence that actually supports the current mastery/automation/complexity claim.
+### Axis-specific verification timestamps
 
-These dates must not be conflated.
+```text
+mastery_verified_at
+automation_verified_at
+complexity_verified_at
+```
+
+These may differ. For example, an untimed answer can verify mastery without verifying timed automation.
 
 ### `forgetting_risk`
-Dynamic learner-state estimate:
+Dynamic derived estimate:
 
 ```text
 unknown | low | medium | high
 ```
 
-C1 defines the field but not the decay formula.
+C1 defines semantics but not decay formula.
 
 Different node families will decay differently:
 
@@ -274,7 +301,7 @@ Different node families will decay differently:
 - Strategies: automation/hint-use sensitivity;
 - writing production: artifact/version evidence sensitivity.
 
-The eventual risk model belongs to later review/recommendation work.
+The eventual risk model belongs to review/recommendation work.
 
 ---
 
@@ -292,9 +319,9 @@ M method/strategy
 C carelessness/execution
 ```
 
-`primary_error_pattern` is a current summary, not a replacement for attempt-level errors.
+`primary_error_pattern` is a derived current summary, not a replacement for attempt-level errors.
 
-After C2 it should be derived from repeated evidence, not set because of one mistake.
+`error_pattern_evidence_strength` prevents one-off mistakes from masquerading as stable patterns.
 
 `error_pattern_note` describes the concrete stable pattern, e.g.:
 
@@ -327,8 +354,8 @@ C1 therefore keeps orthogonal derived dimensions and exposes one convenience `at
 
 ```text
 unknown
- developing
- stable
+developing
+stable
 ```
 
 `stable` is relative to an external active requirement/target, not a permanent intrinsic property. A node can be stable for the current training target while still below eventual Gaokao complexity.
@@ -344,8 +371,8 @@ confirmed
 
 A weak node is not automatically a bottleneck. Bottleneck requires:
 
-1. learner evidence of a meaningful deficit; and
-2. graph evidence that the node constrains important downstream nodes; and
+1. learner evidence of a meaningful deficit or uncertainty;
+2. graph evidence that the node constrains important downstream nodes;
 3. plausible causal connection to observed downstream failures or unlock value.
 
 ### `review_status`
@@ -402,12 +429,13 @@ It must not erase underlying Attempt history. Later recomputation can compare ev
 2. Mastery and automation are independent axes.
 3. One correct item cannot establish `M3`.
 4. Highest attempted complexity is not automatically verified complexity.
-5. Transfer success updates only the actually evidenced target/source constructs; B2 `transfers_to` never auto-grants target mastery.
+5. Transfer success updates only actually evidenced constructs; B2 `transfers_to` never auto-grants target mastery.
 6. Hard prerequisite mastery never auto-grants downstream mastery.
 7. Parent/child mastery is not automatically copied in either direction.
 8. Counts are supporting summaries, not mastery formulas.
 9. Current state may downgrade when recent contradictory evidence is sufficiently strong.
-10. Profile history must remain reconstructable from evidence; current state is a projection, not the sole learning record.
+10. Verification/evidence confidence is tracked per M/A/C axis.
+11. Profile history must remain reconstructable from evidence; current state is a projection, not the sole learning record.
 
 ---
 
@@ -426,7 +454,7 @@ reference answer
 rubric
 ```
 
-Likewise, final scheduling action belongs to TrainingMove rather than Profile:
+Final scheduling action belongs to TrainingMove rather than Profile:
 
 ```text
 next_question_id
@@ -443,10 +471,10 @@ Profile may expose `attention_reason`, but recommendation choice belongs to the 
 1. `(learner_id, node_id)` uniquely identifies current state.
 2. Unknown and M0/A0 are distinct.
 3. M, A and C may move independently.
-4. Evidence strength is explicit.
+4. Evidence confidence and verification recency are per axis.
 5. State provenance is explicit.
 6. Dynamic operational statuses are derived from underlying evidence/profile + graph/goal context.
 7. v1 state can be backfilled without copying ambiguous split-node mastery blindly.
 8. Current state can change both upward and downward.
 9. No grade/year is a mastery dimension.
-10. No recommendation is allowed to treat low-confidence legacy backfill as equivalent to strong attempt-derived evidence.
+10. No recommendation may treat low-confidence legacy backfill as equivalent to strong attempt-derived evidence.
