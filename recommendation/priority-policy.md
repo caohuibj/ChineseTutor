@@ -1,6 +1,6 @@
 # F1 explainable priority policy
 
-Status: **normative draft**
+Status: **normative draft — semantic self-review applied**
 
 ChineseTutor must choose among many plausible TrainingMoves without hiding the decision inside one opaque score.
 
@@ -45,7 +45,8 @@ Typical cases:
 
 - hard prerequisite deficit invalidates several current high-value tasks;
 - confirmed graph bottleneck repeatedly causes downstream failure;
-- severe Q/K/R issue prevents observing otherwise important abilities.
+- severe Q/K/R issue prevents observing otherwise important abilities;
+- a previously established prerequisite has demonstrably regressed and is now blocking an active core target.
 
 P0 does **not** mean “lowest mastery number”.
 
@@ -59,7 +60,9 @@ Typical cases:
 - high-centrality supporting node with strong unlock value;
 - high-impact uncertainty where one cheap diagnosis would change the training path;
 - recently observed stable error pattern affecting multiple tasks;
-- M2 node lacking transfer evidence when transfer is central to the target capability.
+- M2 node lacking transfer evidence when transfer is central to the target capability;
+- overdue/high-forgetting **core** knowledge whose loss would soon threaten active performance;
+- explicit near-term school requirement when missing it has a real deadline and the move still trains a canonical high-value node.
 
 ### P2_normal
 
@@ -82,6 +85,8 @@ Typical cases:
 - automation polishing where no larger bottleneck exists;
 - spaced re-verification of memorization/lexical/cultural nodes.
 
+Maintenance can escalate to P1/P0 when overdue evidence or demonstrated regression materially threatens core downstream performance. This prevents “maintenance starvation”.
+
 ### P4_defer
 
 Valid need, but lower current marginal value or not executable.
@@ -92,7 +97,8 @@ Typical cases:
 - no suitable Question supply;
 - duplicate practice after evidence purpose is already satisfied;
 - high complexity extension before routine mastery is established;
-- unknown low-impact node with no active relevance.
+- unknown low-impact node with no active relevance;
+- a recently saturated node where the next same-form item has little new evidence value.
 
 ---
 
@@ -138,6 +144,8 @@ One lexical probe may have more value than another full translation item.
 ### 4.5 Forgetting/review urgency
 When prior mastery is established but evidence is stale, prefer a cheap re-verification before spending time on lower-value new work.
 
+If review is overdue on a core prerequisite or recent evidence suggests actual regression, its priority class may escalate before tie-breaking.
+
 ### 4.6 Transfer deficit
 For nodes already M2 with adequate routine confidence, a meaningful transfer probe outranks additional same-form routine repetition.
 
@@ -146,13 +154,26 @@ After a successful repair, a nearby fade-scaffold move often has high marginal v
 
 Avoid waiting so long that every session restarts from H3/H4.
 
-### 4.8 School-material relevance
+### 4.8 Recent saturation / diminishing evidence value
+Prefer a different high-value node or a different evidence condition when the current node has just produced enough same-purpose evidence.
+
+Examples:
+
+- three recent routine successes already establish M2 confidence;
+- another same-variant item adds little transfer information;
+- a just-completed diagnostic should not be repeated unless uncertainty remains.
+
+This is not a forced “variety” rule; it prevents low-information overpractice.
+
+### 4.9 School-material relevance
 Use as a tie-breaker when canonical learning value is similar.
 
-### 4.9 Question quality and availability
+Exception: an **explicit ActiveRequirement with a near-term school deadline** may raise priority because the requirement itself is urgent. The urgency comes from the declared requirement, not from grade/unit identity.
+
+### 4.10 Question quality and availability
 Prefer high-fidelity, traceable authentic Questions when evidence purpose is transfer/validation. For narrow diagnosis, a short teacher/tutor-authored probe may be more efficient.
 
-### 4.10 Cost / fatigue
+### 4.11 Cost / fatigue
 When learning value is similar, prefer the move that obtains required evidence with lower unnecessary load.
 
 This is particularly important for long-form writing: use micro-writing/targeted revision when a full essay is not needed.
@@ -216,15 +237,40 @@ A 2-minute retrieval probe can outrank a low-impact new supporting node; if pass
 
 Two P2 moves have similar leverage. One can be trained inside the text currently taught at school. Prefer that move because it gives immediate curricular integration without redefining the graph.
 
+### Example F — school deadline without grade staging
+
+A near-term school assessment explicitly requires a canonical Ability already on the long-term graph. That ActiveRequirement may temporarily raise the move to P1. The reason is the real deadline + canonical value, not “because this is an eighth-grade ability”.
+
+### Example G — maintenance escalation
+
+A core classical lexical prerequisite was previously M2 but is overdue and now fails two recent routine probes, blocking translation. The move becomes P0/P1 repair, not permanent P3 maintenance.
+
 ---
 
-## 7. Priority explanation template
+## 7. Anti-thrashing rule
+
+Do not switch the recommended primary move after every minor event.
+
+Keep the current move while:
+
+- its success criterion is still meaningfully unresolved;
+- no new blocker appears;
+- no C3 state/confidence change materially alters the decision;
+- the move is not saturated or invalidated by new evidence.
+
+Recompute when the evidence purpose is satisfied, contradicted, blocked, or superseded by a materially higher-value need.
+
+This gives the learner enough continuity to complete a learning cycle without turning recommendation into noise.
+
+---
+
+## 8. Priority explanation template
 
 Every selected move should be explainable with four clauses:
 
 ```text
 为什么现在：当前证据显示什么缺口/不确定性
-为什么它重要：高考相关性/依赖解锁/稳定错误
+为什么它重要：高考相关性/依赖解锁/稳定错误/明确期限
 为什么这样练：选择此 move type、复杂度、提示上限的原因
 如何判断完成：明确 success criterion
 ```
@@ -235,7 +281,7 @@ Example:
 
 ---
 
-## 8. Priority invariants
+## 9. Priority invariants
 
 1. Low mastery alone does not define highest priority.
 2. Unknown alone does not define highest priority.
@@ -243,7 +289,9 @@ Example:
 4. Hard prerequisite deficit may create P0; `supports` weakness cannot automatically do so.
 5. High-value diagnosis can outrank additional practice.
 6. Transfer need rises only after routine mastery is sufficiently established.
-7. Review due does not imply full reteaching.
-8. School relevance is a tie-breaker/preference, not the main curriculum axis.
+7. Review due does not imply full reteaching; overdue/regressed core maintenance may escalate.
+8. School relevance is normally a tie-breaker; explicit deadline requirements may temporarily raise priority without creating grade progression.
 9. Question availability affects executability, not learner need.
-10. Every selected priority class must have a human-readable causal rationale.
+10. Recent saturation can lower marginal priority even when a node remains globally important.
+11. Recommendation should remain stable until meaningful evidence changes the decision.
+12. Every selected priority class must have a human-readable causal rationale.
