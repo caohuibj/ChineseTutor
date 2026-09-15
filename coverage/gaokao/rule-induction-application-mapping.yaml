@@ -1,0 +1,54 @@
+# Authentic demand-level mappings for Issue #30.
+# Labels paraphrase project I1 evidence; they are not verbatim exam stems.
+
+mappings:
+  - audit_id: R13-BJ2024-RULE-INDUCTION
+    source: 2024北京卷
+    demand: 从多文本事实中抽取规律，并控制适用条件/复杂性
+    ability_node_ids:
+      - CN-A-induce-rule-from-examples
+      - CN-A-evaluate-evidence-sufficiency-for-claim
+    strategy_node_ids:
+      - CN-S-locate-classify-merge-compress
+      - CN-S-relation-chain
+      - CN-S-claim-reason-evidence-warrant-boundary
+    diagnostic_note: >-
+      若学生能列出材料事实但无法形成覆盖这些事实的共同规则，规则归纳为负/混合；若规则已经形成但边界超过证据，则证据充分性节点另记 mixed/negative。
+
+  - audit_id: R13-NAT2025I-INDUCE-THEN-APPLY
+    source: 2025全国I卷
+    demand: 先从材料抽取种植原则，再把原则用于新的牡丹种植情境
+    ability_node_ids:
+      - CN-A-induce-rule-from-examples
+      - CN-A-apply-rule-to-case
+    strategy_node_ids:
+      - CN-S-locate-classify-merge-compress
+      - CN-S-relation-chain
+      - CN-S-parse-constraints-and-fit
+    diagnostic_note: >-
+      必须分两段观察：规则归纳失败时，下游应用通常 not_observed；若规则归纳正确而新情境匹配错误，则归纳可 positive、应用 negative。
+
+  - audit_id: R13-NAT2025II-SUPPLIED-THEORY-APPLICATION
+    source: 2025全国II卷
+    demand: 使用材料中已经给出的理论/原则评价具体语言案例
+    ability_node_ids:
+      - CN-A-apply-rule-to-case
+      - CN-A-evaluate-evidence-sufficiency-for-claim
+    strategy_node_ids:
+      - CN-S-parse-constraints-and-fit
+      - CN-S-relation-chain
+      - CN-S-claim-reason-evidence-warrant-boundary
+    diagnostic_note: >-
+      因规则由材料提供，本题不能作为规则归纳证据；规则应用可以被独立观察。评价理由是否足以支撑判断由证据充分性节点另行记录。
+
+non_exam_generality_checks:
+  - context: 文言/现代文中的作者观点原则
+    example: 从多个例子归纳作者判断某类行为的共同标准，再判断新例是否满足该标准。
+  - context: 语言运用
+    example: 已给出一条表达原则，判断两个新句例分别是否满足条件并说明依据。
+
+scope_guardrails:
+  - novelty_or_transfer_is_attempt_context_not_node_identity
+  - complete_multi_constraint_plan_generation_remains_issue_33
+  - evidence_sufficiency_remains_CN-A-evaluate-evidence-sufficiency-for-claim
+  - no_new_tasktype_is_created_in_this_slice
