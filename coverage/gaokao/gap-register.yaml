@@ -23,7 +23,7 @@ gaps:
     architecture_change_required: false
     resolution_status: semantic_closure_in_pr
     canonical_node_id: CN-A-induce-rule-from-examples
-    resolution_pr: pending
+    resolution_pr: 43
     remaining_follow_up:
       - GAP-AUTHENTIC-COMPLEXITY-LADDERS
       - GAP-GAOKAO-KNOWLEDGE-POPULATION
@@ -41,7 +41,7 @@ gaps:
     architecture_change_required: false
     resolution_status: semantic_closure_in_pr
     canonical_node_id: CN-A-apply-rule-to-case
-    resolution_pr: pending
+    resolution_pr: 43
     remaining_follow_up:
       - GAP-AUTHENTIC-COMPLEXITY-LADDERS
       - GAP-GAOKAO-KNOWLEDGE-POPULATION
