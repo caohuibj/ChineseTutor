@@ -6,7 +6,7 @@
   relation_type: requires
   to_node_id: CN-K-classical-content-word-meaning-network
   rationale: >-
-    Contextual selection cannot be performed reliably without access to a usable network of candidate meanings; the ability chooses/infer among lexical possibilities rather than inventing meaning from nothing.
+    Contextual selection cannot be performed reliably without access to a usable network of candidate meanings; the ability selects/infers among lexical possibilities rather than inventing meaning from nothing.
   scope_note: Applies to the whole contextual-word-sense Ability.
   evidence_level: supported
   source_basis: [现有文言教材与课外迁移训练, B1 semantic split]
@@ -17,7 +17,7 @@
   relation_type: requires
   to_node_id: CN-A-infer-classical-contextual-word-sense
   rationale: >-
-    Accurate translation requires resolving the contextual meanings of key content words; otherwise the proposition being translated is not stably decoded.
+    Accurate translation requires resolving contextual meanings of key content words; otherwise the proposition being translated is not stably decoded.
   scope_note: Other translation prerequisites such as syntax will be added when their canonical nodes exist.
   evidence_level: supported
   source_basis: [Project Instruction 文言翻译链, 现有文言训练]
@@ -72,19 +72,19 @@
   relation_type: strategy_for
   to_node_id: CN-A-select-typical-writing-material
   rationale: >-
-    The same pressured-situation/key-choice lens can be used productively to compare candidate narrative materials and select the one with greater character/central-idea discriminative value.
-  scope_note: Relevant mainly to narrative/person-centered material selection, not every form of argumentative evidence selection.
+    The same pressured-situation/key-choice lens can be used productively to compare candidate narrative materials and select one with greater character/central-idea discriminative value.
+  scope_note: Relevant mainly to narrative/person-centered material selection, not argumentative evidence selection.
   evidence_level: supported
   source_basis: [人物叙事学习设计中的阅读→写作迁移]
   status: draft
 
-- edge_id: LE-supports-judge-modern-genre-from-evidence--memoir-genre-features
-  from_node_id: CN-A-judge-modern-genre-from-evidence
+- edge_id: LE-supports-memoir-genre-features--judge-modern-genre-from-evidence
+  from_node_id: CN-K-memoir-genre-features
   relation_type: supports
-  to_node_id: CN-K-memoir-genre-features
+  to_node_id: CN-A-judge-modern-genre-from-evidence
   rationale: >-
     Memoir-feature knowledge supports genre judgment when memoir is among the plausible candidate genres, but the broad judgment Ability is not globally dependent on this single genre node.
-  scope_note: Demonstrates why a conditional genre dependency should be supports rather than a global requires edge on the broad Ability.
+  scope_note: Demonstrates why a conditional genre dependency is support rather than a global hard prerequisite on the broad Ability.
   evidence_level: supported
   source_basis: [人物叙事学习设计]
   strength: strong
