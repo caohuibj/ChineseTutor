@@ -1,0 +1,72 @@
+release: R1.5
+notion_production_hub: 3dcd2763-5a38-81a1-b554-d80acb609b9c
+backfill_status: pilot_slice_populated
+source_of_truth_switch: not_started
+learner_id: project-learner
+
+counts:
+  learning_nodes: 77
+  learning_edges_written: 28
+  task_types: 3
+  materials: 1
+  questions: 2
+  training_attempts: 2
+  attempt_node_evidence: 4
+  learner_node_states: 3
+  profile_update_decisions: 3
+
+pilot_nodes:
+  CN-A-evidence-to-character-judgment: 3dcd2763-5a38-817b-9b66-ff28ec161e43
+  CN-A-establish-comparison-dimension: 3dcd2763-5a38-814f-84f5-c965d7de6e51
+  CN-A-explain-comparison-significance: 3dcd2763-5a38-8116-9173-d7a08259e171
+  CN-S-special-context-key-choice-significance: 3dcd2763-5a38-8195-898d-d75261590179
+  CN-S-evidence-explanation-conclusion: 3dcd2763-5a38-81ca-b99c-ce3540508cf3
+  CN-S-compare-dimension-evidence-significance: 3dcd2763-5a38-8105-b6d4-f7fe07a2f8b7
+
+task_types:
+  TT-character-analysis: 3dcd2763-5a38-8154-ba27-d462193dd43c
+  TT-typical-event-characterization: 3dcd2763-5a38-8140-ae90-d02c21d4affb
+  TT-comparison-foil-function: 3dcd2763-5a38-8175-9246-c9d559dfa857
+
+materials:
+  MAT-zhouyafu-school-occurrence: 3dcd2763-5a38-816e-9e23-de98b0288969
+
+questions:
+  Q-zhouyafu-45-character-evidence: 3dcd2763-5a38-8112-8536-e78407a894a9
+  Q-zhouyafu-46-comparison-function: 3dcd2763-5a38-813e-8aa9-e03dd9f49985
+
+training_attempts:
+  ATT-legacy-zhouyafu-45-01: 3dcd2763-5a38-8131-95d5-e739a49ae2f4
+  ATT-legacy-zhouyafu-46-01: 3dcd2763-5a38-8129-b0ae-ebd1b17dc026
+
+attempt_node_evidence:
+  ANE-legacy-zhouyafu-45-character: 3dcd2763-5a38-8144-91a3-ca31d9dbfe4f
+  ANE-legacy-zhouyafu-45-special-context-strategy: 3dcd2763-5a38-8111-b86e-e8dea9b85439
+  ANE-legacy-zhouyafu-46-comparison-dimension: 3dcd2763-5a38-811f-abdd-de8e7f4d0e2b
+  ANE-legacy-zhouyafu-46-comparison-significance: 3dcd2763-5a38-81c7-9914-fd7ccd01be2c
+
+learner_node_states:
+  LNS-project-learner-CN-A-evidence-to-character-judgment: 3dcd2763-5a38-819e-9985-e76594b11a37
+  LNS-project-learner-CN-A-establish-comparison-dimension: 3dcd2763-5a38-8164-88e5-fdafa17c8b4e
+  LNS-project-learner-CN-A-explain-comparison-significance: 3dcd2763-5a38-819c-8336-d4fb368ef1b6
+
+profile_update_decisions:
+  PUD-R1.5-legacy-character-20260915: 3dcd2763-5a38-8141-b6d9-cc6321f39d1a
+  PUD-R1.5-legacy-comparison-dimension-20260915: 3dcd2763-5a38-811f-9895-e0de0182520f
+  PUD-R1.5-legacy-comparison-significance-20260915: 3dcd2763-5a38-8197-9f27-ddb0d98e04af
+
+unknown_policy:
+  historical_hint_level: null
+  historical_hint_count: null
+  historical_independence: unknown
+  strategy_autonomous_invocation: not_inferred
+  transfer_success: not_inferred
+  verification_timestamps_from_last_trained: forbidden
+  legacy_zero_to_M0_A0: forbidden
+
+qa:
+  canonical_node_count_and_uniqueness: passed
+  v1_42_label_read: passed
+  semantic_non_destructive_gates: passed
+  post_write_aggregate_sql: deferred_query_quota
+  dual_run_pilot: not_started
