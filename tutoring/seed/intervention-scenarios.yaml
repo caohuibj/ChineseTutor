@@ -1,0 +1,146 @@
+scenarios:
+  - id: F2-ZHOU-YAFU-REASONING-GAP
+    context: 周亚夫军细柳 典型事件/人物形象
+    training_move: fade_scaffold
+    learner_response: "因为天子来劳军，周亚夫还是不让直接进，说明他刚正不阿。"
+    assessment:
+      preserved_strengths:
+        - 抓到天子劳军的特殊情境
+        - 抓到拒绝直接放行的行为
+        - 人物品质方向成立
+      primary_causal_layer: I
+      missing_link: "为什么在天子亲临时仍坚持军令，特别能检验人物品质"
+    intervention:
+      action_family: guiding_question
+      intended_hint_level: H3
+      prompt_summary: "为什么‘天子亲自劳军’这个特殊情境，会让周亚夫仍按军令办事更能说明他的品格？"
+      target: evidence_to_character_warrant
+    expected_retry: "在天子亲自劳军的特殊情况下，一般将领可能会放松军令，而周亚夫仍按军规办事，因此更能表现他刚正不阿、治军严明。"
+    evidence_effect: "reasoning becomes learner-produced; no evidence supplied"
+
+  - id: F2-ZHOU-YAFU-EXPRESSION-ONLY
+    context: 周亚夫军细柳 人物形象
+    learner_response: "天子来。他也不放。军令一样。别人肯定不这样。所以刚正不阿。"
+    assessment:
+      primary_causal_layer: E
+      reasoning_status: sound
+      written_expression_status: fragmented
+    intervention:
+      action_family: expression_conversion
+      intended_hint_level: H0
+      requested_response_mode: written
+      prompt_summary: "你的逻辑已经完整，只把‘特殊情境—不同选择—品质’合成一句完整书面答案。"
+    forbidden_move: "重新讲人物形象分析或再找证据"
+
+  - id: F2-CLASSICAL-KNOWLEDGE-DISCRIMINATOR
+    context: 文言翻译
+    learner_response: "整句翻译错误，疑似关键词义错误。"
+    assessment:
+      primary_causal_layer: uncertain
+      alternative_hypotheses: [K, I]
+    intervention:
+      action_family: prerequisite_check
+      intended_hint_level: H2
+      prompt_summary: "先不翻整句，只说这个关键词在这里你怎么理解，依据是什么？"
+    branch_if_word_sense_wrong:
+      diagnosis: K
+      next_action: knowledge_recall_cue
+    branch_if_word_sense_right:
+      diagnosis: I
+      next_action: guiding_question_on_sentence_relation
+
+  - id: F2-CLASSICAL-KNOWLEDGE-SUPPLY
+    context: 文言内容理解
+    learner_response: "人物结论错误，因为关键句中的关键实词/句式确实不会。"
+    assessment:
+      primary_causal_layer: K
+      downstream_node: character_judgment
+      downstream_observation: not_observed
+    intervention:
+      action_family: micro_explanation
+      intended_hint_level: H5
+      prompt_summary: "只补这个句中任务所必需的关键实词/句式，再让学生重新还原事件。"
+      node_effects:
+        - node: supplied_classical_knowledge
+          effect: invalidates_independent_observation
+        - node: downstream_event_reconstruction
+          effect: enables_observation
+    evidence_rule: "不得因为最终人物题错误就给人物推理负证据；被直接提供的知识也不能算独立检索。"
+
+  - id: F2-POETRY-EVIDENCE-TO-EMOTION
+    context: 古诗情感
+    learner_response: "作者很悲伤。"
+    assessment:
+      primary_causal_layer: uncertain
+      alternative_hypotheses: [R, I]
+      note: "只有情感标签，没有词句证据，不能先假定是找不到证据还是不会解释证据。"
+    intervention:
+      action_family: prerequisite_check
+      intended_hint_level: H3
+      prompt_summary: "先只指出最能支持你‘悲伤’判断的两个词或意象。"
+    if_evidence_found:
+      next_primary_layer: I
+      next_prompt: "这些词为什么能把情绪推向你说的方向？"
+    if_evidence_not_found:
+      next_primary_layer: R
+      next_action: location_or_evidence_search_support
+
+  - id: F2-LANGUAGE-CARELESSNESS
+    context: 语病/句子修改
+    learner_response: "采用了平时已经稳定掌握的错误搭配，检查后能立即自改。"
+    assessment:
+      primary_causal_layer: C
+      diagnosis_confidence: medium
+    intervention:
+      action_family: execution_check
+      intended_hint_level: H0
+      prompt_summary: "只检查主谓/搭配这一处，不重新讲语法。"
+    escalation_rule: "若跨题重复出现，则重新诊断 K/M/A，不继续笼统标粗心。"
+
+  - id: F2-WRITING-STRUCTURE-BEFORE-LANGUAGE
+    context: 作文段落修改
+    learner_response: "语言流畅但段落没有围绕中心变化组织。"
+    assessment:
+      primary_causal_layer: I
+      missing_link: "段落材料与中心/变化之间的组织关系"
+    intervention:
+      action_family: guiding_question
+      intended_hint_level: H3
+      requested_response_mode: arrow_outline
+      prompt_summary: "先别润色，只用‘段落要证明什么→哪个细节最能证明→怎样回到变化’这一条链重排。"
+    forbidden_move: "直接替学生重写整段"
+
+  - id: F2-HINT-CEILING-OVERRIDE
+    context: F1 fade_scaffold max H1
+    learner_response: "学生意外无法找到关键段落，因此目标推理无法观察。"
+    assessment:
+      primary_causal_layer: R
+    intervention:
+      action_family: location_narrowing
+      intended_hint_level: H4
+      ceiling_exceeded: true
+      override_reason: learner_blocked
+    profile_consequence: "本次不满足 fade-scaffold 成功条件，但学习继续；下一题重新测试无定位提示。"
+
+  - id: F2-H6-MODEL-EXPOSURE
+    context: 多次 H3 后仍无法建立证据到结论的逻辑桥
+    assessment:
+      primary_causal_layer: I
+      productive_struggle_exhausted: true
+    intervention:
+      action_family: reasoning_bridge
+      intended_hint_level: H6
+      answer_content_exposure: partial_content
+      prompt_summary: "提供逻辑桥前半段，让学生完成后半段。"
+    evidence_rule: "被提供的推理节点不再是 independent；同题成功只能算 guided/partial。"
+    next_step: "换新题 H0/H1 重新验证"
+
+  - id: F2-H7-CLOSURE
+    context: 学生持续阻塞且当前任务需要收束
+    intervention:
+      action_family: model_exposure
+      intended_hint_level: H7
+      answer_content_exposure: near_complete
+      request_new_learner_response: true
+      prompt_summary: "展示接近完整模型后，让学生解释模型为什么成立，而不是把复述当独立掌握。"
+    evidence_rule: "same_item_independence_recoverable=false"
