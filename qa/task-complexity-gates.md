@@ -138,6 +138,6 @@ Reviewed records include rationale, reviewer/provenance, and stable Question/Mat
 - [x] legacy difficulty migration defined;
 - [x] representative cross-domain fixtures scored;
 - [x] controlled recommendation examples defined;
-- [ ] C1 legacy shorthand corrected/superseded;
-- [ ] semantic self-review summary complete;
+- [x] C1 legacy shorthand explicitly superseded by ADR-010 and profile compatibility amendment;
+- [x] semantic self-review summary complete;
 - [ ] stacked PR opened.
