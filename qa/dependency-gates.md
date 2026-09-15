@@ -4,7 +4,7 @@ These gates are normative acceptance checks for Issue #2.
 
 ## Gate 1 — Relation semantics are unambiguous
 
-Every directed edge must read naturally as:
+Every persisted directed edge must read naturally as:
 
 ```text
 FROM relation TO
@@ -21,11 +21,13 @@ reading-event-analysis transfers_to writing-material-selection
 
 Fail if direction must be guessed from prose.
 
+`part_of` is not a persisted LearningEdge; it is a virtual projection from B1 `parent_node_id`.
+
 ---
 
 ## Gate 2 — No self edge
 
-Reject `A relation A` for every relation type.
+Reject `A relation A` for every persisted relation type. B1 parent validation separately rejects self-parenting.
 
 ---
 
@@ -127,7 +129,7 @@ A Strategy itself may `require` component Knowledge/Abilities needed to execute 
 
 ---
 
-## Gate 10 — `part_of` is derived, not hand-authored
+## Gate 10 — `part_of` is virtual, never a persisted LearningEdge
 
 If:
 
@@ -141,7 +143,13 @@ then graph views may expose:
 child part_of parent
 ```
 
-Fail independently maintained `part_of` records that could diverge from B1 taxonomy.
+Reject:
+
+- any stored LearningEdge row with `relation_type: part_of`;
+- independently authored rationale/evidence/status for `part_of`;
+- any graph representation that can disagree with `parent_node_id`.
+
+The derived taxonomy must satisfy B1 parent constraints and remain acyclic.
 
 ---
 
@@ -211,15 +219,16 @@ Pass:
 
 ---
 
-## Gate 15 — Edge should alter downstream behavior
+## Gate 15 — Authored edge should alter downstream behavior
 
 At least one must be true:
 
 - changes readiness/remediation;
 - changes scaffold selection;
 - creates a meaningful transfer probe;
-- enables confusion discrimination;
-- represents canonical taxonomy in graph view.
+- enables confusion discrimination.
+
+Taxonomic navigation is not a reason to author a LearningEdge because it is already derived from B1 parent hierarchy.
 
 If none, do not create the edge.
 
@@ -287,17 +296,18 @@ Analysis and production are different Abilities but share reusable structural in
 
 ---
 
-# B2 draft definition of done
+# B2 definition of done
 
-- [x] relation types and natural directions defined;
+- [x] persisted relation types and natural directions defined;
+- [x] virtual `part_of` projection separated from persisted LearningEdge records;
 - [x] hard vs soft prerequisite rule defined;
 - [x] endpoint-type constraints defined;
-- [x] `part_of` source-of-truth conflict resolved;
+- [x] taxonomy source-of-truth conflict resolved;
 - [x] cycle policy defined;
 - [x] transitive closure policy defined;
 - [x] transfer/generalization distinction defined;
 - [x] recommendation semantics described without learner-state leakage;
 - [x] current-asset seed edges added;
 - [x] QA gates added;
-- [x] first semantic self-review corrected support direction and cross-type transfer ambiguity;
+- [x] two semantic review passes completed;
 - [x] stacked PR opened (#12).
