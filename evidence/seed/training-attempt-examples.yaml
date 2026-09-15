@@ -4,9 +4,6 @@
 
 # -----------------------------------------------------------------------------
 # Existing project session: 《周亚夫军细柳》 4.5
-# Historical source shows the learner distinguished ordinary battle achievement
-# from the special emperor-inspection context and explained why enforcing military
-# discipline before the emperor is discriminative character evidence.
 # -----------------------------------------------------------------------------
 - attempt_id: ATT-legacy-zhouyafu-45-01
   attempt_series_id: SERIES-legacy-zhouyafu-45
@@ -33,13 +30,18 @@
   started_at: null
   elapsed_seconds: null
   time_limit_seconds: null
+  material_id_snapshot: null
+  task_type_id_snapshot: null
   material_familiarity: familiar
   transfer_probe: false
   legacy_reconstructed: true
   complexity_band_snapshot: C2
   complexity_vector_snapshot: null
   question_variant_group_id: null
+  response_mode: typed_chat
+  artifact_ref: null
   max_hint_level_before_response: null
+  hint_count_before_response: null
   intervention_type: null
   intervention_summary: null
   question_understanding: 2
@@ -60,8 +62,6 @@
 
 # -----------------------------------------------------------------------------
 # Existing project session: 《周亚夫军细柳》 4.6
-# Historical source shows contrast between 霸上/棘门 and 细柳营 was identified,
-# with terminology “衬托”; effect explanation was less explicit.
 # -----------------------------------------------------------------------------
 - attempt_id: ATT-legacy-zhouyafu-46-01
   attempt_series_id: SERIES-legacy-zhouyafu-46
@@ -89,13 +89,18 @@
   started_at: null
   elapsed_seconds: null
   time_limit_seconds: null
+  material_id_snapshot: null
+  task_type_id_snapshot: null
   material_familiarity: familiar
   transfer_probe: false
   legacy_reconstructed: true
   complexity_band_snapshot: C2
   complexity_vector_snapshot: null
   question_variant_group_id: null
+  response_mode: typed_chat
+  artifact_ref: null
   max_hint_level_before_response: null
+  hint_count_before_response: null
   intervention_type: null
   intervention_summary: null
   question_understanding: 2
@@ -137,13 +142,18 @@
   started_at: null
   elapsed_seconds: 120
   time_limit_seconds: 180
+  material_id_snapshot: MAT-synthetic-character
+  task_type_id_snapshot: TT-character-analysis
   material_familiarity: unfamiliar
   transfer_probe: true
   legacy_reconstructed: false
   complexity_band_snapshot: C2
   complexity_vector_snapshot: null
   question_variant_group_id: VAR-character-evidence-01
+  response_mode: written
+  artifact_ref: null
   max_hint_level_before_response: H0
+  hint_count_before_response: 0
   intervention_type: none
   intervention_summary: null
   question_understanding: 2
@@ -172,7 +182,6 @@
   session_id: SESSION-synthetic
   target_node_ids:
     - CN-A-evidence-to-character-judgment
-    - CN-S-evidence-explanation-conclusion
   node_evidence:
     - node_id: CN-A-evidence-to-character-judgment
       role: primary_target
@@ -188,13 +197,18 @@
   started_at: null
   elapsed_seconds: 55
   time_limit_seconds: 180
+  material_id_snapshot: MAT-synthetic-character
+  task_type_id_snapshot: TT-character-analysis
   material_familiarity: unfamiliar
   transfer_probe: true
   legacy_reconstructed: false
   complexity_band_snapshot: C2
   complexity_vector_snapshot: null
   question_variant_group_id: VAR-character-evidence-01
+  response_mode: written
+  artifact_ref: null
   max_hint_level_before_response: H3
+  hint_count_before_response: 1
   intervention_type: guiding_question
   intervention_summary: 为什么这个行为在当时的特殊情境下比一般行为更能说明这个品质？
   question_understanding: 2
