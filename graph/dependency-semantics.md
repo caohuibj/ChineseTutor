@@ -42,7 +42,7 @@ Use `requires` sparingly.
 Could a learner who genuinely lacks the prerequisite still satisfy TARGET's full `observable_success` across authentic tasks without accidental guessing or hidden substitution?
 
 - **No** → `requires` may be justified.
-- **Yes, but less efficient/reliable** → use `supports`.
+- **Yes, but less efficient/reliable** → use a softer/specialized relation.
 
 ---
 
@@ -67,6 +67,8 @@ Typical examples:
 - scene reconstruction supports poetry emotion inference;
 - relevant genre knowledge supports evidence-based genre judgment;
 - sentence cohesion knowledge supports extended writing revision.
+
+`supports` is the generic soft relation. Prefer a more specific relation (`strategy_for`, `transfers_to`, `contrasts_with`) when its semantics fit.
 
 ---
 
@@ -156,7 +158,7 @@ child.parent_node_id = parent
 => child part_of parent
 ```
 
-It is useful for traversal/reporting but must not be independently edited.
+It is useful for traversal/reporting but must not be independently edited. The derived `part_of` graph must also be acyclic.
 
 ---
 
@@ -278,31 +280,37 @@ Distinction:
 - **same observable operation** → one generalized node;
 - **different same-type operations with reusable structure** → `transfers_to`;
 - **Strategy applied to Ability** → `strategy_for`;
-- **helpful different-type relation** → `supports`.
+- **helpful relation without stronger specialized semantics** → `supports`.
 
 ---
 
 # 7. Relation choice decision tree
+
+Use the most specific semantically correct relation before falling back to generic support:
 
 ```text
 Is one a canonical taxonomic child of the other?
   yes -> parent_node / derived part_of
   no  -> continue
 
+Are they actually the same observable semantic operation?
+  yes -> merge/generalize one LearningNode; no edge
+  no  -> continue
+
 Is B semantically necessary for complete independent performance of A?
   yes -> A requires B
   no  -> continue
 
-Does B materially improve A but not block it?
-  yes -> B supports A
-  no  -> continue
-
-Is A a Strategy and B an Ability the procedure coordinates?
+Is A a Strategy and B an Ability that the procedure coordinates?
   yes -> A strategy_for B
   no  -> continue
 
-Are A and B same-type operations/procedures, and does mastering A lower learning cost for B?
+Are A and B same-type, distinct operations/procedures where mastering A lowers learning cost for B?
   yes -> A transfers_to B
+  no  -> continue
+
+Does A materially improve B without blocking it?
+  yes -> A supports B
   no  -> continue
 
 Are A and B same-type nodes commonly confused?
@@ -323,6 +331,9 @@ Must be acyclic. A hard cycle usually means:
 - at least one edge should be `supports`;
 - direction is wrong;
 - a middle abstraction is missing.
+
+## `part_of`
+Derived taxonomy must also be acyclic; a node cannot taxonomically contain an ancestor.
 
 ## `supports`
 Reciprocal soft support is allowed and non-blocking.
