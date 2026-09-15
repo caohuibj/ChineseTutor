@@ -1,18 +1,18 @@
 # Dependency Graph semantics
 
-Status: **B2 design draft**
+Status: **B2 design draft — self-reviewed**
 
-This document explains how ChineseTutor should interpret canonical graph edges in tutoring, profile updates and recommendation. The normative field contract is in `schemas/learning-edge.schema.md`.
+This document explains how ChineseTutor should interpret canonical graph edges in tutoring, profile updates and recommendation. The normative contract is in `schemas/learning-edge.schema.md`.
 
 ## 1. Why a dependency graph exists
 
 The system must answer more than “which ability is weak?”. It must answer:
 
-- is the target itself weak, or is a prerequisite causing failure?
-- should the learner continue the target or remediate an upstream node?
-- which mastered operation can be transferred to reduce learning cost?
-- which Strategy is suitable as the smallest scaffold?
-- which concept pair should be contrasted because confusion is recurrent?
+- is the target itself weak, or is an upstream prerequisite causing failure?
+- should training continue on the target or switch to remediation?
+- which mastered operation can transfer and reduce learning cost?
+- which Strategy is appropriate as the smallest scaffold?
+- which close concepts should be contrasted because confusion is likely?
 
 Grade ordering cannot answer these questions reliably.
 
@@ -22,38 +22,34 @@ Grade ordering cannot answer these questions reliably.
 
 ## 2.1 `requires` — hard prerequisite
 
-Form:
-
 ```text
 TARGET requires PREREQUISITE
 ```
 
 Meaning:
 
-> Independent, semantically complete performance of TARGET presupposes at least usable access to PREREQUISITE.
+> Independent, semantically complete performance of TARGET presupposes usable access to PREREQUISITE.
 
 Operational consequence:
 
-- if learner evidence later shows the prerequisite is not ready, recommendation should normally remediate or scaffold it before treating the target as the main deficit;
-- target attempts may still be shown diagnostically, but repeated unsupported drilling should be avoided.
+- if learner evidence later shows the prerequisite is not ready, recommendation should normally remediate/scaffold upstream before treating the target as the main deficit;
+- target attempts may still be diagnostic, but repeated unsupported drilling should be avoided.
 
 Use `requires` sparingly.
 
 ### Necessity test
 
-Imagine a learner who genuinely lacks the prerequisite. Could they still satisfy the target's `observable_success` across authentic tasks without accidental guessing or hidden substitution?
+Could a learner who genuinely lacks the prerequisite still satisfy TARGET's full `observable_success` across authentic tasks without accidental guessing or hidden substitution?
 
 - **No** → `requires` may be justified.
-- **Yes, but performance would be less efficient/reliable** → use `supports`.
+- **Yes, but less efficient/reliable** → use `supports`.
 
 ---
 
 ## 2.2 `supports` — non-blocking support
 
-Form:
-
 ```text
-TARGET supports SUPPORT_NODE
+SUPPORT_NODE supports TARGET
 ```
 
 Meaning:
@@ -62,21 +58,19 @@ Meaning:
 
 Operational consequence:
 
-- may increase recommendation value for support practice;
+- may raise the value of support-node practice;
 - may justify temporary scaffold;
 - must never hard-block TARGET readiness.
 
 Typical examples:
 
 - scene reconstruction supports poetry emotion inference;
-- genre knowledge supports richer literary interpretation;
+- relevant genre knowledge supports evidence-based genre judgment;
 - sentence cohesion knowledge supports extended writing revision.
 
 ---
 
 ## 2.3 `strategy_for` — reusable procedure applies to an Ability
-
-Form:
 
 ```text
 STRATEGY strategy_for ABILITY
@@ -90,15 +84,13 @@ Operational consequence:
 
 - if Ability fails and Strategy profile is weak/unknown, tutor may remind the Strategy;
 - if Strategy is automated but Ability still fails, diagnose Knowledge/other Ability prerequisites instead of re-teaching the procedure;
-- reduced hint dependence on the Strategy becomes evidence for automation later.
+- reduced hint dependence becomes Strategy automation evidence later.
 
 A Strategy is normally **not** a hard prerequisite: learners may solve the same cognitive problem through another valid procedure.
 
 ---
 
 ## 2.4 `transfers_to` — learning in one node can accelerate another
-
-Form:
 
 ```text
 SOURCE transfers_to TARGET
@@ -108,7 +100,12 @@ Meaning:
 
 > Mastery/automation of SOURCE creates reusable structure that can reduce learning cost or improve performance on TARGET.
 
-This relation is directional.
+B2 uses `transfers_to` only for same-type relations:
+
+```text
+Ability -> Ability
+Strategy -> Strategy
+```
 
 Examples:
 
@@ -125,51 +122,47 @@ Examples:
 Operational consequence:
 
 - after strong SOURCE evidence, TARGET can be selected as a transfer probe;
-- scaffolding on TARGET can start lower than for a completely unrelated node;
-- successful transfer strengthens both the transfer hypothesis and learner generalization evidence.
+- TARGET scaffolding may start lower than for an unrelated node;
+- successful transfer strengthens generalization evidence but does not replace TARGET evidence.
 
-`transfers_to` does not mean TARGET is guaranteed, and it never substitutes for authentic TARGET evidence.
+If SOURCE and TARGET are actually the same observable operation, use one shared LearningNode rather than a transfer edge.
 
 ---
 
 ## 2.5 `contrasts_with` — discriminative relation
 
-Meaning:
-
-> Two same-type nodes are close enough to be commonly confused, but require a meaningful distinction.
+> Two same-type nodes are close enough to be commonly confused but require a meaningful distinction.
 
 Examples:
 
 - 回忆性散文特征 vs 传记特征;
 - 因果关系 vs 条件关系;
-- 借景抒情 vs 托物言志（if represented as distinct Knowledge nodes）.
+- 借景抒情 vs 托物言志（when represented as distinct Knowledge nodes）.
 
 Operational consequence:
 
 - repeated confusion can trigger paired discrimination practice;
-- one node's success should not automatically update the other;
-- the relation is symmetric but non-transitive.
+- success on one does not update the other automatically;
+- relation is symmetric and non-transitive.
 
 ---
 
 ## 2.6 `part_of` — structural projection
 
-B1 already defines `parent_node_id` as the canonical taxonomic parent. B2 therefore treats `part_of` as a derived graph view:
+B1 already defines `parent_node_id` as canonical taxonomy. B2 treats `part_of` as a derived graph view:
 
 ```text
 child.parent_node_id = parent
 => child part_of parent
 ```
 
-It is useful for graph traversal/reporting but must not be independently edited.
+It is useful for traversal/reporting but must not be independently edited.
 
 ---
 
 # 3. Hard vs soft prerequisite policy
 
-The main design risk is overusing `requires`, turning the graph into an artificial curriculum ladder.
-
-Use these rules:
+The main design risk is overusing `requires`, recreating an artificial curriculum ladder.
 
 ### Rule A — prerequisite must apply to the whole target semantics
 
@@ -181,74 +174,62 @@ Bad:
 
 because many poems do not use allusions.
 
-Better:
+Better: narrower allusion-specific target, or:
 
 ```text
-解释某用典在诗中的作用 requires 识别该典故相关知识
+相关用典知识 supports broader poetry interpretation
 ```
 
-or keep allusion knowledge as `supports` for broader emotion inference.
+### Rule B — task-specific condition is not a broad canonical hard dependency
 
-### Rule B — task-specific condition is not a canonical hard dependency
+If a prerequisite appears only because one question asks for it, attach it to Question/Task mapping or refine the Ability.
 
-If a prerequisite only appears because one particular question asks for it, attach it to Question/Task mapping rather than the broad Ability edge.
+### Rule C — hard edge should explain causal failure
 
-### Rule C — direct causal diagnosis matters
+A good hard edge supports this diagnosis:
 
-A hard edge should make a meaningful diagnostic statement:
+> without prerequisite, failure on target is expected for a clear semantic reason.
 
-> if prerequisite is absent, failure on target is expected for a clear reason.
+### Rule D — strategies are routes, not usually prerequisites
 
-### Rule D — strategies are usually routes, not prerequisites
-
-Prefer:
-
-```text
-strategy_for
-```
-
-over:
-
-```text
-Ability requires Strategy
-```
+Prefer `strategy_for` over `Ability requires Strategy`.
 
 ### Rule E — preserve multiple valid pathways
 
-Do not create hard chains merely because the teacher usually teaches in that order.
+Do not make a hard chain simply because that is the normal teaching sequence.
 
 ---
 
 # 4. How dependencies interact with Learner Profile later
 
-B2 does not define M/A thresholds, but it establishes the decision pattern.
+B2 does not define M/A thresholds, but it defines causal inspection order.
 
 Suppose:
 
 ```text
 T requires P1
 T requires P2
-T supports S1
+S1 supports T
 STR strategy_for T
 ```
 
-Future recommendation logic should inspect learner state in this order:
+Future recommendation logic should ask:
 
-1. Is P1/P2 evidence sufficiently ready?
-2. If not, is target failure plausibly caused upstream?
-3. If prerequisites are ready, is the Strategy unknown/not automated?
+1. Are P1/P2 sufficiently ready?
+2. If not, is target failure plausibly upstream-caused?
+3. If prerequisites are ready, is the relevant Strategy unknown/not automated?
 4. If Strategy is ready too, target-specific practice is justified.
-5. S1 may improve efficiency but never blocks training.
+5. Weak S1 may increase scaffold/support-practice priority but never blocks T.
 
-This creates a causal diagnostic path rather than “wrong answer → repeat same type”.
+This replaces “wrong answer → repeat same type” with causal diagnosis.
 
 ---
 
 # 5. Dependency unlock value
 
-A prerequisite that supports many important downstream nodes may deserve high training priority.
+A prerequisite feeding many high-value downstream nodes may deserve high training priority.
 
-Example conceptually:
+Conceptually:
 
 ```text
 解释证据为何支持结论
@@ -260,22 +241,20 @@ Example conceptually:
 论证写作
 ```
 
-The **unlock value** is derived analytics, not an authored edge property. It can be calculated from:
+`unlock_value` is derived analytics, not an authored edge property. It may later depend on:
 
-- number of downstream high-relevance nodes;
+- number/importance of downstream nodes;
 - edge type;
 - path depth;
 - current learner gaps.
 
-Do not hard-code centrality into `LearningEdge`.
+Do not hard-code centrality in `LearningEdge`.
 
 ---
 
 # 6. Cross-domain transfer as a first-class relation
 
-One design objective is to stop treating reading, writing and different text eras as silos.
-
-High-value transfer patterns already present in current materials include:
+Current school materials already contain high-value transfer patterns:
 
 ```text
 阅读：分析典型事件为什么典型
@@ -286,26 +265,24 @@ High-value transfer patterns already present in current materials include:
         transfers_to
 写作：选择/构造有表现力的细节
 
-阅读：比较原稿与修改稿的表达效果
+阅读：比较原稿与修改稿的效果
         transfers_to
-写作：诊断并修改自己的语言
+写作：诊断并修改自己的表达
 
 现代/文言：证据→人物判断
         shared canonical Ability
 ```
 
-The first three are transfer relations because analysis and production are different operations. The last is shared identity because the reasoning operation itself is identical.
+Distinction:
 
-This distinction is important:
-
-- **same operation** → generalize one node;
-- **different operation with reusable structure** → `transfers_to`.
+- **same observable operation** → one generalized node;
+- **different same-type operations with reusable structure** → `transfers_to`;
+- **Strategy applied to Ability** → `strategy_for`;
+- **helpful different-type relation** → `supports`.
 
 ---
 
 # 7. Relation choice decision tree
-
-When two nodes appear related, ask:
 
 ```text
 Is one a canonical taxonomic child of the other?
@@ -317,18 +294,18 @@ Is B semantically necessary for complete independent performance of A?
   no  -> continue
 
 Does B materially improve A but not block it?
-  yes -> A supports B
+  yes -> B supports A
   no  -> continue
 
 Is A a Strategy and B an Ability the procedure coordinates?
   yes -> A strategy_for B
   no  -> continue
 
-Does mastering A plausibly lower learning cost for B without being a prerequisite?
+Are A and B same-type operations/procedures, and does mastering A lower learning cost for B?
   yes -> A transfers_to B
   no  -> continue
 
-Are A and B same-type concepts/operations that are commonly confused?
+Are A and B same-type nodes commonly confused?
   yes -> A contrasts_with B
   no  -> probably no canonical edge
 ```
@@ -340,15 +317,15 @@ Not every topical association deserves an edge.
 # 8. Cycle policy
 
 ## `requires`
-Must be acyclic. A cycle indicates one of:
+Must be acyclic. A hard cycle usually means:
 
-- the nodes are actually one composite construct;
-- at least one edge should be `supports` rather than `requires`;
+- nodes are one composite construct;
+- at least one edge should be `supports`;
 - direction is wrong;
-- a middle node is missing.
+- a middle abstraction is missing.
 
 ## `supports`
-Cycles are allowed because support can be reciprocal.
+Reciprocal soft support is allowed and non-blocking.
 
 ## `transfers_to`
 Cycles are allowed only as two separately justified directional relations. Bidirectional transfer does not imply equivalence.
@@ -360,17 +337,17 @@ Symmetric by definition; store one canonical pair.
 
 # 9. Activation and evidence policy
 
-Draft edges can be proposed from:
+Draft edges may be proposed from:
 
 - curriculum/material structure;
 - authentic exam analysis;
 - repeated tutoring evidence;
 - stable pedagogical reasoning.
 
-For an edge to become `active`:
+For activation:
 
 ### `requires`
-Needs the strongest review standard:
+Needs strongest review:
 
 - necessity rationale;
 - whole-target applicability;
@@ -378,20 +355,20 @@ Needs the strongest review standard:
 - at least `supported` evidence level.
 
 ### `supports` / `transfers_to`
-May activate at `supported`, but should remain revisable as learner evidence accumulates.
+May activate at `supported`, remaining revisable as evidence accumulates.
 
 ### `strategy_for`
-Requires demonstrated reuse across more than one concrete item/material.
+Should demonstrate reuse across more than one item/material; broad mother strategies eventually need stronger cross-task evidence.
 
 ### `contrasts_with`
-Should be backed by actual or expected confusion that changes practice design.
+Should correspond to an actual or credible confusion that changes practice design.
 
 ---
 
 # 10. What B2 intentionally does not decide
 
 - learner readiness thresholds (`M1` vs `M2` etc.);
-- how much an edge changes recommendation score;
+- numerical recommendation weights;
 - automatic mastery propagation;
 - forgetting/recency models;
 - Question-specific prerequisite tagging;
