@@ -1,8 +1,8 @@
 # F2 hint escalation and fade policy
 
-Status: **normative draft**
+Status: **normative draft — semantic self-review corrections applied**
 
-F2 uses C2's H0-H7 support scale but interprets it **causally per node**. The scale is a record of how much task-specific help was made available before the next response, not a universal score deduction.
+F2 uses C2's H0-H7 support scale but interprets it **causally per node**. The scale records the amount/form of task-specific help available before the next response; it is not a universal score deduction and it does not replace explicit `node_effects`.
 
 ---
 
@@ -11,21 +11,21 @@ F2 uses C2's H0-H7 support scale but interprets it **causally per node**. The sc
 ```text
 H0  no hint
 H1  task-demand / task-type orientation
-H2  strategy, rule-family or knowledge-recall cue
+H2  strategy, rule-family or knowledge-recall cue that does not supply the task-specific answer
 H3  one key guiding question exposing one missing relation
 H4  relevant text range / source location supplied
-H5  critical evidence or discriminating information supplied
+H5  critical evidence or task-specific prerequisite information supplied
 H6  partial reasoning / missing logical bridge supplied
 H7  near-answer / model-answer exposure
 ```
 
-F2 slightly broadens the operational reading of H2 from “strategy/model reminder” to include a **knowledge-recall cue that does not itself supply the task-specific answer**.
+F2 does not treat these labels as a perfect universal ordering across every node. Two interventions at the same H level can affect different constructs very differently. `InterventionDecision.node_effects` is authoritative for what remains independently observable.
 
 Examples:
 
 - “这类翻译先圈哪些关键词？” → H2 strategy cue.
 - “这个词你学过哪些常见义项？” → H2 knowledge-recall cue.
-- “这里‘虽’就是‘即使’。” → not merely a recall cue; independent retrieval of that Knowledge node is now invalidated and the support may be treated as direct knowledge supply in node effects even if the ordinal level remains low/moderate.
+- “这里‘虽’就是‘即使’。” → H5-like direct task-specific prerequisite supply for the word-meaning node; independent retrieval of that Knowledge node is invalidated, while downstream sentence reasoning may still remain observable.
 
 Therefore **node effects outrank the ordinal label** when interpreting evidence.
 
@@ -42,7 +42,7 @@ Examples:
 - clear I gap with correct evidence → H3 key question may be the first appropriate intervention;
 - clear R gap → H3 “where would you look?” or H4 location narrowing depending on how blocked the learner is;
 - M gap → H2 strategy activation;
-- E gap with correct reasoning → expression conversion can be H0-H2 relative to comprehension because no content hint is needed.
+- E gap with correct reasoning → expression conversion can be H0-H2 relative to comprehension because no new content hint is needed.
 
 The policy is not a ritual ladder.
 
@@ -54,7 +54,7 @@ The policy is not a ritual ladder.
 Prefer H1 reorientation/reframe.
 
 ### K
-Prefer H2 recall cue or a minimal contrast. If knowledge is genuinely absent, provide a micro-explanation and record that retrieval evidence is compromised.
+Prefer H2 recall cue or a minimal contrast. If knowledge is genuinely absent, provide a narrow micro-explanation/direct prerequisite fact and treat the supplied node as guided/not independently observed (often H5-like support for that node).
 
 ### R
 Prefer H3 search question; use H4 when navigation itself is blocking progress; H5 only when critical evidence must be supplied.
@@ -122,10 +122,10 @@ H5: point out the exact sentence if still blocked.
 
 ```text
 H2: ask for known meanings / relevant rule family
-micro-explanation: teach one missing canonical fact if genuinely absent
+H5-like direct supply: teach the exact missing task-specific prerequisite only if genuinely absent
 ```
 
-Then return to the original task. Do not expand into a broad lecture.
+Then return immediately to the original operation. Do not expand into a broad lecture.
 
 ---
 
@@ -164,8 +164,8 @@ next comparable probe should remove location help
 
 After a successful supported response, choose the next evidence condition based on what support compromised.
 
-### H2 strategy cue success
-Next task: same operation, H0/H1 to test self-trigger.
+### H2 strategy/recall cue success
+Next task: same operation, H0/H1 to test self-trigger/retrieval.
 
 ### H3 guiding question success
 Next task: remove the key question; preserve comparable reasoning demand.
@@ -173,8 +173,8 @@ Next task: remove the key question; preserve comparable reasoning demand.
 ### H4 location success + downstream independent reasoning
 Next task: remove location cue while keeping reasoning complexity stable.
 
-### H5 evidence supply
-Next task: learner must select evidence independently before reasoning is re-verified.
+### H5 evidence/prerequisite supply
+Next task: learner must independently retrieve/select the supplied element before the downstream operation is fully re-verified.
 
 ### H6 partial reasoning
 Next task: new/variant item must require the learner to construct the missing bridge independently.
@@ -235,4 +235,5 @@ But independent verification requires a new item.
 5. F1 ceiling is planned evidence condition, not a help prohibition.
 6. Successful support creates a fade obligation when independence/automation is the goal.
 7. H6/H7 are valid teaching tools but weak/invalid independent evidence for supplied reasoning.
-8. Productive struggle has an efficiency boundary.
+8. Directly supplying task-specific prerequisite knowledge invalidates independent retrieval for that Knowledge node while potentially preserving downstream observation.
+9. Productive struggle has an efficiency boundary.
