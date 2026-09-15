@@ -13,7 +13,7 @@ scenarios:
     intervention:
       action_family: guiding_question
       intended_hint_level: H3
-      prompt_summary: "先不改措辞：普通将领面对天子可能怎么做？周亚夫偏偏怎么做？这个差别为什么重要？"
+      prompt_summary: "为什么‘天子亲自劳军’这个特殊情境，会让周亚夫仍按军令办事更能说明他的品格？"
       target: evidence_to_character_warrant
     expected_retry: "在天子亲自劳军的特殊情况下，一般将领可能会放松军令，而周亚夫仍按军规办事，因此更能表现他刚正不阿、治军严明。"
     evidence_effect: "reasoning becomes learner-produced; no evidence supplied"
@@ -37,7 +37,7 @@ scenarios:
     learner_response: "整句翻译错误，疑似关键词义错误。"
     assessment:
       primary_causal_layer: uncertain
-      possible_layers: [K, I]
+      alternative_hypotheses: [K, I]
     intervention:
       action_family: prerequisite_check
       intended_hint_level: H2
@@ -71,15 +71,19 @@ scenarios:
     context: 古诗情感
     learner_response: "作者很悲伤。"
     assessment:
-      primary_causal_layer: R
-      note: "只有情感标签，没有词句证据，尚不能判断是证据缺失还是推理缺失。"
+      primary_causal_layer: uncertain
+      alternative_hypotheses: [R, I]
+      note: "只有情感标签，没有词句证据，不能先假定是找不到证据还是不会解释证据。"
     intervention:
-      action_family: guiding_question
+      action_family: prerequisite_check
       intended_hint_level: H3
-      prompt_summary: "先圈出最能决定情绪方向的两个词/意象，不解释情感。"
-    if_evidence_correct_but_link_missing:
+      prompt_summary: "先只指出最能支持你‘悲伤’判断的两个词或意象。"
+    if_evidence_found:
       next_primary_layer: I
-      next_prompt: "这些词共同把情绪推向什么方向？为什么？"
+      next_prompt: "这些词为什么能把情绪推向你说的方向？"
+    if_evidence_not_found:
+      next_primary_layer: R
+      next_action: location_or_evidence_search_support
 
   - id: F2-LANGUAGE-CARELESSNESS
     context: 语病/句子修改
@@ -103,7 +107,7 @@ scenarios:
       action_family: guiding_question
       intended_hint_level: H3
       requested_response_mode: arrow_outline
-      prompt_summary: "先别润色。用三行写：这一段要证明什么→哪个细节最能证明→结尾怎样回到变化。"
+      prompt_summary: "先别润色，只用‘段落要证明什么→哪个细节最能证明→怎样回到变化’这一条链重排。"
     forbidden_move: "直接替学生重写整段"
 
   - id: F2-HINT-CEILING-OVERRIDE
