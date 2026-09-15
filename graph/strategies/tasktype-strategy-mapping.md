@@ -22,10 +22,12 @@ Legend:
 | 原因分析 | S13 关系链 | S4 | 先找事实，再显性连因果/条件 |
 | 人物形象分析 | S8 特殊情境—关键选择—意义 | S1 | 典型人物题重点避免“证据+标签”跳步 |
 | 典型事件/选材作用 | S8 | S1 | 特殊情境与关键选择是辨识度来源 |
+| 情节/叙事安排作用 | S3 | S13 | 看位置、上下文关系；需要时补情节因果 |
 | 词句赏析 | S9 关键词句—写什么—怎么写—效果 | S1 | 不停在修辞标签 |
 | 修辞/描写表达效果 | S9 | S1 | 效果必须落实到具体语境 |
 | 段落/句子结构作用 | S3 内容—位置—上下文关系—作用 | S1 | 禁止空写“承上启下” |
 | 标题含义与作用 | S3 | S1 | 含义部分还需语义推断 Ability |
+| 文体辨析 | S1 | S2 可选 | 用文本证据解释与体裁特征的对应；有比较时用S2 |
 | 主旨/作者情感 | S1 | S4 | 用关键事实/语言支持判断 |
 | 文本比较 | S2 比较维度—分别取证—同异—意义 | S1 | 先统一维度再比较 |
 | 多文本信息整合 | S4 | S2 | 需要比较时叠加 S2 |
@@ -41,9 +43,9 @@ Legend:
 
 | TaskType | primary | secondary | notes |
 | --- | --- | --- | --- |
-| 实词语境义 | — | S13 可选 | 核心是 Knowledge + contextual Ability，不强造模板 |
+| 实词语境义 | — | — | 核心是 Knowledge + contextual Ability，不强造模板 |
 | 虚词/句式判断 | — | — | 以 Knowledge/Ability 为主 |
-| 断句 | S13 关系链 | — | 依据句法/语意关系，不做固定节奏模板 |
+| 断句 | — | — | 当前先保持 Knowledge/Ability 驱动；若未来形成稳定“句法—语义分块”程序再单独论证 Strategy |
 | 文言翻译 | S7 文言翻译五步法 | S12 | S12 可用于译句复核/最小修正 |
 | 文意理解 | S4 | S13 | 先解码，再按事件/关系整合 |
 | 原因概括 | S13 | S4 | 因果链 + 信息压缩 |
@@ -169,6 +171,8 @@ Canonical TaskType records may store:
 recommended_strategy_node_ids:
   - CN-S-...
 ```
+
+or the richer G1 `recommended_strategies` mapping with primary/secondary roles.
 
 Concrete Question records should normally target the underlying Ability/Knowledge nodes; Strategy is included as a target only when the training purpose explicitly observes strategy execution/automation.
 
