@@ -1,0 +1,158 @@
+# G1 canonical mother Strategy seed fixture
+# Documentation fixture; full LearningNode schema applies.
+
+- node_id: CN-S-evidence-explanation-conclusion
+  name_zh: 证据—解释—结论链
+  node_type: strategy
+  domain: META
+  subdomain: META.evidence
+  definition: 先确定结论需要什么证据，选择证据，显性解释证据与结论之间的关系，再回扣题目要求。
+  observable_success: 在人物、主旨、诗歌情感、开放评价等不同TaskType中，能够主动补出证据到结论之间的解释而非只写“证据+标签”。
+  scope_in: 需要证据支持判断/评价的主观题与短论证。
+  scope_out: 纯记忆题；只需信息压缩的题；固定答案句式。
+  gaokao_relevance: core
+  status: draft
+
+- node_id: CN-S-compare-dimension-evidence-significance
+  name_zh: 比较维度—分别取证—同异—意义链
+  node_type: strategy
+  domain: META
+  subdomain: META.comparison
+  definition: 先建立共享比较维度，再分别取证，明确相同/不同，最后解释差异或共同点的意义。
+  observable_success: 面对跨文本/人物/诗歌/观点比较时能主动先定维度，避免A说内容、B说手法的错位比较。
+  scope_in: 比较阅读、人物对比、观点比较、手法比较。
+  scope_out: 单一对象分析；只并列摘抄两边信息。
+  gaokao_relevance: core
+  status: draft
+
+- node_id: CN-S-content-position-context-function
+  name_zh: 内容—位置—上下文关系—作用链
+  node_type: strategy
+  domain: META
+  subdomain: META.function
+  definition: 先说明内容，再判断其篇章位置，分析与前后文的关系，最后说明对结构、人物、主旨或表达的具体作用。
+  observable_success: 作用题中能够说明“承什么/启什么/铺垫什么”，不只贴“承上启下”等标签。
+  scope_in: 段落、句子、标题、叙事安排、开头结尾等作用分析。
+  scope_out: 纯表达效果赏析；纯内容概括。
+  gaokao_relevance: core
+  status: draft
+
+- node_id: CN-S-locate-classify-merge-compress
+  name_zh: 定位—分类—合并—压缩
+  node_type: strategy
+  domain: META
+  subdomain: META.information
+  definition: 找到相关信息，按同一标准分类，合并重复信息，在保留必要条件的前提下压缩表达。
+  observable_success: 信息概括/多材料整合中能够覆盖要点、去重并保持分类标准一致。
+  scope_in: 信息提取、内容概括、原因概括、多材料整合、图文转述。
+  scope_out: 需要解释因果逻辑但尚未完成关系建模的题。
+  gaokao_relevance: core
+  status: draft
+
+- node_id: CN-S-claim-reason-evidence-warrant-boundary
+  name_zh: 观点—理由—证据—论证—边界
+  node_type: strategy
+  domain: META
+  subdomain: META.argument
+  definition: 明确观点，提出理由，选择证据/例子，解释证据为何支持理由，并加入必要限定或边界。
+  observable_success: 在开放评价、议论段、证据充分性等任务中形成完整论证而非只表态或堆例子。
+  scope_in: 论证、评价、观点表达、材料作文议论链。
+  scope_out: 纯叙事组织；纯信息提取。
+  gaokao_relevance: core
+  status: draft
+
+- node_id: CN-S-poetry-evidence-emotion
+  name_zh: 景事人—关键词—情绪方向—对象—验证
+  node_type: strategy
+  domain: POE
+  subdomain: POE.emotion
+  definition: 从景、事、人物状态出发，圈决定性词语/意象，判断情绪方向与对象，再回到原诗验证。
+  observable_success: 古诗情感/意境题中能从原诗证据推出情感，而不是套固定意象含义。
+  scope_in: 诗歌情感、意境、情景关系、人物状态。
+  scope_out: 默写；只解释典故知识。
+  gaokao_relevance: core
+  status: draft
+
+- node_id: CN-S-classical-translation-five-step
+  name_zh: 文言翻译五步法
+  node_type: strategy
+  domain: CLA
+  subdomain: CLA.translation
+  definition: 圈关键词 → 逐词落实 → 调整句式 → 补省略 → 通读校验。
+  observable_success: 陌生文言句中能主动执行步骤，并通过校验发现关键词遗漏、对象错位或现代汉语不通顺。
+  scope_in: 文言翻译及译句复核。
+  scope_out: 固定篇目译文记忆；单纯实词背诵。
+  gaokao_relevance: supporting
+  status: draft
+
+- node_id: CN-S-special-context-key-choice-significance
+  name_zh: 特殊情境—关键选择—差异—意义链
+  node_type: strategy
+  domain: MRD
+  subdomain: MRD.narrative
+  definition: 识别特殊压力/限制，找人物关键选择，与常态或他人形成差异，再解释该选择如何集中表现人物或中心。
+  observable_success: 面对人物/典型事件/选材题时主动解释“为什么这个选择在这个情境下特别有意义”。
+  scope_in: 典型事件、人物选择、选材作用及叙事写作迁移。
+  scope_out: 一般事件概括；所有人物题机械套用。
+  gaokao_relevance: supporting
+  status: draft
+
+- node_id: CN-S-textual-appreciation
+  name_zh: 关键词句—内容—写法—具体效果—意义
+  node_type: strategy
+  domain: META
+  subdomain: META.appreciation
+  definition: 抓关键词句，说清写了什么，识别语言/修辞/描写/角度，再解释具体效果并回到情感、人物或主旨。
+  observable_success: 赏析时不止写术语和“生动形象”，而能把写法与具体语境效果连接起来。
+  scope_in: 词句赏析、炼字、修辞、描写、局部表现手法。
+  scope_out: 篇章结构作用；纯知识识别。
+  gaokao_relevance: core
+  status: draft
+
+- node_id: CN-S-parse-constraints-and-fit
+  name_zh: 题目限制—核心任务—候选答案—校验
+  node_type: strategy
+  domain: META
+  subdomain: META.task
+  definition: 圈对象、范围、身份、文体、情境等限制，提炼核心任务，生成候选回应，再用限制逐项校验是否偏题。
+  observable_success: 作文/微写作/开放表达中能够先建立约束清单并用其检查立意或回答。
+  scope_in: 审题、任务型表达、开放题、情境写作。
+  scope_out: 最终论证/叙事质量本身。
+  gaokao_relevance: core
+  status: draft
+
+- node_id: CN-S-narrative-construction
+  name_zh: 中心—典型材料—关键场景—细节—变化—点题
+  node_type: strategy
+  domain: WRT
+  subdomain: WRT.narrative
+  definition: 从中心/主问题出发选典型材料，锁定关键场景，以人物/环境细节推进变化，最后回扣中心。
+  observable_success: 叙事写作能把材料、场景、细节和人物/自我变化组织成服务中心的完整链。
+  scope_in: 叙事作文、片段写作、人物故事、素材迁移。
+  scope_out: 议论段论证；单纯语言润色。
+  gaokao_relevance: core
+  status: draft
+
+- node_id: CN-S-diagnose-minimal-revise-check
+  name_zh: 定位问题—保留原意—最小修改—复核
+  node_type: strategy
+  domain: LAN
+  subdomain: LAN.revision
+  definition: 先定位问题层级与类型，在保留原意的前提下作最小必要修改，再通读复核是否产生新问题。
+  observable_success: 病句/局部作文修改中能说明问题、做必要而不过度的改动，并完成复核。
+  scope_in: 句子逻辑、病句、局部表达修改。
+  scope_out: 中心/结构层级重构；代写整段全文。
+  gaokao_relevance: supporting
+  status: draft
+
+- node_id: CN-S-relation-chain
+  name_zh: 现象结果—关系类型—事实链—核心原因—回扣
+  node_type: strategy
+  domain: META
+  subdomain: META.relation
+  definition: 明确题目中的结果/现象，判断因果、条件、目的、转折等关系，按关系找事实并连成完整逻辑链。
+  observable_success: 原因/条件/动机题中能够显性写出中间关系，不把相关事实直接并列成答案。
+  scope_in: 原因分析、条件分析、情节因果、行为动机、信息类关系分析、文言原因概括。
+  scope_out: 证据充分性评价；纯信息压缩。
+  gaokao_relevance: core
+  status: draft
