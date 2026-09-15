@@ -2,9 +2,11 @@
 
 Status: **F3 normative draft**
 
-A `ReviewDecision` records why one learner-node axis is considered current/due/overdue, what evidence clock was used, and what minimum verification task should be scheduled.
+A `ReviewDecision` records why one learner-node review need is current/due/overdue across one or more compatible axes, what evidence clocks were used, and what minimum verification task should be scheduled.
 
 It is a temporal planning/audit object. It does **not** directly change Mastery, Automation or verified Complexity.
+
+One decision may cover several axes when one well-designed probe can validly observe them together; each axis still has independent state and refresh rules.
 
 ```text
 LearnerNodeState + Attempt history + retention policy + ActiveRequirement
@@ -143,7 +145,7 @@ verification_plan:
   probe_note: string
 ```
 
-The review probe should be the **smallest task that can validly re-observe the due axis**.
+The review probe should be the **smallest task that can validly re-observe the due axis/axes**.
 
 Examples:
 
@@ -151,6 +153,8 @@ Examples:
 - character-reasoning mastery → one representative evidence→warrant item, not a full reading paper;
 - Strategy automation → an item where the strategy must self-trigger without H2;
 - writing scene construction → one focused paragraph or revision artifact rather than a full essay.
+
+If one task can validly verify multiple due axes, combine them rather than scheduling redundant probes.
 
 ---
 
@@ -217,7 +221,7 @@ Outcome semantics:
 ## 9. F3 invariants
 
 1. Time does not directly alter M/A/C values.
-2. Review status is axis-specific.
+2. Review status is axis-specific even when one decision combines axes.
 3. Historical evidence strength and current freshness confidence are distinct.
 4. Unknown verification date is not equivalent to overdue failure.
 5. Review clock can be refreshed only by valid observation accepted through C3.
