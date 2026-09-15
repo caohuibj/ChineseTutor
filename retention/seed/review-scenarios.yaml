@@ -1,0 +1,213 @@
+scenarios:
+  - id: F3-ZHOU-YAFU-DELAYED-INDEPENDENT-VERIFY
+    context: "《周亚夫军细柳》之后的人物证据推理训练"
+    node: CN-A-evidence-to-character-judgment
+    retention_family: reasoning_ability
+    history:
+      - "在周亚夫题中能够抓住特殊情境、行为和人物品质"
+      - "曾需要关键追问补出‘为什么该选择特别能检验人物品质’这一层"
+    temporal_need:
+      reason: post_repair_recheck
+      note: "不重复同一题，而是在延迟后换陌生人物材料验证同一推理链。"
+    review_plan:
+      move_type: independent_practice
+      max_hint: H0
+      complexity_band: C2
+      probe: "新人物材料：事实/特殊情境→关键选择→为什么有意义→稳定品质"
+    expected:
+      same_item_repetition: false
+      successful_attempt_can_refresh_mastery: true
+      successful_attempt_can_support_automation: true
+      note: "F3负责产生延迟验证需要；F1根据当前状态决定 independent_practice 而非强行标 review。"
+
+  - id: F3-CLASSICAL-LEXICON-DUE-PASS
+    node: CN-K-classical-content-word-meaning
+    retention_family: exact_retrieval
+    profile_before:
+      mastery: M2
+      mastery_evidence_strength: strong
+      mastery_review_status: due
+      forgetting_risk: medium
+    review_plan:
+      move_type: review
+      max_hint: H0
+      cost: micro
+      probe: "在一个新句中独立判断目标实词义项。"
+    attempt:
+      observation: positive
+      independence: independent
+    expected:
+      hidden_downgrade: false
+      c3_action: "hold M2, refresh mastery verification/confidence"
+      next_review_status: current
+
+  - id: F3-CLASSICAL-LEXICON-OVERDUE-FAIL
+    node: CN-A-infer-classical-contextual-word-sense
+    retention_family: reasoning_ability
+    profile_before:
+      mastery: M2
+      mastery_review_status: overdue
+    review_attempt:
+      observation: negative
+      independence: independent
+      hint: H0
+    expected:
+      direct_time_decay: false
+      direct_review_downgrade: false
+      route: "C2 negative evidence -> C3 contradiction handling"
+      possible_next: "diagnose K vs I before changing downstream translation state"
+
+  - id: F3-RECITATION-CHEAP-VERIFY
+    node: poem_recitation_exact_production
+    retention_family: recitation
+    profile_before:
+      mastery: M2
+      evidence_strength: moderate
+      review_status: due
+    review_plan:
+      cost: micro
+      response_mode: written
+      probe: "只默写需要验证的连续两句，而非整首反复抄写。"
+    principle: "exact production is observed; rereading alone would not count"
+
+  - id: F3-REASONING-IMPLICIT-REVIEW
+    node: CN-A-evidence-to-character-judgment
+    retention_family: reasoning_ability
+    profile_before:
+      mastery: M2
+      review_status: due
+    ordinary_training_attempt:
+      material: "new modern narrative"
+      primary_task: "character analysis"
+      target_node_observation: positive
+      independence: independent
+      complexity_band: C2
+      max_hint: H0
+    expected:
+      implicit_review_credit: true
+      standalone_review_needed: false
+      note: "ordinary high-value training already re-observed the construct"
+
+  - id: F3-REASONING-PASSIVE-EXPOSURE-NO-CREDIT
+    node: CN-A-evidence-to-character-judgment
+    event: "teacher explains a model answer containing evidence->warrant reasoning"
+    expected:
+      implicit_review_credit: false
+      review_clock_reset: false
+      reason: "learner operation was not observed"
+
+  - id: F3-AUTOMATION-DUE-MASTERY-CURRENT
+    node: CN-S-evidence-explanation-conclusion
+    retention_family: strategy
+    profile_before:
+      mastery: M2
+      mastery_review_status: current
+      automation: A2
+      automation_review_status: due
+    recommendation:
+      move_type: automation
+      max_hint: H0
+      complexity_change: none
+      task_condition: "learner must self-trigger the strategy"
+    expected:
+      comprehension_reteach: false
+      mastery_review_required: false
+
+  - id: F3-POST-REPAIR-CHECK
+    node: CN-A-evidence-to-character-judgment
+    history:
+      - "initial failure"
+      - "H6 partial reasoning bridge supplied"
+      - "guided success"
+    expected:
+      review_reason: post_repair_recheck
+      schedule: "earlier than normal family horizon"
+      probe: "new sufficiently distinct C2 item at H0/H1"
+      same_item_independent_verification: false
+
+  - id: F3-WRITING-MICRO-REVIEW
+    node: CN-A-select-typical-writing-material
+    retention_family: writing_production
+    profile_before:
+      mastery: M2
+      review_status: due
+    review_plan:
+      cost: short
+      probe: "给一个题目和三个候选事件，要求选择并说明为什么最服务中心；或做一个短提纲。"
+    forbidden:
+      - "为验证单一选材能力而要求完整作文"
+
+  - id: F3-ACTIVE-SCHOOL-REQUIREMENT-PULLS-REVIEW
+    node: classical_recitation_node
+    retention_family: recitation
+    normal_state:
+      review_status: current
+      days_until_normal_due: 20
+    active_requirement:
+      type: school_sync
+      due_in_days: 3
+      requires_fresh_exact_recall: true
+    expected:
+      early_review_allowed: true
+      reason: active_requirement
+      grade_based_progression: false
+
+  - id: F3-REGRESSED-PREREQUISITE-ESCALATES
+    node: classical_word_sense
+    profile_history:
+      old_mastery: M2
+      review_status: overdue
+      recent_attempts: "two independent failures across distinct contexts"
+    downstream:
+      active_target: classical_translation
+      hard_prerequisite_relation: true
+    expected:
+      c3_may_downgrade: true
+      f1_priority: "P0/P1 depending current blocking consequence"
+      escalation_reason: "demonstrated regression + prerequisite impact, not elapsed time alone"
+
+  - id: F3-COMPLEXITY-CLOCK-DIFFERENT
+    node: multi_text_evidence_evaluation
+    profile_before:
+      mastery: M2
+      mastery_review_status: current
+      verified_complexity_band: C4
+      complexity_review_status: due
+    review_plan:
+      purpose: refresh_complexity
+      minimum_complexity_band: C4
+    invalid_probe:
+      complexity_band: C1
+      result: positive
+    expected:
+      mastery_may_gain_evidence: true
+      c4_complexity_clock_refresh: false
+
+  - id: F3-UNKNOWN-IS-DIAGNOSE-NOT-REVIEW
+    node: newly_added_gaokao_ability
+    profile_before:
+      mastery: null
+      mastery_verified_at: null
+    expected:
+      review_status: unknown
+      review_move: false
+      f1_move_if_needed: diagnose
+      reason: "no historical claim exists to retain"
+
+  - id: F3-M0-IS-ESTABLISH-NOT-MAINTENANCE
+    node: argument_evidence_explanation
+    profile_before:
+      mastery: M0
+    expected:
+      ordinary_review_move: false
+      f1_move: establish
+      reason: "the construct is not yet established; this is development, not forgotten maintenance"
+
+  - id: F3-REVIEW-FLOOD-CONTROL
+    due_nodes: 18
+    session_minutes: 20
+    expected_policy:
+      - "batch compatible exact retrieval nodes"
+      - "embed review inside already-selected tasks where valid"
+      - "keep routine maintenance near configured session budget"
+      - "defer low-impact enrichment review before blocking/development needs"
