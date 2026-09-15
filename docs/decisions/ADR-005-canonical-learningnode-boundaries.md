@@ -1,22 +1,22 @@
 # ADR-005 — Canonical LearningNode semantic boundaries
 
-Status: **proposed in B1**
+Status: **accepted by B1 semantic self-review**
 
 ## Context
 
-The v1 operational model uses a single ability-map row for concepts with very different semantics. Examples include:
+The v1 operational model uses single rows for concepts with different semantics, for example:
 
-- `文言实词` — accumulated lexical knowledge plus contextual inference;
-- `修辞与表达效果` — rhetorical-device knowledge plus contextual analysis;
-- `标题含义与作用` — primarily an exam Task Type containing several underlying abilities;
+- `文言实词` — lexical knowledge plus contextual inference;
+- `修辞与表达效果` — device knowledge plus contextual effect analysis;
+- `标题含义与作用` — mainly a Task Type containing several underlying abilities;
 - `开放评价与迁移` — a family of evaluation/transfer operations;
-- mastery/automation values stored next to the semantic definition itself.
+- learner mastery/automation stored beside semantic definitions.
 
-This shape is useful for manual tutoring but weak for a dependency graph, personal profile and recommendation engine.
+This is useful for manual tutoring but weak for dependency modeling, personal profiles and recommendation.
 
 ## Decision
 
-ChineseTutor will use one canonical `LearningNode` registry with exactly three semantic node types:
+ChineseTutor uses one canonical `LearningNode` registry with exactly three semantic types:
 
 ```text
 knowledge
@@ -24,51 +24,93 @@ ability
 strategy
 ```
 
-The registry is canonical and learner-independent.
+The registry is learner-independent.
 
 ### Knowledge
-Stable facts, concepts, distinctions, conventions and rule systems the learner can know/recognize/recall/understand.
+Stable facts, concepts, distinctions, conventions and rule systems that can be known, recognized, recalled or understood.
 
 ### Ability
-Observable operations the learner can perform on language, text, information, artifacts or communication situations.
+Observable operations performed on language, text, information, artifacts or communication situations.
 
 ### Strategy
-Reusable, multi-step procedures used to coordinate multiple operations across tasks; strategies can be prompted, faded, independently invoked and automated.
+Reusable multi-step procedures that coordinate operations and can be prompted, faded, independently invoked, automated and transferred.
 
 Task Types, Materials, Questions, Learner Profile state and Attempt evidence are separate entities.
+
+## Stable identity
+
+Canonical IDs are:
+
+```text
+CN-<TYPE>-<SLUG>
+```
+
+`domain` and `subdomain` are deliberately excluded from permanent identity because taxonomy can be refined without semantic change. IDs are never recycled.
+
+## Domain and taxonomy
+
+- `domain` is coverage/navigation, not progression;
+- `subdomain` uses stable machine codes such as `META.evidence`, `CLA.lexicon`;
+- taxonomic parent has the same node type and normally the same primary domain;
+- prerequisites, supports, transfer and contrast are graph edges, not parent relations.
+
+## Alias rule
+
+`aliases_zh` contains only one-to-one semantic synonyms. A broad legacy row that splits into several v2 nodes is documented in the migration map rather than attached as an alias to one child.
+
+## Cross-domain rule
+
+Identical reasoning operations are generalized when doing so preserves diagnosis.
+
+Example:
+
+```text
+modern character judgment
+classical character judgment
+        ↓
+CN-A-evidence-to-character-judgment  domain=META
+```
+
+Modern/classical decoding remains source-specific prerequisite context.
+
+Genre is handled differently because semantics differ:
+
+```text
+genre feature knowledge -> LIT
+judge a modern text's genre from evidence -> MRD
+```
 
 ## Consequences
 
 ### Positive
 
-- profile state can attach uniformly to any relevant knowledge/ability/strategy node;
+- learner state can overlay any canonical node uniformly;
 - dependency edges can cross current subject silos;
-- knowledge gaps can be separated from reasoning gaps;
-- task labels no longer masquerade as cognitive abilities;
-- identical reasoning can transfer across modern/classical/poetry tasks;
-- learner-facing method count can be kept small through Strategy consolidation.
+- knowledge gaps can be distinguished from reasoning gaps;
+- task labels no longer masquerade as abilities;
+- cross-domain transfer can be represented explicitly;
+- Strategy count can later be consolidated without losing task-specific metadata.
 
 ### Costs
 
-- v1 ability rows will not migrate one-to-one;
-- current mixed labels must be split/generalized;
-- aliases are necessary so school terminology remains recognizable;
-- migration must be non-destructive until Profile and Attempt layers are ready.
+- v1 rows will not migrate one-to-one;
+- mixed labels require split/generalization;
+- migration aliases cannot be used as a shortcut for semantic differences;
+- operational Notion migration must be non-destructive until Profile/Attempt layers exist.
 
 ## Rejected alternatives
 
-### Separate unrelated Knowledge and Ability databases with independent identifiers
+### Encode domain in permanent node ID
+Rejected because domain is mutable taxonomy; moving a semantically identical node would otherwise break identity.
 
-Rejected as the canonical semantic model because dependency edges and profile overlays would need special-case handling. Operational Notion views may still separate node types while sharing one canonical identity model.
+### Separate unrelated Knowledge and Ability registries
+Rejected because dependency/profile tooling would need special-case identity rules.
 
-### Keep the existing 42 rows as permanent atomic abilities
+### Keep all 42 v1 rows as permanent atomic abilities
+Rejected because several visibly mix knowledge, operation and task semantics.
 
-Rejected because several rows visibly combine knowledge, operation and task semantics, preventing precise diagnosis.
+### Organize nodes by grade
+Rejected. Grade is source/load metadata; progression follows dependencies, complexity and learner evidence.
 
-### Organize canonical nodes by grade
-
-Rejected. Grade is source/load metadata. Progression is determined by prerequisites, complexity and learner evidence.
-
-### Treat every question-type algorithm as a Strategy node
-
-Rejected. This would recreate template proliferation. Only reusable mother procedures qualify as canonical Strategy nodes; consolidation is handled in PR G1.
+### Treat every Task Type algorithm as a Strategy
+Rejected. That recreates template proliferation. Only reusable mother procedures qualify; consolidation is deferred to G1.
