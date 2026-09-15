@@ -126,4 +126,4 @@ Examples such as prompt parsing, sentence revision, poetic emotion and character
 - [x] automation/hint evidence boundary documented;
 - [x] F1 Strategy-target integration documented;
 - [x] semantic self-review complete;
-- [ ] stacked PR opened.
+- [x] stacked PR opened.
