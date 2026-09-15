@@ -1,0 +1,223 @@
+# B1 executable-style examples (documentation fixture, not runtime schema)
+# IDs are domain-independent. subdomain uses stable machine codes.
+# aliases_zh contains only one-to-one semantic synonyms, never mixed v1 labels.
+
+- node_id: CN-K-memoir-genre-features
+  name_zh: 回忆性散文的文体特征
+  node_type: knowledge
+  domain: LIT
+  subdomain: LIT.genre
+  definition: >-
+    回忆性散文在回望视角、材料选择、叙事与抒情关系、写作目的等方面的稳定体裁特征。
+  observable_success: >-
+    能说明主要特征，并与传记、小说等相邻体裁作概念区分。
+  scope_in: 体裁稳定特征与概念辨析。
+  scope_out: 对某篇具体现代文本作最终文体判定。
+  parent_node_id: null
+  gaokao_relevance: supporting
+  status: draft
+  aliases_zh: [回忆性散文特征]
+  source_basis: [现有人物叙事学习设计]
+
+- node_id: CN-A-judge-modern-genre-from-evidence
+  name_zh: 根据现代文本证据判断文体
+  node_type: ability
+  domain: MRD
+  subdomain: MRD.genre
+  definition: >-
+    调用体裁知识，从叙事视角、材料组织、表达方式和写作目的等文本证据判断现代文本的文体属性，并说明理由。
+  observable_success: >-
+    面对陌生现代文本时，能列出相关证据并解释其与文体特征的对应关系，而不是只贴标签。
+  scope_in: 回忆性散文、传记、小说等现代文本辨析。
+  scope_out: 仅背体裁定义；文学史记忆；古代文体专项判断。
+  parent_node_id: null
+  gaokao_relevance: supporting
+  status: draft
+  aliases_zh: [根据文本证据判断文体]
+  source_basis: [现有人物叙事学习设计]
+
+- node_id: CN-A-evidence-to-character-judgment
+  name_zh: 由事实、情境与选择推断人物特征
+  node_type: ability
+  domain: META
+  subdomain: META.evidence
+  definition: >-
+    从人物言行、事件与所处特殊情境出发，解释关键选择为何能支持某项相对稳定的人物特征判断。
+  observable_success: >-
+    在现代文或文言陌生材料中，能给出事实证据并显性完成“证据为什么支持人物判断”的推理。
+  scope_in: 人物形象、人物评价、典型事件中的人格判断。
+  scope_out: 文言词句解码；仅概括事件；无证据价值判断。
+  parent_node_id: null
+  gaokao_relevance: core
+  status: draft
+  aliases_zh: []
+  source_basis: [周亚夫军细柳训练记录, 人物叙事单元]
+
+- node_id: CN-S-special-context-key-choice-significance
+  name_zh: 特殊情境—关键选择—意义链
+  node_type: strategy
+  domain: MRD
+  subdomain: MRD.narrative
+  definition: >-
+    识别事件中的特殊压力或限制，找人物关键选择，与常态或他人形成差异，再解释这种差异如何集中证明人物特征并服务人物/主旨。
+  observable_success: >-
+    面对“为什么选这件事/为什么这一小事典型”等不同题目，能主动调用该链条，而非只评价事件“重要”。
+  scope_in: 典型事件、人物选择、选材作用；可通过 transfer edge 支撑写作选材。
+  scope_out: 所有事件概括；固定答案句式。
+  parent_node_id: null
+  gaokao_relevance: supporting
+  status: draft
+  aliases_zh: [特殊情境关键选择意义链]
+  source_basis: [知识与方法卡：典型事件为什么“典型”]
+
+- node_id: CN-K-classical-content-word-meaning-network
+  name_zh: 文言实词常用义网络
+  node_type: knowledge
+  domain: CLA
+  subdomain: CLA.lexicon
+  definition: >-
+    高频文言实词的常见义项及义项之间的基本联系，是语境义判断的知识基础。
+  observable_success: >-
+    能回忆或识别常见义项，并区分容易混淆的义项。
+  scope_in: 高频实词常见义、一词多义网络。
+  scope_out: 在陌生句中最终选择当前义项；完整句子翻译。
+  parent_node_id: null
+  gaokao_relevance: core
+  status: draft
+  aliases_zh: [文言实词常用义]
+  source_basis: [现有文言教材与真题]
+
+- node_id: CN-A-infer-classical-contextual-word-sense
+  name_zh: 根据语境判断文言词语义项
+  node_type: ability
+  domain: CLA
+  subdomain: CLA.lexicon
+  definition: >-
+    在词义知识网络基础上，根据搭配、句法和上下文事件关系选择或推断当前文言语境中的合理义项。
+  observable_success: >-
+    在陌生短篇中能给出与句意一致的词义判断，并在需要时说明语境依据。
+  scope_in: 实词语境义、一词多义义项选择、部分活用后语义理解。
+  scope_out: 单纯背诵词条；虚词功能；完整句子翻译。
+  parent_node_id: null
+  gaokao_relevance: core
+  status: draft
+  aliases_zh: [文言实词语境义]
+  source_basis: [现有文言教材与课外迁移设计]
+
+- node_id: CN-A-translate-classical-sentence-accurately
+  name_zh: 准确翻译文言句子
+  node_type: ability
+  domain: CLA
+  subdomain: CLA.translation
+  definition: >-
+    在落实关键词、识别句法并补足必要省略的基础上，把文言句子转换为语义准确、关系清楚、符合现代汉语表达习惯的句子。
+  observable_success: >-
+    关键词义、逻辑关系、人物/对象、特殊句式均落实，译句通顺且无关键语义遗漏。
+  scope_in: 单句或短句翻译。
+  scope_out: 全文概括；只背固定译文。
+  parent_node_id: null
+  gaokao_relevance: core
+  status: draft
+  aliases_zh: [准确翻译文言句]
+  source_basis: [Project Instruction, 文言训练体系]
+
+- node_id: CN-S-classical-translation-five-step
+  name_zh: 文言翻译五步法
+  node_type: strategy
+  domain: CLA
+  subdomain: CLA.translation
+  definition: 圈关键词 → 逐词落实 → 调整句式 → 补省略 → 通读校验。
+  observable_success: >-
+    能在陌生文言句中主动执行步骤，并通过校验发现关键词遗漏、对象错位或现代汉语不通顺。
+  scope_in: 文言翻译及译句复核。
+  scope_out: 固定篇目的译文记忆。
+  parent_node_id: null
+  gaokao_relevance: supporting
+  status: draft
+  aliases_zh: [圈关键词逐词落实调整句式补省略通读校验]
+  source_basis: [Project Instruction]
+
+- node_id: CN-A-link-poetic-image-to-emotion
+  name_zh: 解释意象、画面与情感之间的关系
+  node_type: ability
+  domain: POE
+  subdomain: POE.emotion
+  definition: >-
+    从具体景物、事件、人物状态和关键词出发，还原画面特征，并解释这些证据如何形成情绪方向和情感对象。
+  observable_success: >-
+    不只给出“思乡/悲伤/喜悦”等情感标签，而能用诗中证据解释情感判断。
+  scope_in: 意象、意境、情景关系、思想感情。
+  scope_out: 只背意象固定象征义；默写。
+  parent_node_id: null
+  gaokao_relevance: core
+  status: draft
+  aliases_zh: [解释诗歌意象与情感关系]
+  source_basis: [Project Instruction, 古诗词题型地图]
+
+- node_id: CN-A-select-typical-writing-material
+  name_zh: 选择能集中表现中心的典型材料
+  node_type: ability
+  domain: WRT
+  subdomain: WRT.material
+  definition: >-
+    根据题目限制和中心问题，在候选经历或材料中选择具有关键冲突、情境压力、人物选择或辨识度的内容，使有限篇幅高效服务中心。
+  observable_success: >-
+    能比较多个候选素材并解释最终选择为什么更能服务中心，而不是只因事件宏大或熟悉而选择。
+  scope_in: 叙事作文选材、素材迁移、典型事件选择。
+  scope_out: 细节展开；全文结构；单纯列素材。
+  parent_node_id: null
+  gaokao_relevance: core
+  status: draft
+  aliases_zh: []
+  source_basis: [人物故事会写作任务, 周亚夫典型事件训练]
+
+- node_id: CN-A-parse-writing-prompt-constraints
+  name_zh: 解析写作题目的任务与限制
+  node_type: ability
+  domain: WRT
+  subdomain: WRT.prompt
+  definition: >-
+    从题目、材料和任务中识别对象、范围、情境、身份、文体、核心限制与必须回应的关系。
+  observable_success: >-
+    能把题目转换为明确约束清单，并避免因漏看限制而出现立意或选材偏题。
+  scope_in: 命题作文、材料作文、任务型写作、微写作前置审题。
+  scope_out: 最终立意质量；完整作文组织。
+  parent_node_id: null
+  gaokao_relevance: core
+  status: draft
+  aliases_zh: [写作任务约束解析]
+  source_basis: [作文训练体系]
+
+- node_id: CN-A-revise-sentence-minimally
+  name_zh: 诊断并最小修改句子逻辑或语法问题
+  node_type: ability
+  domain: LAN
+  subdomain: LAN.revision
+  definition: >-
+    判断句子中的成分、搭配、指代或逻辑关系问题，在尽量保留原意的前提下作最小修改。
+  observable_success: >-
+    能指出问题所在，修改后语义、结构和逻辑均成立，且不过度改写。
+  scope_in: 病句修改、表达准确性、局部改写。
+  scope_out: 全段重写；文学语言审美；作文全文修改。
+  parent_node_id: null
+  gaokao_relevance: supporting
+  status: draft
+  aliases_zh: [最小修改句子问题]
+  source_basis: [语言运用题]
+
+- node_id: CN-S-evidence-explanation-conclusion
+  name_zh: 证据—解释—结论链
+  node_type: strategy
+  domain: META
+  subdomain: META.evidence
+  definition: >-
+    先确定结论所需证据，再显性解释证据与结论之间的关系，最后回扣题目要求，避免“有证据无推理”。
+  observable_success: >-
+    在人物、主旨、诗歌情感、开放评价等不同任务中，能够在不提醒的情况下主动补出证据到结论的中间推理。
+  scope_in: 需要文本证据支持判断的主观题与短论证。
+  scope_out: 纯记忆题；固定答案句式。
+  parent_node_id: null
+  gaokao_relevance: core
+  status: draft
+  aliases_zh: [证据解释结论]
+  source_basis: [阅读答题总算法, 表达升级算法]
