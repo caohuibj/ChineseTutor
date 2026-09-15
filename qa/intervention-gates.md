@@ -118,5 +118,5 @@ Changing to a prerequisite micro-probe inside a question is local tutoring contr
 - [x] model-exposure evidence boundary defined;
 - [x] C2 audit-link amendment defined;
 - [x] modern/classical/poetry/language/writing scenarios added;
-- [ ] semantic self-review completed;
-- [ ] stacked PR opened.
+- [x] semantic self-review completed;
+- [x] stacked PR opened (#22).
