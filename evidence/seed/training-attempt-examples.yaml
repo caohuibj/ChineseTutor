@@ -1,0 +1,228 @@
+# C2 TrainingAttempt fixtures.
+# Includes conservative reconstruction of one existing project session and synthetic examples.
+# Legacy reconstructed scores are intentionally incomplete where historical telemetry is unavailable.
+
+# -----------------------------------------------------------------------------
+# Existing project session: 《周亚夫军细柳》 4.5
+# -----------------------------------------------------------------------------
+- attempt_id: ATT-legacy-zhouyafu-45-01
+  attempt_series_id: SERIES-legacy-zhouyafu-45
+  learner_id: project-learner
+  question_id: null
+  legacy_question_ref: 周亚夫军细柳-4.5-为什么劳军一事足以塑造真将军
+  attempt_number: 1
+  previous_attempt_id: null
+  session_id: SESSION-2026-09-14-zhouyafu
+  target_node_ids:
+    - CN-A-evidence-to-character-judgment
+  node_evidence:
+    - node_id: CN-A-evidence-to-character-judgment
+      role: primary_target
+      observation: positive
+      independence: unknown
+      note: 已能用“特殊情境+关键选择”解释为什么该事件比普通战绩更能说明人物品质；历史提示程度不完整。
+    - node_id: CN-S-special-context-key-choice-significance
+      role: strategy
+      observation: mixed
+      independence: unknown
+      note: 推理链已出现，但无法从旧记录确认是否完全自主调用。
+  completed_at: 2026-09-14T20:38:00+09:00
+  started_at: null
+  elapsed_seconds: null
+  time_limit_seconds: null
+  material_id_snapshot: null
+  task_type_id_snapshot: null
+  material_familiarity: familiar
+  transfer_probe: false
+  legacy_reconstructed: true
+  complexity_band_snapshot: C2
+  complexity_vector_snapshot: null
+  question_variant_group_id: null
+  response_mode: typed_chat
+  artifact_ref: null
+  max_hint_level_before_response: null
+  hint_count_before_response: null
+  intervention_type: null
+  intervention_summary: null
+  question_understanding: 2
+  task_type_recognition: null
+  text_location: 2
+  evidence_selection: 2
+  reasoning: 2
+  terminology: 1
+  written_expression: 1
+  answer_correctness: 2
+  error_codes: [E]
+  primary_error_code: E
+  error_note: 思路和证据成立，但仍是口述式长句，需要整理成“结论—证据—解释”的规范书面表达。
+  delta_from_previous: null
+  delta_summary: null
+  raw_answer: null
+  feedback_summary: 抓到关键：普通战斗主要证明战绩；在天子亲自劳军的特殊情境下仍坚持军令，人物选择更有辨识度。
+
+# -----------------------------------------------------------------------------
+# Existing project session: 《周亚夫军细柳》 4.6
+# -----------------------------------------------------------------------------
+- attempt_id: ATT-legacy-zhouyafu-46-01
+  attempt_series_id: SERIES-legacy-zhouyafu-46
+  learner_id: project-learner
+  question_id: null
+  legacy_question_ref: 周亚夫军细柳-4.6-霸上棘门与细柳营对比作用
+  attempt_number: 1
+  previous_attempt_id: null
+  session_id: SESSION-2026-09-14-zhouyafu
+  target_node_ids:
+    - CN-A-establish-comparison-dimension
+    - CN-A-explain-comparison-significance
+  node_evidence:
+    - node_id: CN-A-establish-comparison-dimension
+      role: primary_target
+      observation: positive
+      independence: unknown
+      note: 能比较其他军营直接放行与细柳营严格按军令行事。
+    - node_id: CN-A-explain-comparison-significance
+      role: primary_target
+      observation: mixed
+      independence: unknown
+      note: 已识别“衬托”，但旧回答中“如何突出周亚夫治军严整/刚正”的作用链不够完整。
+  completed_at: 2026-09-14T20:38:00+09:00
+  started_at: null
+  elapsed_seconds: null
+  time_limit_seconds: null
+  material_id_snapshot: null
+  task_type_id_snapshot: null
+  material_familiarity: familiar
+  transfer_probe: false
+  legacy_reconstructed: true
+  complexity_band_snapshot: C2
+  complexity_vector_snapshot: null
+  question_variant_group_id: null
+  response_mode: typed_chat
+  artifact_ref: null
+  max_hint_level_before_response: null
+  hint_count_before_response: null
+  intervention_type: null
+  intervention_summary: null
+  question_understanding: 2
+  task_type_recognition: 2
+  text_location: 2
+  evidence_selection: 2
+  reasoning: 1
+  terminology: 2
+  written_expression: 1
+  answer_correctness: 1
+  error_codes: [I, E]
+  primary_error_code: I
+  error_note: 对比事实与术语正确，但需要把“差异→突出对象→突出特点”的作用解释写完整。
+  delta_from_previous: null
+  delta_summary: null
+  raw_answer: null
+  feedback_summary: 已找到对比并使用“衬托”术语；下一步要显性说明这种差异怎样突出周亚夫。
+
+# -----------------------------------------------------------------------------
+# Synthetic two-attempt example showing minimal intervention and delta.
+# -----------------------------------------------------------------------------
+- attempt_id: ATT-synthetic-character-01
+  attempt_series_id: SERIES-synthetic-character
+  learner_id: example-learner
+  question_id: Q-synthetic-character
+  legacy_question_ref: null
+  attempt_number: 1
+  previous_attempt_id: null
+  session_id: SESSION-synthetic
+  target_node_ids:
+    - CN-A-evidence-to-character-judgment
+  node_evidence:
+    - node_id: CN-A-evidence-to-character-judgment
+      role: primary_target
+      observation: mixed
+      independence: independent
+      note: 事实与品质判断都有，但缺少证据到结论的解释桥梁。
+  completed_at: 2026-09-15T10:00:00+09:00
+  started_at: null
+  elapsed_seconds: 120
+  time_limit_seconds: 180
+  material_id_snapshot: MAT-synthetic-character
+  task_type_id_snapshot: TT-character-analysis
+  material_familiarity: unfamiliar
+  transfer_probe: true
+  legacy_reconstructed: false
+  complexity_band_snapshot: C2
+  complexity_vector_snapshot: null
+  question_variant_group_id: VAR-character-evidence-01
+  response_mode: written
+  artifact_ref: null
+  max_hint_level_before_response: H0
+  hint_count_before_response: 0
+  intervention_type: none
+  intervention_summary: null
+  question_understanding: 2
+  task_type_recognition: 2
+  text_location: 2
+  evidence_selection: 2
+  reasoning: 1
+  terminology: 1
+  written_expression: 1
+  answer_correctness: 1
+  error_codes: [I, E]
+  primary_error_code: I
+  error_note: 推理跳步。
+  delta_from_previous: null
+  delta_summary: null
+  raw_answer: null
+  feedback_summary: 结论方向成立；只缺“为什么这个行为在这个情境下足以说明该品质”。
+
+- attempt_id: ATT-synthetic-character-02
+  attempt_series_id: SERIES-synthetic-character
+  learner_id: example-learner
+  question_id: Q-synthetic-character
+  legacy_question_ref: null
+  attempt_number: 2
+  previous_attempt_id: ATT-synthetic-character-01
+  session_id: SESSION-synthetic
+  target_node_ids:
+    - CN-A-evidence-to-character-judgment
+  node_evidence:
+    - node_id: CN-A-evidence-to-character-judgment
+      role: primary_target
+      observation: positive
+      independence: partial
+      note: 经一个关键追问后补出了证据到品质的显性理由。
+    - node_id: CN-S-evidence-explanation-conclusion
+      role: strategy
+      observation: positive
+      independence: guided
+      note: 提问激活后能正确完成证据—解释—结论链。
+  completed_at: 2026-09-15T10:03:00+09:00
+  started_at: null
+  elapsed_seconds: 55
+  time_limit_seconds: 180
+  material_id_snapshot: MAT-synthetic-character
+  task_type_id_snapshot: TT-character-analysis
+  material_familiarity: unfamiliar
+  transfer_probe: true
+  legacy_reconstructed: false
+  complexity_band_snapshot: C2
+  complexity_vector_snapshot: null
+  question_variant_group_id: VAR-character-evidence-01
+  response_mode: written
+  artifact_ref: null
+  max_hint_level_before_response: H3
+  hint_count_before_response: 1
+  intervention_type: guiding_question
+  intervention_summary: 为什么这个行为在当时的特殊情境下比一般行为更能说明这个品质？
+  question_understanding: 2
+  task_type_recognition: 2
+  text_location: 2
+  evidence_selection: 2
+  reasoning: 2
+  terminology: 2
+  written_expression: 2
+  answer_correctness: 2
+  error_codes: []
+  primary_error_code: null
+  error_note: null
+  delta_from_previous: resolved
+  delta_summary: 一个H3关键问题即可补齐推理与书面表达；下一题应撤掉该提示验证自动化。
+  raw_answer: null
+  feedback_summary: 二答成立；该次成功证明“提示下可修复”，但尚不能当作H0独立迁移证据。
