@@ -117,11 +117,38 @@ now ≥ overdue_at              → overdue
 
 ---
 
-## 5. Forgetting risk
+## 5. Freshness confidence
+
+Historical evidence strength and current freshness are separate.
+
+Suggested default interpretation relative to the axis horizon `H`:
+
+```text
+no usable verification timestamp                        → unknown
+elapsed < 0.60H, no contradiction                       → high
+0.60H ≤ elapsed < 1.00H, no meaningful contradiction   → medium/high depending evidence strength
+1.00H ≤ elapsed < 1.75H                                 → medium
+elapsed ≥ 1.75H                                         → low
+```
+
+Adjust downward when:
+
+- evidence strength was weak;
+- recent contradictions exist;
+- the active requirement demands a more exact/high-pressure form than the last verification.
+
+Adjust upward only through valid newer evidence accepted by C3; do not manually “feel confident” without evidence.
+
+These cutoffs are policy defaults, not a psychological law.
+
+---
+
+## 6. Forgetting risk
 
 `forgetting_risk` is not merely elapsed time. It combines:
 
 - review status;
+- freshness confidence;
 - evidence strength;
 - node retention family;
 - recent meaningful use;
@@ -138,6 +165,7 @@ Use when the system lacks enough verification history to interpret recency.
 Typical when:
 
 - review status is current;
+- freshness confidence is high;
 - evidence is moderate/strong;
 - no recent contradiction exists.
 
@@ -146,6 +174,7 @@ Typical when one or more apply:
 
 - approaching due horizon;
 - review status is due;
+- freshness confidence is medium;
 - evidence was weak;
 - automation has not been observed recently;
 - active requirement raises freshness importance.
@@ -154,6 +183,7 @@ Typical when one or more apply:
 Typical when one or more apply:
 
 - review status is overdue for an important axis;
+- freshness confidence is low;
 - recent contradictory evidence exists;
 - a previously stable hard prerequisite now shows instability;
 - exact-retrieval/recitation evidence is substantially stale near an active assessment.
@@ -162,19 +192,21 @@ High forgetting risk still does **not** mean M/A/C automatically drops.
 
 ---
 
-## 6. Evidence-strength adaptation
+## 7. Evidence-strength adaptation
 
 The horizon table already gives shorter intervals for weak evidence, but F3 applies additional semantic rules.
 
 ### Weak evidence
 Examples:
 
-- one old success;
+- one sparse success;
 - heavy scaffold;
-- legacy backfill;
+- legacy-only backfill;
 - near-identical variants only.
 
 Treat review as **re-verification**, not routine maintenance.
+
+Age itself is represented through freshness confidence rather than retroactively rewriting a historically strong evidence set as weak.
 
 ### Moderate evidence
 Use normal family horizon.
@@ -186,9 +218,9 @@ Strong evidence never means “never review again”.
 
 ---
 
-## 7. Embedded/implicit review
+## 8. Embedded/implicit review
 
-A TrainingAttempt not labelled `review` may refresh the clock if it genuinely re-observes the axis.
+A TrainingAttempt not labelled `review` may refresh the clock if it genuinely re-observes the axis and C3 accepts it as current verification evidence.
 
 ### Can refresh mastery
 A recent attempt may refresh mastery when:
@@ -199,6 +231,8 @@ A recent attempt may refresh mastery when:
 - the task is representative enough for the node;
 - no supplied answer invalidated the construct.
 
+For M3 specifically, a familiar routine item is not enough. Refreshing an M3 claim requires meaningful unfamiliar/diverse transfer evidence consistent with the C3 M3 semantics.
+
 ### Can refresh automation
 Only if the attempt actually observes self-trigger/access/low-friction execution, typically:
 
@@ -207,7 +241,7 @@ Only if the attempt actually observes self-trigger/access/low-friction execution
 - time/attention conditions are relevant when claiming A3.
 
 ### Can refresh complexity
-Only if the attempt independently performs the node at a comparable or higher D2 demand than the currently verified band.
+Only if the attempt independently performs the node at a comparable or higher D2 demand than the currently verified band, with relevant complexity dimensions represented.
 
 ### Does not refresh
 
@@ -216,11 +250,12 @@ Only if the attempt independently performs the node at a comparable or higher D2
 - seeing a model answer;
 - downstream task where the node is `not_observed`;
 - success only after direct supply of the target content;
-- a very easy task that does not re-test the relevant complexity claim.
+- a very easy task that does not re-test the relevant complexity claim;
+- a familiar routine item when the claim being refreshed is M3 transfer.
 
 ---
 
-## 8. Family-specific review shapes
+## 9. Family-specific review shapes
 
 ### `exact_retrieval`
 Prefer brief retrieval-in-context, discrimination, or production probes. Batch multiple compatible facts efficiently.
@@ -242,7 +277,7 @@ Prefer authentic micro-writing/revision artifacts tied to the specific skill. A 
 
 ---
 
-## 9. Node-level overrides
+## 10. Node-level overrides
 
 A canonical node may define a retention override only when there is a stable semantic reason.
 
@@ -259,13 +294,15 @@ Learner-specific calibration belongs to personal policy/profile configuration, n
 
 ---
 
-## 10. F3 invariants
+## 11. F3 invariants
 
 1. Review horizon is a scheduling heuristic, not a mastery score.
 2. Time alone never downgrades M/A/C.
 3. Evidence family matters more than source grade.
 4. Each axis may have a different clock.
-5. Embedded use counts only when the target construct is actually re-observed.
-6. Passive exposure does not reset clocks.
-7. Strong evidence extends the interval; it does not create permanent exemption.
-8. Policy values remain configurable and should be recalibrated from real learner data later.
+5. Evidence strength and freshness confidence remain distinct.
+6. Embedded use counts only when the target construct is actually re-observed and accepted through C3.
+7. Passive exposure does not reset clocks.
+8. M3 retention preserves transfer requirements.
+9. Strong evidence extends the interval; it does not create permanent exemption.
+10. Policy values remain configurable and should be recalibrated from real learner data later.
