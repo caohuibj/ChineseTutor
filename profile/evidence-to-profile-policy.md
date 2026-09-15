@@ -1,10 +1,10 @@
 # C3 — Evidence → Learner Profile update policy
 
-Status: **normative draft**
+Status: **normative draft — semantic self-review complete**
 
 This policy defines how C2 `TrainingAttempt` evidence contributes to C1 `LearnerNodeState`.
 
-It is deliberately conservative. The goal is not to maximize the number of state changes; the goal is to make every change semantically defensible, explainable, and reversible when later evidence contradicts it.
+It is deliberately conservative. The goal is not to maximize the number of state changes; the goal is to make every change semantically defensible, explainable, replayable, and reversible when later evidence contradicts it.
 
 ---
 
@@ -26,6 +26,16 @@ For one learner and one canonical node:
 ```
 
 Do not jump directly from `answer_correctness` to mastery.
+
+The authoritative semantic model is **replayable projection**, not irreversible mutation. Implementations may update incrementally for speed, but the current Profile must be reproducible from:
+
+```text
+TrainingAttempt / artifact evidence ledger
++ policy version
++ explicit manual overrides
+```
+
+A newer policy may recompute a different current state without deleting prior evidence or prior decisions.
 
 ---
 
@@ -68,6 +78,8 @@ Discount or exclude evidence when:
 - multiple items are trivial variants and are being counted as independent diversity.
 
 Evidence may remain useful for diagnosis even if it is too weak to move mastery.
+
+When hint relevance to the target node is ambiguous, do **not** assume full independence. Preserve the observation with lower confidence or `partial/unknown` independence until causal interpretation is defensible.
 
 ---
 
@@ -180,11 +192,15 @@ It can:
 
 It must not be manufactured from downstream failure when the node was not actually observable.
 
+For A0 specifically, failure to invoke is valid automation evidence only when underlying knowledge/ability is sufficient for invocation to be meaningfully observable. Missing mastery should not be mislabeled as missing automation.
+
 ---
 
 # 6. Mastery update semantics
 
 Mastery is a current estimate of quality + independence + generalization.
+
+State levels are **evidence claims, not mandatory sequential badges**. If a previously unknown node already has a batch of evidence satisfying M2 or M3 semantics, it may initialize directly to that level. Do not require artificial M0→M1→M2 progression over separate runs.
 
 ## 6.1 Unknown → M0
 
@@ -217,12 +233,14 @@ M2 requires independent success on representative tasks.
 
 Minimum semantic topology:
 
-- more than one valid independent success;
+- more than one valid independent observation or equivalent independently assessable evidence episodes;
 - not all from the same near-identical variant group;
 - representative coverage of the node's observable-success semantics;
 - no unresolved recent contradiction of comparable quality.
 
 This is a **minimum topology**, not an attempt-count formula. Two trivial items are not sufficient merely because the number is two.
+
+For costly long-form writing/artifact work, independently assessable versions, sections, or revision episodes may provide distinct evidence when they genuinely expose the same canonical node under varied conditions. C3 must not require repeated full essays merely to satisfy a numeric quota.
 
 Hints that only activate a separate Strategy may still permit M2 for execution quality if node-specific independence remains `independent`; they usually weaken automation evidence instead.
 
@@ -232,13 +250,13 @@ M3 means stable generalization, not “very good at routine tasks”.
 
 Require:
 
-1. M2-quality independent performance is already established;
-2. at least two meaningfully distinct unfamiliar transfer contexts or equivalent strong diversity evidence;
+1. M2-quality independent performance is already established in the evidence set;
+2. at least two meaningfully distinct unfamiliar transfer contexts or equivalent stronger diversity evidence;
 3. target operation remains semantically the same while material/task surface changes;
 4. success is not dependent on meaningful strategy/reasoning prompts;
 5. no strong contradictory transfer evidence remains unresolved.
 
-At least two distinct transfer contexts is a guardrail against one lucky item; it is necessary but not automatically sufficient.
+At least two distinct transfer contexts is a guardrail against one lucky item; it is necessary in ordinary short-task evidence but not mechanically sufficient. A richer long-form artifact history may provide equivalent stronger evidence topology.
 
 Repeated familiar high-complexity success can raise complexity confidence without producing M3.
 
@@ -246,7 +264,7 @@ Repeated familiar high-complexity success can raise complexity confidence withou
 
 # 7. Automation update semantics
 
-Automation is independent from mastery.
+Automation is independent from mastery. A previously unknown automation state may initialize directly to A2/A3 if the evidence set genuinely satisfies those semantics; sequential unlocking is not required.
 
 ## 7.1 Unknown/A0 → A1
 
@@ -291,7 +309,7 @@ Untimed work cannot by itself verify A3.
 
 # 8. Verified complexity update semantics
 
-`verified_complexity_band` is the highest intrinsic D2 complexity band at which the learner has sufficiently credible evidence for the node.
+`verified_complexity_band` is the highest intrinsic D2 complexity band at which the learner has sufficiently credible evidence for the node. It may initialize directly to any supported band; C0→C1→C2 sequential unlocking is not required.
 
 Rules:
 
@@ -523,13 +541,29 @@ Profile effect:
 
 ---
 
-# 16. Policy invariants
+# 16. Replay and policy-version semantics
+
+`LearnerNodeState` is a current materialized projection. `TrainingAttempt`/artifact evidence remains the durable source.
+
+Requirements:
+
+- incremental updates must be replay-equivalent to recomputation over the same evidence scope;
+- every decision records `policy_version`;
+- manual overrides remain explicit and separable from evidence-derived state;
+- a later policy version may alter the current projection without rewriting historical Attempt events;
+- prior `ProfileUpdateDecision` records remain available for audit.
+
+This prevents hidden drift from years of irreversible point mutations.
+
+---
+
+# 17. Policy invariants
 
 1. Node-specific observation beats whole-question correctness.
 2. Unknown never becomes weak without valid negative evidence.
 3. Scaffold level changes the meaning of success.
 4. Independence is evaluated per node, not globally.
-5. M/A/C update independently.
+5. M/A/C update independently and may initialize directly to evidence-supported levels.
 6. Hold + confidence change is a first-class outcome.
 7. Diversity matters; repeated variants do not fabricate stability.
 8. M3 requires unfamiliar generalization evidence.
@@ -539,4 +573,6 @@ Profile effect:
 12. Legacy evidence is preserved but cannot dominate stronger native evidence.
 13. Error patterns require repetition and causal stability.
 14. Graph relations guide diagnosis but never propagate mastery.
-15. Every material Profile change is auditable through `ProfileUpdateDecision`.
+15. Long-form artifacts can contribute multiple valid evidence episodes without requiring repeated whole artifacts.
+16. Current Profile is replayable from evidence + policy version + explicit override.
+17. Every material Profile change is auditable through `ProfileUpdateDecision`.
