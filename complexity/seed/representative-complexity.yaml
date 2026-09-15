@@ -1,0 +1,151 @@
+# D2 representative complexity calibration fixtures.
+# These are architecture/calibration examples. Unless an exact source reference is given,
+# they should not be represented as verbatim authentic exam items.
+
+- fixture_id: CX-modern-character-evidence
+  domain: modern_reading
+  task_label: 陌生叙事文本中依据关键事件分析人物特点
+  source_basis: project_task_archetype
+  vector:
+    text_load: 1
+    information_hiddenness: 2
+    reasoning_depth: 2
+    material_heterogeneity: 0
+    knowledge_retrieval_distance: 1
+    response_openness: 1
+    expression_load: 1
+    time_pressure: 1
+  band: C2
+  rationale: >-
+    主要难点是从事件/情境/选择建立证据—解释—人物判断链；单一材料、回答空间较窄，
+    因而是典型多步解释而非多材料综合。是否“陌生”属于 Attempt 条件，不改变 C2。
+
+- fixture_id: CX-classical-translation
+  domain: classical_chinese
+  task_label: 文言句子关键词落实并调整句式完成翻译
+  source_basis: project_translation_model
+  vector:
+    text_load: 0
+    information_hiddenness: 2
+    reasoning_depth: 2
+    material_heterogeneity: 0
+    knowledge_retrieval_distance: 2
+    response_openness: 1
+    expression_load: 1
+    time_pressure: 1
+  band: C2
+  rationale: >-
+    输入局部但语义通常隐含在古今词义、句式、省略关系中，需要多要素协调；答案受原句约束，
+    开放度有限，因此属于 C2 而非开放评价。
+
+- fixture_id: CX-poetry-emotion
+  domain: poetry
+  task_label: 根据意象、画面和关键词解释诗歌情感
+  source_basis: project_poetry_model
+  vector:
+    text_load: 1
+    information_hiddenness: 2
+    reasoning_depth: 2
+    material_heterogeneity: 0
+    knowledge_retrieval_distance: 1
+    response_openness: 2
+    expression_load: 1
+    time_pressure: 1
+  band: C2
+  rationale: >-
+    情感不能只贴标签，需要从局部语言证据建立解释链；可能存在多个受约束的合理表述，
+    但通常仍是单文本、有限开放的解释任务。
+
+- fixture_id: CX-language-sentence-revision
+  domain: language_use
+  task_label: 识别句子逻辑/语病并作最小修改
+  source_basis: project_language_model
+  vector:
+    text_load: 0
+    information_hiddenness: 1
+    reasoning_depth: 1
+    material_heterogeneity: 0
+    knowledge_retrieval_distance: 1
+    response_openness: 1
+    expression_load: 0
+    time_pressure: 1
+  band: C1
+  rationale: >-
+    一般只需识别一个局部关系或规则并完成一次受约束修改。若题目同时涉及多重语义逻辑冲突，
+    可以在具体 Question 上升至 C2，而不是按“语病题”统一定级。
+
+- fixture_id: CX-multitext-information-evaluation
+  domain: modern_information
+  task_label: 多材料整合并评价观点与证据是否充分
+  source_basis: gaokao_bridge_archetype
+  vector:
+    text_load: 2
+    information_hiddenness: 3
+    reasoning_depth: 3
+    material_heterogeneity: 2
+    knowledge_retrieval_distance: 2
+    response_openness: 2
+    expression_load: 2
+    time_pressure: 2
+  band: C4
+  rationale: >-
+    需要跨材料重组关系、识别隐含前提并评价证据相关性/充分性；开放度仍受材料与任务约束，
+    因而属于高综合受约束评价 C4，而不是必须判为 C5。
+
+- fixture_id: CX-poetry-comparison
+  domain: poetry
+  task_label: 比较两首诗中同一意象/手法的不同作用
+  source_basis: project_comparison_archetype
+  vector:
+    text_load: 1
+    information_hiddenness: 2
+    reasoning_depth: 2
+    material_heterogeneity: 2
+    knowledge_retrieval_distance: 1
+    response_openness: 2
+    expression_load: 2
+    time_pressure: 1
+  band: C3
+  rationale: >-
+    两个诗歌对象需要分别取证并建立统一比较维度，多个二级维度同时参与，
+    但通常不要求深层模型评价或远距离理论调用，因此校准为 C3。
+
+- fixture_id: CX-full-narrative-writing
+  domain: writing
+  task_label: 根据开放命题完成完整叙事作文
+  source_basis: project_writing_archetype
+  vector:
+    text_load: 1
+    information_hiddenness: 1
+    reasoning_depth: 2
+    material_heterogeneity: 0
+    knowledge_retrieval_distance: 1
+    response_openness: 3
+    expression_load: 3
+    time_pressure: 2
+  band: C5
+  rationale: >-
+    选材、结构、场景、人物、语言与点题需要持续组织，存在多条合理建构路径；
+    即使单个局部推理不都达到 reasoning=3，开放度3与表达负荷3使其构成复杂建构任务。
+
+- fixture_id: CX-argumentative-material-writing
+  domain: writing
+  task_label: 基于材料建立有边界的完整论证
+  source_basis: gaokao_writing_archetype
+  vector:
+    text_load: 2
+    information_hiddenness: 2
+    reasoning_depth: 3
+    material_heterogeneity: 1
+    knowledge_retrieval_distance: 2
+    response_openness: 3
+    expression_load: 3
+    time_pressure: 2
+  band: C5
+  rationale: >-
+    需要界定概念、建立观点—理由—论据—分析链并处理限定/反例，且输出是开放的长篇复杂建构。
+
+# Same intrinsic Question under different learner conditions:
+# - C2 character-evidence question + familiar material + H3 -> scaffolded learning evidence
+# - same C2 question + unfamiliar material + H0 -> transfer/generalization probe
+# Canonical band remains C2 in both cases.
