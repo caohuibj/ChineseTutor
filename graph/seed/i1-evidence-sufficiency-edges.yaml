@@ -1,0 +1,42 @@
+# B2-compatible edges for the Issue #31 Ability.
+# These are authored Strategy -> Ability relations. No Strategy is a hard prerequisite.
+
+- edge_id: LE-strategy_for-evidence-explanation-conclusion--evaluate-evidence-sufficiency-for-claim
+  from_node_id: CN-S-evidence-explanation-conclusion
+  relation_type: strategy_for
+  to_node_id: CN-A-evaluate-evidence-sufficiency-for-claim
+  rationale: >-
+    S1 makes the warrant between evidence and conclusion explicit, which is necessary for noticing when a cited fact is relevant but does not actually support the claimed inference strongly enough.
+  scope_note: >-
+    Useful when the main diagnostic problem is the local evidence-to-conclusion link; it does not by itself guarantee that the complete evidence set is sufficient.
+  evidence_level: supported
+  source_basis: [G1 S1, I1 evidence-sufficiency audit, Issue #31]
+  status: active
+
+- edge_id: LE-strategy_for-compare-dimension-evidence-significance--evaluate-evidence-sufficiency-for-claim
+  from_node_id: CN-S-compare-dimension-evidence-significance
+  relation_type: strategy_for
+  to_node_id: CN-A-evaluate-evidence-sufficiency-for-claim
+  rationale: >-
+    S2 supports adjudication between competing interpretations or claims by forcing evidence to be compared under a shared dimension rather than counted or listed independently.
+  scope_note: >-
+    Especially useful for competing interpretations, cross-text claims and paired judgments; not required when only one claim is under evaluation.
+  evidence_level: supported
+  source_basis: [G1 S2, I1-BJ2023-CLASSICAL-INTERPRETATION, Issue #31]
+  status: active
+
+- edge_id: LE-strategy_for-claim-reason-evidence-warrant-boundary--evaluate-evidence-sufficiency-for-claim
+  from_node_id: CN-S-claim-reason-evidence-warrant-boundary
+  relation_type: strategy_for
+  to_node_id: CN-A-evaluate-evidence-sufficiency-for-claim
+  rationale: >-
+    S5 explicitly checks claim, reasons, evidence, warrant and qualification/boundary, matching the reusable procedure needed to detect irrelevant support, missing coverage and over-broad conclusions.
+  scope_note: >-
+    Recommended for open evaluation and argumentative production; Strategy execution is evidence about the procedure, while the Ability is the evaluated outcome.
+  evidence_level: supported
+  source_basis: [G1 S5, I1 Gaokao audit, Issue #31]
+  status: active
+
+# No global `requires` edge is added here.
+# Evidence-selection, text-decoding and domain-knowledge prerequisites vary by Question.
+# A task may present the candidate evidence directly, so those operations fail B2's whole-target necessity test.
