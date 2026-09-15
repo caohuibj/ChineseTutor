@@ -149,4 +149,4 @@ The cached family can be recomputed from policy/canonical semantics; learner sta
 - [x] review-flood controls defined;
 - [x] cross-domain regression scenarios added;
 - [x] semantic self-review complete;
-- [ ] stacked PR opened.
+- [x] stacked PR opened.
