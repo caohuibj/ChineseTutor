@@ -1,12 +1,12 @@
 # LearningEdge canonical schema
 
-Status: **B2 normative draft — self-reviewed**
+Status: **B2 normative draft — second semantic review complete**
 
 This document defines stable semantic relationships between canonical `LearningNode` records. It builds on B1 and excludes learner-specific state.
 
 ## 1. Core rule
 
-A `LearningEdge` states a durable semantic relationship between two canonical nodes. It answers questions such as:
+A `LearningEdge` is an **authored, persisted** semantic relationship between two canonical nodes. It answers questions such as:
 
 - what is genuinely required before another operation is independently viable?
 - what knowledge/ability materially supports another node without blocking it?
@@ -16,16 +16,17 @@ A `LearningEdge` states a durable semantic relationship between two canonical no
 
 Edges do **not** store one learner's readiness, mastery, recent performance or recommendation priority.
 
+B2 also exposes one **virtual graph relation**, `part_of`, derived only from B1 `LearningNode.parent_node_id`. It is queryable in graph views but is **not persisted as a LearningEdge record**.
+
 ---
 
-## 2. Relation types and direction
+## 2. Relation vocabulary and direction
 
-Canonical relation types:
+### 2.1 Persisted authored LearningEdge types
 
 ```text
 requires
 supports
-part_of
 strategy_for
 transfers_to
 contrasts_with
@@ -65,14 +66,6 @@ CN-K-memoir-genre-features
 CN-A-judge-modern-genre-from-evidence
 ```
 
-### `part_of`
-
-```text
-CHILD part_of PARENT
-```
-
-Structural projection only. In B2 it is **derived from B1 `parent_node_id`** and is not independently authored.
-
 ### `strategy_for`
 
 ```text
@@ -102,14 +95,29 @@ Cross-type reuse should normally use `strategy_for`, `supports`, or a shared gen
 
 Symmetric distinction/confusion relation. Store one canonical pair only; do not infer direction or transitivity.
 
+### 2.2 Virtual relation: `part_of`
+
+```text
+CHILD part_of PARENT
+```
+
+`part_of` is a read-model projection:
+
+```text
+child.parent_node_id = parent
+=> child part_of parent
+```
+
+It is never hand-authored, never assigned its own `edge_id`, `evidence_level`, `source_basis`, or `status`, and never appears in the persisted `LearningEdge` store. This guarantees B1 taxonomy has one source of truth.
+
 ---
 
-## 3. Canonical fields
+## 3. Persisted LearningEdge fields
 
 ```yaml
 edge_id: string
 from_node_id: string
-relation_type: requires | supports | part_of | strategy_for | transfers_to | contrasts_with
+relation_type: requires | supports | strategy_for | transfers_to | contrasts_with
 to_node_id: string
 rationale: string
 scope_note: string | null
@@ -168,14 +176,15 @@ Allowed primarily for `supports` and `transfers_to`; coarse semantic strength on
 
 ## 4. Endpoint type constraints
 
-| relation | allowed FROM | allowed TO | notes |
+| persisted relation | allowed FROM | allowed TO | notes |
 | --- | --- | --- | --- |
 | requires | Knowledge / Ability / Strategy | Knowledge / Ability | Strategy may require component Knowledge/Abilities; Strategy is not a hard-prerequisite target |
 | supports | Knowledge / Ability / Strategy | Knowledge / Ability / Strategy | source is the support; target is the beneficiary |
-| part_of | same type as parent | same type as child | derived from B1 hierarchy; direction child→parent |
 | strategy_for | Strategy only | Ability only | TaskType mapping lives elsewhere |
 | transfers_to | Ability or Strategy | same type as source | directed, non-equivalent, non-blocking |
 | contrasts_with | same node type | same node type | symmetric canonical pair |
+
+Virtual `part_of` requires child and parent to satisfy the B1 parent rules, including same semantic type and acyclic taxonomy.
 
 Reject by default:
 
@@ -218,7 +227,7 @@ Fail. Relevant image knowledge may `support` the target but is not globally nece
 ## 6. Graph integrity rules
 
 ### 6.1 No self edges
-Reject `A relation A` for all relation types.
+Reject `A relation A` for all persisted relation types. B1 parent validation likewise rejects self-parenting.
 
 ### 6.2 `requires` is acyclic
 The active hard-prerequisite subgraph must be a DAG. Every new active `requires` edge must pass cycle detection/topological validation.
@@ -242,13 +251,13 @@ do not automatically store `A requires C`. Add it only if C is also a direct sem
 
 For `contrasts_with`, store exactly one pair; reverse duplicates are invalid.
 
-### 6.6 `part_of` has one source of truth
+### 6.6 Taxonomy projection is not persisted
 
-Do not hand-author `part_of`; derive it from `LearningNode.parent_node_id`.
+Never create a `LearningEdge` row whose `relation_type` is `part_of`. Graph consumers derive `part_of` from `LearningNode.parent_node_id` at read/traversal time.
 
 ### 6.7 No implicit inverse records
 
-Views may expose `required_by` / `supported_by`, but only canonical authored direction is stored.
+Views may expose `required_by`, `supported_by`, or `parent_of`, but only canonical authored direction (or the B1 parent field for taxonomy) is stored.
 
 ---
 
@@ -263,7 +272,7 @@ Expected downstream behavior:
 - `strategy_for` → candidate procedure for hints/scaffold;
 - `transfers_to` → source success may justify a transfer probe or lower initial scaffold, but never mastery propagation;
 - `contrasts_with` → candidate discriminative/confusion practice;
-- `part_of` → reporting/navigation only.
+- virtual `part_of` → reporting/navigation only.
 
 Learner readiness thresholds belong to C1/F1.
 
@@ -273,16 +282,17 @@ Learner readiness thresholds belong to C1/F1.
 
 Prefer the weakest relation that accurately captures reality. Do not use `requires` to impose teaching order.
 
-A new edge should change at least one downstream behavior:
+A new authored edge should change at least one downstream behavior:
 
 - readiness/blocking;
 - remediation choice;
 - scaffold choice;
 - transfer-probe selection;
-- confusion diagnosis;
-- reporting/navigation.
+- confusion diagnosis.
 
-If it changes nothing, do not add it.
+Taxonomic reporting is handled by B1 parent hierarchy, not by authored LearningEdge rows.
+
+If an edge changes nothing, do not add it.
 
 ---
 
@@ -308,13 +318,13 @@ These belong to Profile/Attempt/Recommendation analytics.
 
 ## 10. B2 invariants
 
-1. Every active edge has valid canonical endpoints.
-2. Every edge has exactly one relation type and an unambiguous direction.
+1. Every active persisted edge has valid canonical endpoints.
+2. Every persisted edge has exactly one authored relation type and an unambiguous direction.
 3. `requires` is sparse, whole-target, grade-independent and acyclic.
 4. `supports` direction is supporter→target and never blocks readiness.
-5. `part_of` is derived from B1 parent hierarchy only.
+5. `part_of` is virtual only and derived from B1 `parent_node_id`; it is never a persisted LearningEdge row.
 6. `strategy_for` is Strategy→Ability.
 7. `transfers_to` is same-type Ability→Ability or Strategy→Strategy and never implies equivalence/prerequisite.
 8. `contrasts_with` is same-type, symmetric and deduplicated.
 9. learner state never appears in canonical edges.
-10. rationale and source basis are reviewable.
+10. rationale and source basis are reviewable for every persisted edge.
