@@ -4,13 +4,13 @@ Issue: #2 — Define prerequisite/dependency graph semantics
 
 ## Implemented
 
-- canonical `LearningEdge` schema;
-- six relation types: `requires`, `supports`, `part_of`, `strategy_for`, `transfers_to`, `contrasts_with`;
+- canonical persisted `LearningEdge` schema;
+- five authored relation types: `requires`, `supports`, `strategy_for`, `transfers_to`, `contrasts_with`;
+- sixth graph relation `part_of` as a virtual projection from B1 `parent_node_id`;
 - natural direction convention for every relation;
 - hard-prerequisite necessity test and whole-target applicability rule;
 - endpoint-type constraints;
 - acyclic hard-prerequisite policy;
-- derived-only `part_of` policy tied to B1 `parent_node_id`;
 - Strategy-vs-prerequisite distinction;
 - same-operation generalization vs cross-operation transfer rule;
 - edge evidence/confidence model;
@@ -20,17 +20,9 @@ Issue: #2 — Define prerequisite/dependency graph semantics
 
 ## Semantic self-review findings
 
-The first B2 draft exposed five issues worth correcting before opening the PR.
+Two review passes exposed six issues and corrected them.
 
 ### 1. `supports` direction was linguistically reversed — fixed
-
-The first draft encoded:
-
-```text
-TARGET supports SUPPORT_NODE
-```
-
-while the prose meant “SUPPORT_NODE supports TARGET”. This would be error-prone in traversal and authoring.
 
 Canonical direction is now:
 
@@ -38,49 +30,52 @@ Canonical direction is now:
 SUPPORT_NODE supports TARGET
 ```
 
-and seed data/QA/ADR are aligned.
-
 ### 2. Cross-type `transfers_to` was ambiguous — fixed
 
-Allowing Strategy→Ability transfer overlaps with `strategy_for`, while Knowledge→Ability overlaps with `supports/requires`.
-
-B2 now restricts transfer to:
+B2 restricts transfer to:
 
 ```text
 Ability -> Ability
 Strategy -> Strategy
 ```
 
-If two operations are actually semantically identical, they should be one generalized node rather than a transfer edge.
+Cross-type reuse uses `strategy_for`, `supports`, or shared-node generalization.
 
 ### 3. Generic `supports` could swallow specialized relations — fixed
 
-The relation-choice decision tree now checks:
+Relation selection now prefers taxonomy/same identity, hard prerequisite, `strategy_for`, same-type `transfers_to`, then generic `supports`, then `contrasts_with`.
 
-1. taxonomy / same identity;
-2. hard prerequisite;
-3. `strategy_for`;
-4. same-type `transfers_to`;
-5. generic `supports`;
-6. `contrasts_with`.
+### 4. Seed-edge confidence was overstated — fixed
 
-This preserves more informative semantics.
+An evidence→character Strategy relation initially marked `validated` was downgraded to `supported` pending repeated graph/learner evidence.
 
-### 4. Seed edge confidence was overstated — fixed
+### 5. Derived taxonomy needs cycle safety — fixed
 
-The evidence→character Strategy relation was initially marked `validated`, but current evidence is strong design/teaching support rather than repeated graph validation. It has been downgraded to `supported`.
+Virtual `part_of` inherits B1 parent constraints and must remain acyclic.
 
-### 5. Derived taxonomy also needs cycle safety — clarified
+### 6. `part_of` was still modeled like a persisted edge — fixed
 
-`part_of` is derived from B1 parent hierarchy and must remain acyclic, even though it does not participate in readiness blocking.
+The first reviewed schema correctly said `part_of` was derived but still listed it in the persisted LearningEdge union, forcing unnecessary authored fields such as rationale/evidence/source_basis and leaving room for duplicate storage.
+
+Final B2 contract:
+
+```text
+Persisted LearningEdge:
+requires | supports | strategy_for | transfers_to | contrasts_with
+
+Virtual graph relation:
+part_of := projection of LearningNode.parent_node_id
+```
+
+No stored `part_of` row is valid.
 
 ## Acceptance judgment
 
-**PASS for B2 draft architecture.**
+**PASS for B2 semantic architecture.**
 
-The remaining questions require later learner-state/attempt evidence rather than more edge-schema design:
+The remaining questions require learner-state/attempt evidence rather than more edge-schema design:
 
-- what mastery level makes a prerequisite “ready”;
+- what learner state makes a hard prerequisite “ready”;
 - how recommendation scores use hard/soft/transfer edges;
 - whether graph evidence levels can be upgraded from actual learner data;
 - how task-specific conditional prerequisites attach to Questions.
