@@ -1,6 +1,6 @@
 # v1 learner-state → v2 LearnerNodeState backfill plan
 
-Status: **C1 non-destructive migration design**
+Status: **C1 non-destructive migration design — aligned to per-axis evidence model**
 
 The current Notion ability map stores personal state next to canonical concept definitions. C1 separates those fields without pretending that every v1 row maps one-to-one to a v2 node.
 
@@ -12,7 +12,7 @@ The current Notion ability map stores personal state next to canonical concept d
 | --- | --- | --- |
 | `当前掌握度` | `LearnerNodeState.mastery` | direct only when v1 row maps one-to-one to a canonical node; otherwise use split/merge rules below |
 | `自动化度` | `LearnerNodeState.automation` | same rule as mastery |
-| `最近训练` | `last_trained_at` | never automatically treated as `last_verified_at` |
+| `最近训练` | `last_trained_at` | never automatically treated as any axis verification timestamp |
 | `待加强` | `attention_reason` legacy note | does not automatically mean `bottleneck` |
 | `阶段定位` | no direct LearnerNodeState field | legacy curriculum/planning metadata; grade/stage is not mastery |
 | `初二达标标准` | not personal state | useful content may become canonical observable-success example / load guidance / active goal outside Profile |
@@ -24,25 +24,41 @@ The current Notion ability map stores personal state next to canonical concept d
 
 ## 2. Direct one-to-one backfill
 
-When a v1 row maps cleanly to one canonical v2 node, e.g. a stable Ability concept retained semantically, backfill may initialize:
+When a v1 row maps cleanly to one canonical v2 node, backfill may initialize:
 
 ```yaml
 mastery: mapped v1 value
 automation: mapped v1 value
-last_trained_at: v1 最近训练
-last_verified_at: null
-evidence_strength: weak
+verified_complexity_band: null
+
+mastery_evidence_strength: weak
+automation_evidence_strength: weak
+complexity_evidence_strength: none
+
 state_source: legacy_backfill
-attention_reason: ["legacy v1 state; requires attempt-based verification"]
+last_trained_at: v1 最近训练
+mastery_verified_at: null
+automation_verified_at: null
+complexity_verified_at: null
+
+attempt_count: null
+independent_success_count: null
+transfer_success_count: null
+
+attention_reason:
+  - "legacy v1 state; requires attempt-based verification"
 ```
 
-Why evidence defaults to `weak`:
+Why confidence defaults low:
 
-- current v1 state was not computed from the future structured Attempt model;
-- evidence may be valid pedagogically but lacks normalized diversity/hint/complexity metadata;
-- C1 must preserve useful history without overstating confidence.
+- v1 state was not computed from the future structured Attempt model;
+- evidence may be pedagogically useful but lacks normalized diversity/hint/complexity metadata;
+- historical counts are usually unknown rather than zero;
+- C1 must preserve useful history without overstating verification.
 
-A reviewer may upgrade selected legacy states to `moderate` only when explicit historical records already contain strong independent/transfer evidence.
+A reviewer may upgrade a specific axis to `moderate` only when explicit historical records directly verify that axis.
+
+Example: a recorded independent unfamiliar answer may support mastery more strongly without proving timed automation.
 
 ---
 
@@ -77,7 +93,7 @@ v1 mixed row
 -> add attention_reason: "split from v1 <label>; needs targeted verification"
 ```
 
-If historical work clearly distinguishes a child, that child may receive a low-confidence backfill with evidence reference.
+If historical work clearly distinguishes a child, that child may receive a low-confidence backfill with an evidence reference.
 
 Representative split rows:
 
@@ -107,9 +123,9 @@ Example:
 炼字
 ```
 
-Their historical performance should later be mapped through Questions/Attempts to the actual underlying canonical nodes.
+Historical performance should later map through Questions/Attempts to actual underlying canonical nodes.
 
-Until that mapping is available, preserve the legacy value only in migration documentation; do not invent a pseudo Ability to hold it.
+Until that mapping exists, preserve the legacy value only in migration documentation; do not invent a pseudo Ability merely to hold the number.
 
 ---
 
@@ -129,9 +145,11 @@ Backfill policy:
 
 1. collect all legacy source rows that map to the shared node;
 2. initialize the current estimate conservatively;
-3. cap legacy-only mastery at `M2` unless there is explicit unfamiliar cross-domain transfer evidence;
-4. set `evidence_strength` according to source diversity, normally `weak` or `moderate`;
-5. never infer `M3` solely from two familiar domain labels existing in v1.
+3. cap legacy-only mastery at `M2` unless explicit unfamiliar cross-domain transfer evidence exists;
+4. set `mastery_evidence_strength` according to source diversity, normally `weak` or `moderate`;
+5. automation confidence remains separate and may be weaker;
+6. do not infer a verified complexity band beyond what the records explicitly support;
+7. never infer `M3` solely from two familiar domain labels existing in v1.
 
 If v1 values conflict, preserve the lower/uncertain estimate or leave mastery unknown pending targeted verification; do not average scores mechanically.
 
@@ -143,7 +161,7 @@ Some broad v1 abilities may remain useful as reporting composites while canonica
 
 If the composite remains a canonical Ability, its state must not be populated by simply averaging child mastery.
 
-Possible later derivation can use explicit aggregate rules, but C1 backfill should either:
+C1 backfill should either:
 
 - preserve a clearly one-to-one legacy composite estimate as `legacy_backfill`; or
 - leave it unknown until C2/F1 defines evidence aggregation.
@@ -167,15 +185,17 @@ Therefore:
 v1 最近训练 -> last_trained_at
 ```
 
-but:
+but by default:
 
 ```text
-last_verified_at = null
+mastery_verified_at = null
+automation_verified_at = null
+complexity_verified_at = null
 ```
 
-unless the learning record explicitly supports independent verification.
+unless the historical learning record explicitly verifies the relevant dimension.
 
-This avoids false recency confidence.
+An independent answer may verify mastery but still not verify automation under time pressure. Axis timestamps must be reviewed separately.
 
 ---
 
@@ -212,13 +232,13 @@ Values such as:
 高中展开
 ```
 
-reflect historical planning, not the learner's actual mastery.
+reflect historical planning, not learner state.
 
 Do not map them into:
 
 - mastery;
 - automation;
-- complexity ceiling;
+- verified complexity;
 - readiness;
 - prerequisite status.
 
@@ -239,51 +259,60 @@ special emperor-inspection context
 -> choice becomes discriminative evidence of character
 ```
 
-For a shared character-evidence Ability this supports a useful legacy starting estimate, but because evidence is narrow and scaffolded it should not become strong M2/M3 certainty automatically.
+For a shared character-evidence Ability this supports a useful legacy starting hypothesis, but because evidence is narrow and scaffolded it should not become strong M2/M3 certainty automatically.
 
-Recommended C1 backfill style:
+Illustrative C1 backfill style:
 
 ```yaml
 mastery: M1
 automation: A1
 verified_complexity_band: C2
-evidence_strength: weak
+
+mastery_evidence_strength: weak
+automation_evidence_strength: weak
+complexity_evidence_strength: weak
 state_source: legacy_backfill
+
 last_trained_at: 2026-09-14
-last_verified_at: null
+mastery_verified_at: null
+automation_verified_at: null
+complexity_verified_at: null
+
 primary_error_pattern: E
+error_pattern_evidence_strength: weak
 attention_reason:
   - "evidence/reasoning direction established; written inferential link still needs stabilization"
 ```
 
-Exact values remain subject to historical-record review during live migration; this file defines the migration logic, not a production write.
+Exact values remain subject to historical-record review during live migration; this file defines migration logic, not a production write.
 
 ### 对比衬托
 
-The learner recognized the contrast between 霸上/棘门 and 细柳营 and connected it to highlighting 周亚夫. Because automation still required explicit method framing, a plausible legacy hypothesis is:
+The learner recognized the contrast between 霸上/棘门 and 细柳营 and connected it to highlighting 周亚夫. Because automatic method invocation still required framing, a plausible legacy hypothesis is:
 
 ```text
-mastery around M1-M2
+mastery roughly M1-M2
 automation A1
 weak evidence
 ```
 
-Do not force a precise state until the Attempt model captures a comparable unfamiliar task.
+Do not force a precise state until C2 captures a comparable unfamiliar task.
 
 ---
 
 ## 11. Migration procedure
 
 ```text
-1. export/inspect v1 rows and migration dispositions from B1
+1. inspect v1 rows and B1 migration dispositions
 2. classify mapping: one-to-one / split / task-only / merge-generalize / composite
-3. create LearnerNodeState only where canonical target exists
+3. create LearnerNodeState only where a canonical target exists
 4. apply conservative legacy backfill rules
 5. mark state_source = legacy_backfill
-6. keep evidence_strength weak unless explicit records justify more
-7. do not set last_verified_at merely from last_trained
-8. create a targeted verification queue for high-value unknown/low-confidence nodes
-9. after C2, let real Attempt evidence progressively replace legacy uncertainty
+6. keep per-axis evidence weak/none unless explicit records justify more
+7. do not infer verification timestamps from last_trained
+8. keep unknown historical counters null rather than fabricating zero
+9. create targeted verification probes for high-value unknown/low-confidence nodes
+10. after C2, let real Attempt evidence progressively replace legacy uncertainty
 ```
 
 Migration is additive and non-destructive until the new profile is validated.
