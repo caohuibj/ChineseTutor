@@ -1,0 +1,213 @@
+# F1 representative TrainingMove scenarios.
+# Synthetic unless explicitly marked as reconstructed from current project evidence.
+
+- scenario_id: F1-zhouyafu-fade-character-reasoning
+  source: current_project_reconstructed
+  profile:
+    node_id: CN-A-evidence-to-character-judgment
+    mastery: M1
+    automation: A1
+    verified_complexity: C2
+    mastery_evidence: weak
+    primary_error_pattern: E
+  recent_evidence:
+    - familiar Zhou Yafu task showed correct special-context reasoning but historical hint independence is uncertain
+    - comparison task showed correct contrast facts but incomplete effect explanation
+  recommendation:
+    move_type: fade_scaffold
+    primary_target_node_ids: [CN-A-evidence-to-character-judgment]
+    priority_class: P1_high
+    reason_codes: [mastery_gap, automation_gap, strategy_fade, dependency_unlock]
+    preferred_task_types: [TT-character-analysis]
+    material_familiarity_target: unfamiliar
+    complexity_band_target: C2
+    max_intended_hint_level: H1
+    success: two distinct C2 materials with positive independent evidence-to-character explanation at H0/H1
+  rationale: >-
+    Direction is established, so reteaching character labels is low value. Keep reasoning demand stable,
+    remove the key-question scaffold, and verify independent evidence→explanation→judgment production.
+
+- scenario_id: F1-same-task-novice-character
+  source: synthetic
+  profile:
+    character_reasoning: M0
+    text_location: M0
+  recommendation:
+    move_type: establish
+    primary_target_node_ids: [CN-A-locate-relevant-information]
+    secondary_target_node_ids: [CN-A-evidence-to-character-judgment]
+    priority_class: P0_blocking
+    complexity_band_target: C1
+    max_intended_hint_level: H4
+    material_familiarity_target: familiar
+  rationale: >-
+    A full independent character-analysis item would mostly measure inability to locate evidence.
+    Establish the blocker first even though the eventual TaskType is the same.
+
+- scenario_id: F1-same-task-transfer-ready-character
+  source: synthetic
+  profile:
+    node_id: CN-A-evidence-to-character-judgment
+    mastery: M2
+    automation: A2
+    verified_complexity: C2
+    mastery_evidence: strong
+    transfer_success_count: 0
+  recommendation:
+    move_type: transfer_probe
+    primary_target_node_ids: [CN-A-evidence-to-character-judgment]
+    priority_class: P1_high
+    material_familiarity_target: unfamiliar
+    transfer_probe_required: true
+    complexity_band_target: C2
+    max_intended_hint_level: H0
+    excluded_variant_group_ids: [VAR-recent-character-family]
+  rationale: >-
+    More familiar routine character questions add little information; the missing evidence is generalization.
+
+- scenario_id: F1-classical-hard-prerequisite-block
+  source: synthetic
+  profile:
+    classical_word_sense: M0
+    classical_translation: M1
+  graph:
+    - CN-A-translate-classical-sentence-accurately requires CN-A-infer-classical-contextual-word-sense
+  recommendation:
+    move_type: establish
+    primary_target_node_ids: [CN-A-infer-classical-contextual-word-sense]
+    priority_class: P0_blocking
+    max_intended_hint_level: H3
+    complexity_band_target: C1
+  rejected_move:
+    move_type: independent_practice
+    target: CN-A-translate-classical-sentence-accurately
+    reason: demonstrated lexical prerequisite failure would make downstream translation evidence causally ambiguous
+
+- scenario_id: F1-unknown-prerequisite-diagnose-not-assume
+  source: synthetic
+  profile:
+    classical_word_sense: unknown
+    classical_translation: M1
+  recommendation:
+    move_type: diagnose
+    primary_target_node_ids: [CN-A-infer-classical-contextual-word-sense]
+    priority_class: P1_high
+    complexity_band_target: C1
+    max_intended_hint_level: H0
+    success: one or two short probes sufficient to determine whether lexical decoding is actually the blocker
+  rationale: unknown prerequisite is not treated as failure; cheap diagnosis has high information value
+
+- scenario_id: F1-central-bottleneck-outranks-isolated-low-score
+  source: synthetic
+  candidates:
+    - node: title-function-task-underlying
+      state: M0
+      graph_unlock_value: low
+      gaokao_relevance: supporting
+    - node: CN-S-evidence-explanation-conclusion
+      state: M1/A1
+      graph_unlock_value: high
+      gaokao_relevance: core
+  selected:
+    node: CN-S-evidence-explanation-conclusion
+    move_type: fade_scaffold
+    priority_class: P1_high
+  rationale: >-
+    The shared evidence-warrant strategy affects character, theme, evaluation and argumentative expression,
+    so its causal leverage outranks an isolated lower mastery label.
+
+- scenario_id: F1-review-cheap-before-reteach
+  source: synthetic
+  profile:
+    node: CN-K-classical-content-word-meaning
+    mastery: M2
+    mastery_evidence: moderate
+    forgetting_risk: high
+    review_status: due
+  recommendation:
+    move_type: review
+    priority_class: P3_maintenance
+    complexity_band_target: C1
+    max_intended_hint_level: H0
+    success: one short retrieval/context probe succeeds independently
+  next_if_success: stop review; preserve state/confidence per C3
+  next_if_failure: recompute toward diagnose/establish depending on error
+
+- scenario_id: F1-expression-gap-micro-writing-not-full-essay
+  source: synthetic
+  profile:
+    reasoning: M2
+    written_expression: M1
+    error_pattern: E
+  recommendation:
+    move_type: scaffolded_practice
+    primary_target_node_ids: [CN-A-revise-sentence-minimally]
+    priority_class: P1_high
+    response_mode_preference: written
+    complexity_vector_constraints:
+      reasoning_depth: {min: 1, max: 2}
+      expression_load: {min: 1, max: 2}
+    max_intended_hint_level: H2
+    success: convert correct oral/arrow logic into two concise scoreable written answers without adding new reasoning content
+  rationale: do not spend a full essay when the evidence need is local written conversion
+
+- scenario_id: F1-school-material-tiebreak
+  source: synthetic
+  candidates:
+    - node: CN-A-explain-detail-function
+      priority_class: P2_normal
+      school_relevance: high
+    - node: another-supporting-node
+      priority_class: P2_normal
+      school_relevance: low
+  selected: CN-A-explain-detail-function
+  rationale: comparable canonical value; current school text makes practice cheaper and immediately transferable
+
+- scenario_id: F1-no-question-supply
+  source: synthetic
+  need:
+    node: high-value-information-modeling
+    priority_class_if_executable: P1_high
+  inventory:
+    question_availability: none
+  recommendation_result:
+    selected_move_status: deferred_for_supply
+    content_gap_request: true
+    preserve_need: true
+    choose_next_best_executable_move: true
+  rationale: inventory shortage must not rewrite learner Profile or erase the high-value need
+
+- scenario_id: F1-automation-without-hardening-reasoning
+  source: synthetic
+  profile:
+    mastery: M2
+    automation: A1
+    verified_complexity: C2
+  recommendation:
+    move_type: automation
+    priority_class: P2_normal
+    complexity_band_target: C2
+    max_intended_hint_level: H0
+    complexity_vector_constraints:
+      reasoning_depth: {min: 2, max: 2}
+      time_pressure: {min: 1, max: 2}
+    success: self-trigger correct strategy under moderate timing on two distinct contexts
+  rationale: raise fluency/time demand, not semantic reasoning depth
+
+- scenario_id: F1-complexity-extension-controlled
+  source: synthetic
+  profile:
+    mastery: M2
+    automation: A2
+    verified_complexity: C2
+  active_goal:
+    desired_complexity: C3
+  recommendation:
+    move_type: complexity_extension
+    priority_class: P2_normal
+    complexity_vector_constraints:
+      reasoning_depth: {min: 2, max: 2}
+      material_heterogeneity: {min: 2, max: 2}
+      expression_load: {min: 1, max: 2}
+    max_intended_hint_level: H0
+  rationale: raise cross-material integration while keeping reasoning and expression within controlled ranges
