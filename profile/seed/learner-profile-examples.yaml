@@ -1,0 +1,132 @@
+# Synthetic C1 profile fixtures.
+# These are documentation examples only. They contain no production learner identity.
+
+- learner_state_id: LNS-example-CN-A-evidence-to-character-judgment
+  learner_id: example-learner
+  node_id: CN-A-evidence-to-character-judgment
+  mastery: M2
+  automation: A1
+  verified_complexity_band: C2
+  mastery_evidence_strength: moderate
+  automation_evidence_strength: weak
+  complexity_evidence_strength: moderate
+  state_source: attempt_derived
+  attempt_count: 5
+  independent_success_count: 2
+  transfer_success_count: 0
+  last_trained_at: 2026-09-15T10:00:00+09:00
+  mastery_verified_at: 2026-09-15T10:00:00+09:00
+  automation_verified_at: null
+  complexity_verified_at: 2026-09-15T10:00:00+09:00
+  forgetting_risk: low
+  primary_error_pattern: E
+  error_pattern_evidence_strength: moderate
+  error_pattern_note: 证据和结论通常正确，但书面答案有时省略显性的解释桥梁。
+  attention_reason:
+    - 推理质量已接近独立稳定，下一步应减少方法提醒并训练书面解释自动化。
+  manual_override_reason: null
+  state_updated_at: 2026-09-15T10:05:00+09:00
+
+- learner_state_id: LNS-example-CN-S-classical-translation-five-step
+  learner_id: example-learner
+  node_id: CN-S-classical-translation-five-step
+  mastery: M2
+  automation: A2
+  verified_complexity_band: C2
+  mastery_evidence_strength: moderate
+  automation_evidence_strength: moderate
+  complexity_evidence_strength: moderate
+  state_source: attempt_derived
+  attempt_count: 6
+  independent_success_count: 4
+  transfer_success_count: 1
+  last_trained_at: 2026-09-14T18:00:00+09:00
+  mastery_verified_at: 2026-09-14T18:00:00+09:00
+  automation_verified_at: 2026-09-14T18:00:00+09:00
+  complexity_verified_at: 2026-09-14T18:00:00+09:00
+  forgetting_risk: low
+  primary_error_pattern: null
+  error_pattern_evidence_strength: none
+  error_pattern_note: null
+  attention_reason:
+    - 策略调用已较稳定；若翻译仍失败，应优先检查实词/句法前置节点，而不是重复讲步骤。
+  manual_override_reason: null
+  state_updated_at: 2026-09-14T18:05:00+09:00
+
+- learner_state_id: LNS-example-CN-A-infer-classical-contextual-word-sense
+  learner_id: example-learner
+  node_id: CN-A-infer-classical-contextual-word-sense
+  mastery: M1
+  automation: A1
+  verified_complexity_band: C1
+  mastery_evidence_strength: moderate
+  automation_evidence_strength: weak
+  complexity_evidence_strength: moderate
+  state_source: attempt_derived
+  attempt_count: 8
+  independent_success_count: 2
+  transfer_success_count: 0
+  last_trained_at: 2026-09-14T18:00:00+09:00
+  mastery_verified_at: 2026-09-14T18:00:00+09:00
+  automation_verified_at: null
+  complexity_verified_at: 2026-09-14T18:00:00+09:00
+  forgetting_risk: medium
+  primary_error_pattern: K
+  error_pattern_evidence_strength: moderate
+  error_pattern_note: 熟悉义项能回忆，但陌生语境中容易机械套用第一义项。
+  attention_reason:
+    - 这是文言翻译的重要前置节点，当前失败更可能来自词义网络/语境选择而非翻译策略。
+  manual_override_reason: null
+  state_updated_at: 2026-09-14T18:05:00+09:00
+
+- learner_state_id: LNS-example-CN-A-evaluate-evidence-sufficiency
+  learner_id: example-learner
+  node_id: CN-A-evaluate-evidence-sufficiency
+  mastery: null
+  automation: null
+  verified_complexity_band: null
+  mastery_evidence_strength: none
+  automation_evidence_strength: none
+  complexity_evidence_strength: none
+  state_source: mixed
+  attempt_count: 0
+  independent_success_count: 0
+  transfer_success_count: 0
+  last_trained_at: null
+  mastery_verified_at: null
+  automation_verified_at: null
+  complexity_verified_at: null
+  forgetting_risk: unknown
+  primary_error_pattern: null
+  error_pattern_evidence_strength: none
+  error_pattern_note: null
+  attention_reason:
+    - 高价值节点但尚无直接证据；应使用低成本诊断题建立基线，而不是默认M0。
+  manual_override_reason: null
+  state_updated_at: 2026-09-15T10:05:00+09:00
+
+- learner_state_id: LNS-example-CN-K-required-poem-line
+  learner_id: example-learner
+  node_id: CN-K-required-poem-line
+  mastery: M2
+  automation: A2
+  verified_complexity_band: C1
+  mastery_evidence_strength: moderate
+  automation_evidence_strength: moderate
+  complexity_evidence_strength: weak
+  state_source: attempt_derived
+  attempt_count: 4
+  independent_success_count: 4
+  transfer_success_count: 0
+  last_trained_at: 2026-07-01T08:00:00+09:00
+  mastery_verified_at: 2026-07-01T08:00:00+09:00
+  automation_verified_at: 2026-07-01T08:00:00+09:00
+  complexity_verified_at: 2026-07-01T08:00:00+09:00
+  forgetting_risk: high
+  primary_error_pattern: null
+  error_pattern_evidence_strength: none
+  error_pattern_note: null
+  attention_reason:
+    - 既往掌握证据存在但验证时间较久；适合快速复现验证，不需要直接降为M0。
+  manual_override_reason: null
+  state_updated_at: 2026-09-15T10:05:00+09:00
