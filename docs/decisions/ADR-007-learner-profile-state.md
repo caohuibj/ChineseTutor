@@ -1,6 +1,6 @@
 # ADR-007 — Learner Profile is a dynamic evidence projection
 
-Status: **proposed in C1**
+Status: **proposed in C1; semantic self-review complete**
 
 ## Context
 
@@ -27,9 +27,9 @@ Core observed dimensions:
 Mastery M0-M3
 Automation A0-A3
 Verified Complexity C0-C5
-Evidence Strength
+per-axis Evidence Strength
+per-axis Verification Recency
 Evidence Provenance
-Recency / Verification
 Forgetting Risk
 Stable Error Pattern
 ```
@@ -60,21 +60,41 @@ Current estimates may move upward or downward as evidence changes. Forgetting, t
 
 The system must not encode “mastery only increases”.
 
-## Evidence confidence is separate from state estimate
+## Evidence confidence and verification are per axis
 
-A state such as:
+A single evidence-strength field was rejected during C1 review because Mastery, Automation and Complexity can be supported by different observations.
+
+Example:
 
 ```text
-M2 + weak evidence
+mastery: M2
+mastery_evidence_strength: strong
+
+automation: A1
+automation_evidence_strength: weak
 ```
 
-is valid. It means M2 is the current best estimate but should be cheaply verified before the system treats it as strongly established.
+Likewise, verification timestamps are separate:
 
-C1 uses ordinal evidence strength rather than a pseudo-precise numerical score. C2/F1 may later compute richer confidence internally.
+```text
+mastery_verified_at
+automation_verified_at
+complexity_verified_at
+```
+
+An untimed independent answer may verify mastery while providing little evidence about automation under pressure.
+
+C1 uses ordinal evidence strength rather than pseudo-precise numbers. C2/F1 may later compute richer confidence internally.
+
+## Historical counts distinguish unknown from zero
+
+Attempt/success counters are derived caches once C2 exists. During legacy migration, `null` means historical count is unknown, while `0` means the event source positively contains zero events.
+
+This prevents migration gaps from masquerading as lack of training.
 
 ## Operational statuses are orthogonal
 
-The v1/product terms:
+The product terms:
 
 ```text
 Stable
@@ -84,7 +104,7 @@ Review Due
 Unknown
 ```
 
-mix different dimensions. C1 therefore separates:
+mix different dimensions. C1 separates:
 
 ```text
 readiness_status: unknown | developing | stable
@@ -126,9 +146,11 @@ Task-Type-only rows do not create fake profile nodes.
 
 Cross-domain merges do not fabricate M3 transfer.
 
-`最近训练` maps to training recency, not verification recency.
+`最近训练` maps to `last_trained_at`, not to any verification timestamp.
 
 `待加强` becomes an attention note, not an automatic bottleneck.
+
+Historical counts may remain null rather than being fabricated as zero.
 
 ## Consequences
 
@@ -137,7 +159,7 @@ Cross-domain merges do not fabricate M3 transfer.
 - supports multiple learners cleanly;
 - preserves understanding-vs-automation differences;
 - distinguishes unknown from weak;
-- allows confidence-aware verification;
+- preserves confidence differences across dimensions;
 - supports forgetting and review;
 - supports graph-aware bottleneck detection later;
 - makes recommendation and tutoring explainable;
@@ -160,6 +182,9 @@ Rejected because absence of evidence is not demonstrated weakness.
 
 ### Use one percentage per ability
 Rejected because it collapses mastery, automation, complexity, confidence, recency and error pattern into an opaque number.
+
+### Use one evidence confidence/timestamp for the whole state
+Rejected during self-review because different observations verify different axes.
 
 ### Make Stable/Developing/Bottleneck/ReviewDue one persisted exclusive truth
 Rejected because these concepts are not semantically exclusive. Orthogonal dimensions are preserved and a UI label may be derived.
