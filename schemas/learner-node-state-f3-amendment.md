@@ -65,7 +65,12 @@ automation_evidence_strength
 complexity_evidence_strength
 ```
 
-F3 must not mutate strong historical evidence into “weak evidence” merely because time passed.
+C1's earlier shorthand mentioned “old” evidence among reasons a state might be weak. F3 refines that temporal part of the semantics:
+
+- evidence that was structurally weak/legacy-only can still be `weak`;
+- but once a native evidence set is established as `moderate`/`strong`, ordinary passage of time should primarily reduce **freshness confidence**, not rewrite the historical evidence set as though it had never been strong.
+
+F3 must therefore not mutate strong historical evidence into “weak evidence” merely because time passed.
 
 Instead, F3 derives axis-specific **freshness confidence**:
 
