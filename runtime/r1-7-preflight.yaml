@@ -1,0 +1,73 @@
+runtime_release: R1.7
+status: awaiting_real_learner_response
+learner_id: project-learner
+
+session_id: SESSION-r18-pilot-01
+current_series_id: SERIES-r18-01-zhouyafu-46
+next_attempt_id: ATT-r18-01-zhouyafu-46-01
+next_attempt_number: 1
+
+selected_training_move:
+  id: TM-r16-01-comparison-significance-h0-baseline
+  notion_page_id: 3dcd2763-5a38-8180-a36a-cfd1a8180cda
+  status: selected
+  move_type: fade_scaffold
+  planned_hint_ceiling: H0
+  transfer_probe: false
+
+question:
+  id: Q-zhouyafu-46-comparison-function
+  notion_page_id: 3dcd2763-5a38-813e-8aa9-e03dd9f49985
+  prompt: "霸上、棘门军与细柳营的对比有何作用？"
+  task_type: TT-comparison-foil-function
+  complexity_band: C2
+  source: school_provided
+  prompt_fidelity: verbatim
+
+material:
+  id: MAT-zhouyafu-school-occurrence
+  notion_page_id: 3dcd2763-5a38-816e-9e23-de98b0288969
+  familiarity_for_first_attempt: familiar
+
+nodes:
+  primary_target:
+    id: CN-A-explain-comparison-significance
+    page_id: 3dcd2763-5a38-8116-9173-d7a08259e171
+  secondary_target:
+    id: CN-A-establish-comparison-dimension
+    page_id: 3dcd2763-5a38-814f-84f5-c965d7de6e51
+
+first_response_support_snapshot:
+  max_hint_level_before_response: H0
+  hint_count_before_response: 0
+  intervention_type: none
+  response_mode: typed_chat
+  legacy_reconstructed: false
+
+write_order_after_real_response:
+  - TrainingAttempt
+  - AttemptNodeEvidence
+  - assess causal gap
+  - InterventionDecision_if_needed
+  - learner_retry_if_requested
+  - subsequent_TrainingAttempt
+  - subsequent_AttemptNodeEvidence
+  - ProfileUpdateDecision_when_warranted
+  - LearnerNodeState_projection
+  - TrainingMove_transition
+
+pre_response_invariants:
+  attempt_created: false
+  node_evidence_created: false
+  intervention_decision_created: false
+  profile_update_created: false
+  synthetic_response_allowed: false
+
+pilot_floor:
+  native_attempts_min: 20
+  native_attempts_target_max: 40
+  task_or_domain_families_min: 4
+  intervention_retry_sequences_min: 5
+
+source_of_truth_switch: not_started
+v1_rollback_safe: true
