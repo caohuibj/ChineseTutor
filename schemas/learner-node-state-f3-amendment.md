@@ -23,12 +23,19 @@ mastery_review_debt: unknown | none | light | material | urgent
 automation_review_debt: unknown | none | light | material | urgent
 complexity_review_debt: unknown | none | light | material | urgent
 
-retention_family: exact_retrieval | recitation | conceptual_knowledge | reasoning_ability | strategy | writing_production | other | null
+mastery_freshness_confidence: unknown | low | medium | high
+automation_freshness_confidence: unknown | low | medium | high
+complexity_freshness_confidence: unknown | low | medium | high
+
+retention_family_cache: exact_retrieval | recitation | conceptual_knowledge | reasoning_ability | strategy | writing_production | other | null
+retention_policy_version: string | null
 forgetting_risk: unknown | low | medium | high
 last_review_decision_id: string | null
 ```
 
 These may be materialized for dashboards/query speed, but they are reproducible from evidence + F3 policy and are not primary learner-state evidence.
+
+`retention_family_cache` is deliberately named as a cache: the policy resolver/classification is the authority. It may be inferred from canonical node semantics or an explicit retention-policy override. Learner state does not redefine the node's retention family.
 
 ---
 
@@ -48,7 +55,44 @@ F3 does not create a new generic `last_verified_at`, because that would again co
 
 ---
 
-## 3. Coarse `review_status`
+## 3. Evidence strength vs freshness confidence
+
+C1 evidence-strength fields describe the **quality/diversity of the supporting evidence set**:
+
+```text
+mastery_evidence_strength
+automation_evidence_strength
+complexity_evidence_strength
+```
+
+F3 must not mutate strong historical evidence into “weak evidence” merely because time passed.
+
+Instead, F3 derives axis-specific **freshness confidence**:
+
+```text
+mastery_freshness_confidence
+automation_freshness_confidence
+complexity_freshness_confidence
+```
+
+Example:
+
+```text
+mastery = M2
+mastery_evidence_strength = strong
+mastery_freshness_confidence = low
+mastery_review_status = overdue
+```
+
+Meaning:
+
+> The old M2 evidence was high quality, but it is no longer fresh enough to be confidently treated as current without re-verification.
+
+This avoids rewriting history while still representing temporal uncertainty.
+
+---
+
+## 4. Coarse `review_status`
 
 For backward compatibility, C1's existing:
 
@@ -73,11 +117,12 @@ The summary never replaces the axis-specific fields.
 
 ---
 
-## 4. `forgetting_risk` semantics refined
+## 5. `forgetting_risk` semantics refined
 
 `forgetting_risk` is still one convenience summary, but F3 makes clear that it is an operational estimate derived from:
 
 - axis review debt;
+- freshness confidence;
 - evidence strength;
 - retention family;
 - active requirement;
@@ -88,7 +133,17 @@ It must not be used as direct proof that mastery declined.
 
 ---
 
-## 5. What F3 does not add
+## 6. Unknown/non-established state does not create ordinary review
+
+If the relevant axis value is `null`, F1 should generally use `diagnose`, not `review`.
+
+If mastery is positively `M0` or the construct has never been established, F1 should generally use `establish` / scaffolded practice rather than treating the node as forgotten maintenance.
+
+F3 review is primarily for previously evidenced claims that need freshness verification.
+
+---
+
+## 7. What F3 does not add
 
 Do not add:
 
@@ -103,10 +158,12 @@ The system must not silently transform time into learner failure or tie the Prof
 
 ---
 
-## 6. Amendment invariants
+## 8. Amendment invariants
 
 1. M/A/C values do not change merely because review status changes.
 2. Review freshness is tracked per axis.
-3. The coarse review/forgetting fields remain derived caches.
-4. Unknown verification history remains distinguishable from overdue known history.
-5. F3 policy version must make temporal fields replayable/recomputable.
+3. Evidence strength and freshness confidence are distinct.
+4. The coarse review/forgetting fields remain derived caches.
+5. Unknown verification history remains distinguishable from overdue known history.
+6. Retention-family cache is policy-derived, not learner-defined canonical meaning.
+7. F3 policy version must make temporal fields replayable/recomputable.
