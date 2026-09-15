@@ -1,8 +1,8 @@
 # Question canonical schema
 
-Status: **D1 normative draft**
+Status: **D1 normative draft — semantic self-review complete**
 
-A `Question` is one concrete learner-facing prompt attached to one canonical Material and one primary TaskType.
+A `Question` is one concrete learner-facing prompt attached to one canonical Material and indexed by one primary TaskType plus optional secondary TaskTypes.
 
 It is reusable across learners. Learner completion/failure/review state never belongs on Question.
 
@@ -13,7 +13,8 @@ It is reusable across learners. Learner completion/failure/review state never be
 ```yaml
 question_id: Q-...
 material_id: string
-task_type_id: string
+primary_task_type_id: string
+secondary_task_type_ids: string[]
 prompt: string
 parent_question_id: string | null
 source_question_number: string | null
@@ -31,19 +32,25 @@ MAT-zhouyafu
   -> Q-content-summary
 ```
 
-Source passage/content is stored once in Material.
+Source content is stored once in the Material occurrence/version.
+
+### Integrated TaskTypes
+
+Most Questions have one clear TaskType. Complex authentic tasks may combine operations, so D1 keeps one primary TaskType for indexing plus optional secondary TaskTypes.
+
+Secondary TaskTypes must reflect genuinely present task semantics, not every incidental subskill.
 
 ### Multi-text Question
 
-A Question still references one `material_id`. If several texts/charts are presented together, that Material is a `bundle` whose components preserve the individual source objects.
+A Question references one `material_id`. If several texts/charts are presented together, that Material is a bundle whose components preserve the individual source objects.
 
 ### Subquestions
 
-Use `parent_question_id` when a source exam item contains dependent subparts. If subparts have different TaskTypes/target nodes and can be assessed separately, model each as a separate Question.
+Use `parent_question_id` when a source exam item has dependent subparts. If subparts have different TaskTypes/target nodes and can be scored or attempted separately, model separate Questions.
 
-`question_group_id` can preserve exam/item grouping without implying semantic dependency.
+`question_group_id` preserves exam/item grouping without implying prerequisite semantics.
 
-`variant_group_id` groups near-equivalent or generated/adapted variants for later diversity accounting. C2 Attempt may snapshot this value.
+`variant_group_id` groups near-equivalent/adapted/generated variants for later diversity accounting; C2 Attempt snapshots it.
 
 ---
 
@@ -55,18 +62,19 @@ prompt_fidelity: verbatim | lightly_normalized | adapted | generated | unknown
 adaptation_note: string | null
 question_source_url: string | null
 question_source_file_ref: string | null
+question_provenance_note: string | null
 ```
 
 ### Authenticity rule
 
-A Question must not be presented as an original authentic exam question when the prompt was reconstructed, adapted, or generated.
+A reconstructed/adapted/generated prompt must not be represented as an original authentic exam question.
 
 - `verbatim`: wording verified against source;
 - `lightly_normalized`: typography/layout normalized without semantic change;
-- `adapted`: wording/content changed in a way that may alter task behavior;
-- `generated`: created by tutor/editor rather than extracted from a source.
+- `adapted`: changes may alter task behavior;
+- `generated`: created by tutor/editor rather than extracted.
 
-Authentic training may use adapted/generated variants, but they must be labeled honestly and should not substitute for actual transfer validation on real questions.
+Adapted/generated variants are useful practice but should not substitute for genuine authentic-transfer validation.
 
 ---
 
@@ -81,9 +89,7 @@ official_score: number | null
 scoring_note: string | null
 ```
 
-This distinction is required because a model-derived answer must never silently become “官方答案”.
-
-When official scoring guidance is unavailable, a teacher/tutor rubric can still be useful, but its provenance remains explicit.
+A model/teacher-derived answer must never silently become “官方答案”.
 
 ---
 
@@ -96,22 +102,18 @@ strategy_node_ids: string[]
 primary_target_node_ids: string[]
 ```
 
-### Mapping semantics
+- Knowledge/Ability/Strategy lists describe nodes directly relevant to the concrete Question.
+- `primary_target_node_ids` identifies the constructs this Question is deliberately curated to train/diagnose.
+- Do not copy every transitive B2 prerequisite into every Question.
+- Question mapping is editorial metadata; actual learner evidence is C2 `TrainingAttempt.node_evidence`.
 
-- `knowledge_node_ids`: Knowledge likely required/observed by the Question;
-- `ability_node_ids`: observable operations exercised;
-- `strategy_node_ids`: Strategies that the task may validly reveal/use;
-- `primary_target_node_ids`: the nodes this Question is deliberately curated to train or diagnose.
-
-Not every relevant prerequisite must be copied onto the Question if B2 graph traversal can derive it. Add explicit mappings when the Question directly tests or uniquely requires a node.
-
-Question mapping is static editorial metadata; actual learner evidence is C2 `TrainingAttempt.node_evidence`.
+Concrete Question mappings override broad TaskType default mappings.
 
 ---
 
 ## 5. Complexity placeholder
 
-D1 carries complexity fields because Questions need a difficulty/context description, but Issue #6 defines the final complexity model.
+D1 carries complexity metadata because Questions need it, but Issue #6 defines the final vector semantics.
 
 ```yaml
 complexity_band: null | C0 | C1 | C2 | C3 | C4 | C5
@@ -121,10 +123,10 @@ complexity_status: unreviewed | provisional | reviewed
 
 Rules:
 
-- D1 does not define the numerical/vector calculation;
-- coarse legacy difficulty may migrate as `provisional` only;
+- D1 does not define the calculation;
+- legacy difficulty may seed `provisional` only;
 - source grade never substitutes for complexity;
-- C2 Attempts snapshot the complexity values used at the time.
+- C2 Attempts snapshot the values in force at attempt time.
 
 ---
 
@@ -136,15 +138,6 @@ curation_note: string | null
 ```
 
 This is shared editorial state only.
-
-Allowed examples:
-
-```text
-candidate — source/question needs verification
-verified — provenance and prompt checked
-active — available for recommendation/training
-retired — retained historically but not selected for new training
-```
 
 Forbidden learner-specific status:
 
@@ -158,13 +151,11 @@ Forbidden learner-specific status:
 个人提示等级
 ```
 
-Those live in TrainingAttempt/Profile/TrainingMove/queue layers.
+Those belong to C1/C2/future TrainingMove/queue layers.
 
 ---
 
-## 7. Transfer/familiarity is not a static Question property
-
-A Question may be curated as useful for transfer testing, but whether it is actually **unfamiliar** is learner-specific.
+## 7. Transfer/familiarity is learner-relative
 
 Optional editorial field:
 
@@ -172,29 +163,22 @@ Optional editorial field:
 transfer_probe_candidate: bool
 ```
 
-This means the Question is suitable as a transfer probe when learner history makes it unfamiliar enough.
+This means the Question is suitable as a transfer probe when the learner's history makes it sufficiently unfamiliar.
 
-Do not store:
-
-```text
-是否陌生迁移 = true
-```
-
-as an absolute learner-independent fact.
-
-C2 Attempt records actual `material_familiarity` and `transfer_probe` for that learner/event.
+Do not store absolute `是否陌生迁移=true` on Question. C2 Attempt records actual `material_familiarity` and `transfer_probe`.
 
 ---
 
 ## 8. Question invariants
 
-1. Every Question points to exactly one canonical Material (atomic or bundle).
-2. Every Question has one primary TaskType.
-3. Prompt provenance/fidelity is explicit.
-4. Reference-answer/rubric provenance is explicit.
-5. LearningNode mappings are editorial targets, not learner evidence.
-6. Complexity metadata is independent of grade and remains provisional until Issue #6 semantics are applied.
-7. Learner training status never lives on Question.
-8. Transfer unfamiliarity is determined per learner Attempt, not statically.
-9. One Material can own many Questions without source duplication.
-10. Near-identical variants can be grouped so evidence diversity is not inflated.
+1. Every Question points to exactly one canonical Material occurrence/version (atomic or bundle).
+2. Every Question has exactly one primary TaskType and zero or more secondary TaskTypes.
+3. Secondary TaskTypes represent genuine integrated task semantics, not incidental subskills.
+4. Prompt provenance/fidelity is explicit.
+5. Reference-answer/rubric provenance is explicit.
+6. LearningNode mappings are editorial targets, not learner evidence.
+7. Complexity is grade-independent and provisional until Issue #6 semantics are applied.
+8. Learner training status never lives on Question.
+9. Transfer unfamiliarity is determined per learner Attempt.
+10. One Material can own many Questions without duplicate source content within that source occurrence.
+11. Near-identical variants can be grouped so evidence diversity is not inflated.
