@@ -1,45 +1,46 @@
 # Material canonical schema
 
-Status: **D1 normative draft**
+Status: **D1 normative draft — semantic self-review complete**
 
 A `Material` is the language/content object presented to the learner or used as the source stimulus for one or more Questions.
 
-Examples:
-
-- one modern essay or excerpt;
-- one classical passage;
-- one poem;
-- a pair/set of texts presented together;
-- a chart plus explanatory text;
-- an interview transcript;
-- a writing prompt source packet;
-- a whole-book chapter/excerpt.
+Examples include one essay/excerpt, one classical passage, one poem, a text set, chart/media packet, transcript, writing-source packet, or whole-book excerpt.
 
 A Material is **not** a Question, Task Type, learner attempt, or training status.
 
 ---
 
-## 1. Identity: exact presented object, not abstract work
+## 1. Identity: presented source occurrence/version, not abstract work
 
 ```yaml
 material_id: MAT-...
 title: string
 material_kind: atomic | bundle
-```
-
-The identity represents the exact learner-facing version.
-
-If the same literary work appears with materially different excerpting, edits, annotations, charts, or paired texts, those are different Material records.
-
-Optional grouping:
-
-```yaml
 work_group_id: string | null
+content_group_id: string | null
 ```
 
-`work_group_id` may group versions/excerpts of the same underlying work without pretending they are identical evidence contexts.
+Material identity represents the exact learner-facing **presentation occurrence/version** in a traceable source context.
 
-Material IDs are stable and independent of Notion page IDs or file names.
+Create different Materials when any of these can change evidence context:
+
+- excerpt boundaries;
+- edits/normalization beyond trivial formatting;
+- annotations;
+- paired media/texts;
+- source/exam packet context;
+- presentation order in a bundle.
+
+Thus the same underlying essay may appear as separate Materials in a textbook and a district exam even if much of the text is identical. They may share grouping metadata and/or content references.
+
+### Grouping
+
+- `work_group_id` groups versions/excerpts of the same underlying literary/source work.
+- `content_group_id` may group byte/text-equivalent or near-identical presented content across occurrences when useful for familiarity/deduplication analytics.
+
+Grouping never erases source provenance.
+
+Material IDs are independent of Notion page IDs, URLs and local file names.
 
 ---
 
@@ -51,45 +52,33 @@ language_form: modern_chinese | classical_chinese | poetry | mixed | other
 content_ref: string | null
 content_hash: string | null
 content_complete: bool | null
-content_fidelity: verbatim | excerpted | lightly_normalized | adapted | unknown
+content_fidelity: verbatim | excerpted | lightly_normalized | adapted | generated | unknown
 adaptation_note: string | null
 component_material_ids: string[]
 ```
 
 ### `content_ref`
-Reference to the actual source content in an operational system: uploaded file, Notion page, permitted URL, file-library identifier, etc.
-
-The canonical schema does not require copyrighted source text to be committed into GitHub.
+Reference to the actual source content in an operational system: uploaded file, Notion page, permitted URL, file-library identifier, etc. Copyrighted text need not be committed into GitHub.
 
 ### `content_hash`
-Optional hash/fingerprint of the exact presented content/version for deduplication and provenance checks.
+Optional fingerprint of exact presented content for provenance/dedup checks. Equal hashes do not automatically imply one Material because source occurrence/context may differ.
 
-### `component_material_ids`
-Used when `material_kind=bundle`.
+### Bundle composition
 
-Example:
+When `material_kind=bundle`, `component_material_ids` is an ordered list when presentation order matters.
 
-```text
-MAT-poetry-comparison-packet
-  components:
-  - MAT-poem-a
-  - MAT-poem-b
-```
-
-Bundle rules:
+Rules:
 
 - components remain independently identifiable Materials;
-- bundle composition is ordered when presentation order matters;
-- bundle graph must be acyclic;
-- an atomic Material has no components.
-
-A Question can therefore reference one Material while still supporting multi-text tasks through a bundle.
+- bundle composition is acyclic;
+- atomic Materials have no components;
+- a Question references the bundle rather than duplicating component content.
 
 ---
 
-## 3. Authorship / literary metadata
+## 3. Descriptive literary metadata
 
-Optional fields:
+Optional:
 
 ```yaml
 author: string | null
@@ -99,13 +88,11 @@ work_title: string | null
 collection_title: string | null
 ```
 
-These are descriptive metadata, not canonical LearningNodes. Literary/cultural knowledge is mapped separately through B1 nodes when relevant.
+These are descriptive metadata, not canonical LearningNodes.
 
 ---
 
 ## 4. Provenance
-
-Material provenance must remain traceable.
 
 ```yaml
 source_type: textbook | school_material | school_exam | district_exam | zhongkao | gaokao | authoritative_simulation | authentic_external | editorial | generated | unknown
@@ -116,7 +103,7 @@ source_grade: string | null
 source_publisher_or_org: string | null
 source_url: string | null
 source_file_ref: string | null
-source_reliability: official | authoritative | school | reputable_reprint | editorial | unknown
+source_reliability: official | authoritative | school | reputable_reprint | editorial | generated | unknown
 reprint_source: string | null
 retrieved_at: datetime | null
 provenance_note: string | null
@@ -124,32 +111,27 @@ rights_note: string | null
 ```
 
 ### Grade is metadata only
+`source_grade` never controls prerequisite, complexity or progression.
 
-`source_grade` says where the material came from. It never controls prerequisite or learner progression.
+### Reprints
+When an authentic exam/source is obtained from a republication:
 
-### Reprint distinction
-
-When an authentic exam is obtained through a republication rather than the original authority:
-
-- retain the claimed original exam metadata;
-- identify the republication source separately;
-- do not silently upgrade `source_reliability` to official.
+- retain claimed original exam/source metadata;
+- record the republication separately;
+- do not silently label the retrieved copy `official` unless official provenance was actually verified.
 
 ### Authenticity discipline
-
-A Material labeled as official/authentic must have traceable source evidence. Memory-reconstructed or materially adapted text must not be presented as verbatim original.
+Memory-reconstructed, adapted or generated content must be labeled accordingly. Source fidelity cannot be inferred from a familiar title alone.
 
 ---
 
-## 5. Curation state vs learner state
+## 5. Curation vs learner state
 
-Allowed editorial lifecycle:
+Allowed shared editorial lifecycle:
 
 ```yaml
 curation_status: candidate | verified | active | retired
 ```
-
-This is **content curation state**, shared across learners.
 
 Forbidden learner-specific fields:
 
@@ -164,19 +146,19 @@ Forbidden learner-specific fields:
 是否陌生迁移（相对某个学生）
 ```
 
-Those belong to TrainingAttempt/Profile/TrainingMove layers.
+These belong to C1/C2/future TrainingMove layers.
 
 ---
 
-## 6. Material invariants
+## 6. D1 invariants
 
-1. One exact presented source/version has one stable Material identity.
-2. One Material may support many Questions without duplicating source content.
-3. Multi-text packets use bundle composition rather than embedding duplicate texts in every Question.
-4. Source grade is metadata only.
-5. Adapted/excerpted content is labeled explicitly.
-6. Traceability survives candidate→formal promotion.
-7. Copyright/storage location is separate from semantic identity; GitHub need not contain full source text.
-8. Material contains no learner-specific training status.
-9. Bundle composition is acyclic.
-10. Curation status is not learner mastery/training status.
+1. Material identity is a traceable presented source occurrence/version, not an abstract work title.
+2. One Material may support many Questions without duplicating source content within that occurrence.
+3. Equal/near-equal content across different source contexts may remain distinct Materials and be connected by grouping metadata.
+4. Multi-text packets use acyclic ordered bundle composition.
+5. Source grade is metadata only.
+6. Adapted/generated/excerpted content is labeled honestly.
+7. Candidate→formal promotion preserves provenance.
+8. Storage location/copyright handling is separate from semantic identity.
+9. Material contains no learner-specific training status.
+10. Curation state is not learner mastery/training state.
