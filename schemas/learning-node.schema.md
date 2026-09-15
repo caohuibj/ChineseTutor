@@ -1,18 +1,18 @@
 # LearningNode canonical schema
 
-Status: **B1 normative draft**
+Status: **B1 normative draft — reviewed**
 
 This document defines the canonical unit of the ChineseTutor Learning Graph. It is a semantic contract, not a Notion-specific database design.
 
 ## 1. Core rule
 
-A `LearningNode` describes something stable about the learning domain. It must not describe one learner's current state, one particular question, one school year, or one study session.
+A `LearningNode` describes a stable unit in the learning domain. It must not describe one learner's current state, one question, one source text, one school year, or one study session.
 
-The canonical registry contains exactly three semantic node types:
+Exactly three semantic node types are canonical:
 
-- `knowledge`: facts, concepts, distinctions, language/literary/cultural rules or conventions that can be known, recognized, recalled, or understood;
-- `ability`: observable operations that can be performed on a text, task, artifact, or communicative situation;
-- `strategy`: reusable procedures that organize multiple operations and can be deliberately invoked, faded, automated, and transferred.
+- `knowledge` — facts, concepts, distinctions, language/literary/cultural rules or conventions that can be known, recognized, recalled or understood;
+- `ability` — observable operations that can be performed on language, text, information, an artifact or a communicative situation;
+- `strategy` — reusable procedures that coordinate multiple operations and can be prompted, faded, independently invoked, automated and transferred.
 
 If a proposed node mixes these meanings, split it before adding it to the canonical graph.
 
@@ -23,36 +23,36 @@ If a proposed node mixes these meanings, split it before adding it to the canoni
 ### 2.1 Format
 
 ```text
-CN-<TYPE>-<DOMAIN>-<SLUG>
+CN-<TYPE>-<SLUG>
 ```
 
 where:
 
 - `<TYPE>` is `K`, `A`, or `S`;
-- `<DOMAIN>` is the canonical domain code;
-- `<SLUG>` is a stable, short English identifier in kebab-case.
+- `<SLUG>` is a globally unique, short English identifier in kebab-case within that type.
 
 Examples:
 
 ```text
-CN-K-CLA-classical-content-word-meaning
-CN-A-CLA-infer-contextual-word-sense
-CN-A-MRD-evidence-to-character-trait
-CN-S-META-evidence-explanation-conclusion
-CN-A-WRT-select-typical-material
+CN-K-classical-content-word-meaning
+CN-A-infer-classical-contextual-word-sense
+CN-A-evidence-to-character-judgment
+CN-S-evidence-explanation-conclusion
+CN-A-select-typical-writing-material
 ```
 
 ### 2.2 Identity rules
 
-1. The ID is independent of Notion page IDs, titles, database names, grade labels and source materials.
-2. Renaming the Chinese display name does **not** change the ID when the concept remains semantically identical.
-3. If a node changes meaning materially, create a new ID and deprecate/redirect the old one.
-4. IDs are never recycled.
-5. A node moved to another navigation parent keeps its ID unless its semantic meaning changed.
+1. `node_id` is independent of Notion page IDs, titles, database names, domains, subdomains, grade labels and source materials.
+2. Renaming the Chinese display name does **not** change the ID when semantics remain identical.
+3. Moving a node between navigation domains/subdomains does **not** change the ID.
+4. If semantic meaning changes materially, create a new ID and deprecate the old node.
+5. IDs are never recycled.
+6. IDs must remain resolvable after deprecation through `deprecated_by` or migration documentation.
 
-### 2.3 Why IDs are English-slug based
+### 2.3 Why domain is not encoded in the ID
 
-The learner-facing system remains Chinese. The slug exists only to provide durable machine identity across Notion, GitHub and future code. It avoids identity changing when Chinese terminology is normalized.
+`domain` is a mutable coverage/navigation classification. Cross-domain generalization and later taxonomy refinement must not invalidate permanent identity. Machine identity therefore encodes only semantic type plus stable slug.
 
 ---
 
@@ -60,16 +60,29 @@ The learner-facing system remains Chinese. The slug exists only to provide durab
 
 | code | domain | purpose |
 | --- | --- | --- |
-| `LAN` | 语言文字基础 | vocabulary, syntax, orthography, language precision |
-| `MRD` | 现代文阅读 | modern literary/informational reading |
-| `CLA` | 文言文 | classical-Chinese language and prose reading |
-| `POE` | 古诗词 | poetry knowledge, reading and appreciation |
-| `LIT` | 文学与文化 | genres, authors/works, literary/cultural knowledge, whole-book reading |
-| `WRT` | 写作 | narrative, argumentative, source-based and revision abilities |
-| `COM` | 语言运用与真实交流 | practical communication, transformation, audience-purpose tasks, cross-media |
-| `META` | 跨域推理、评价与迁移 | cross-domain reasoning and transfer operations/strategies |
+| `LAN` | 语言文字基础 | vocabulary, syntax, orthography, cohesion, language precision |
+| `MRD` | 现代文阅读 | modern literary/informational text interpretation |
+| `CLA` | 文言文 | classical-Chinese decoding, discourse and culture |
+| `POE` | 古诗词 | poetic language, imagery, structure, technique and emotion |
+| `LIT` | 文学与文化 | genre, authors/works, literary/cultural knowledge, whole-book reading |
+| `WRT` | 写作 | narrative, argumentative, source-based and revision production |
+| `COM` | 语言运用与真实交流 | practical, audience-purpose and cross-media communication |
+| `META` | 跨域推理、评价与迁移 | reasoning operations reusable across content domains |
 
-Domain is a **coverage/navigation classification**, not a progression level. A node may be cross-domain while retaining one primary domain and secondary tags/relations.
+Domain is **coverage/navigation**, never progression.
+
+### 3.1 Domain-assignment precedence
+
+Assign by the semantic object, not by wording of the question that happens to test it.
+
+1. **Cross-domain reasoning operation → `META`.** Example: explaining why evidence supports a conclusion, establishing a comparison dimension, judging evidence sufficiency.
+2. **Language-form system reusable across tasks → `LAN`.** Example: syntax, cohesion, sentence logic, lexical precision.
+3. **Extended composition/product construction → `WRT`.** Example: narrative material selection, argument paragraph construction, revision of an essay draft.
+4. **Concrete audience-purpose/practical or cross-media act → `COM`.** Example: interview-question design, notice rewriting, chart-to-text conversion.
+5. **Literary/cultural concept independent of one modern passage → `LIT`.** Example: memoir genre features, literary history, whole-book knowledge.
+6. **Representation-specific reading/decoding → source domain (`MRD`, `CLA`, `POE`).** Example: classical contextual word sense, poetry scene reconstruction, modern narrative time structure.
+
+If two domains remain plausible, choose the domain that best predicts prerequisites and intervention. Record cross-cutting relevance in `secondary_domains` or later graph edges; do not duplicate identity.
 
 ---
 
@@ -98,57 +111,71 @@ source_basis: reference[]
 Permanent machine identity governed by Section 2.
 
 #### `name_zh`
-Short learner/teacher-facing canonical Chinese name. It should describe the semantic object, not one exam label.
+Short canonical Chinese display name. It describes the semantic unit, not an exam label.
 
 #### `node_type`
-The Knowledge / Ability / Strategy distinction. This is the most important semantic field.
+Knowledge / Ability / Strategy. This is the primary semantic distinction.
 
 #### `domain`
-Primary coverage domain. It must not imply that the node can only transfer inside that domain.
+Primary coverage/navigation domain. It does not constrain transfer.
 
 #### `subdomain`
-A stable navigation/coverage family such as `词义`, `人物与叙事`, `文言句法`, `论证`, `信息整合`.
+Stable machine code using `<DOMAIN>.<family>` form, e.g.:
+
+```text
+META.evidence
+MRD.narrative
+CLA.lexicon
+POE.emotion
+WRT.material
+COM.interview
+```
+
+Chinese labels and explanations belong in taxonomy documentation/views, not in the machine code.
 
 #### `definition`
-What the node means. Definition must be self-contained enough that two editors can make the same tagging decision.
+Self-contained semantic definition sufficient for consistent tagging by independent editors.
 
 #### `observable_success`
-What successful use looks like in learner evidence.
+What successful evidence looks like.
 
-For Knowledge, observable success may be recognition, recall, distinction or accurate explanation.
+- Knowledge: correct recognition, recall, distinction or explanation.
+- Ability: an observable operation/output.
+- Strategy: correct selection and execution of the procedure, not merely a correct final answer.
 
-For Ability, it must describe an observable operation and output.
-
-For Strategy, it must describe correct procedure selection/execution, not merely final-answer correctness.
-
-#### `scope_in`
-Explicit inclusions: what examples or operations belong to this node.
-
-#### `scope_out`
-Explicit boundaries: nearby concepts/tasks that do not belong to this node.
+#### `scope_in` / `scope_out`
+Explicit semantic boundary and nearby exclusions.
 
 #### `parent_node_id`
-Taxonomic decomposition only. It is **not** a prerequisite edge. Hard/soft prerequisites belong in the dependency-edge model.
+Taxonomic decomposition only, never prerequisite semantics.
+
+A taxonomic parent must:
+
+- have the **same `node_type`**;
+- normally have the **same primary domain**;
+- represent a broader kind/family of the child.
+
+Cross-type, cross-domain, prerequisite and transfer relations belong in B2 graph edges.
 
 #### `gaokao_relevance`
-- `core`: repeatedly required directly or as a central prerequisite in Gaokao;
-- `supporting`: materially supports core performance but is not consistently isolated as a tested endpoint;
-- `enrichment`: useful for broader literacy but not required for baseline coverage.
+- `core` — repeatedly required directly or is a central prerequisite;
+- `supporting` — materially supports core performance;
+- `enrichment` — broader literacy beyond baseline coverage.
 
-It does not determine training order by itself.
+This field never determines training order by itself.
 
 #### `status`
-- `draft`: semantics still under review;
-- `active`: canonical and available for mapping/profile;
-- `deprecated`: historical identity retained but new tagging should use successor nodes.
+- `draft` — semantics under review;
+- `active` — canonical and available for mapping/profile;
+- `deprecated` — identity retained; new tagging should use successor guidance.
 
 #### `aliases_zh`
-Common textbook, school or exam terminology that resolves to the same canonical semantic node.
+Only one-to-one semantic synonyms or common equivalent terminology.
 
-Aliases must not be used to merge genuinely distinct nodes.
+Do **not** use an alias to absorb a mixed legacy label that splits into multiple canonical nodes. Those mappings belong in migration documentation.
 
 #### `source_basis`
-Evidence supporting why the node belongs in the graph, e.g. curriculum standards, authentic exams, current school materials, or repeated operational need. Source evidence justifies coverage; it is not learner evidence.
+Coverage evidence such as curriculum standards, authentic exams, school materials or repeated operational need. This is not learner evidence.
 
 ---
 
@@ -163,20 +190,15 @@ deprecated_by: string | null
 notes: string
 ```
 
-These fields improve authoring and QA but are not required for identity.
-
 ---
 
 ## 6. Fields forbidden from canonical LearningNode
 
-The following belong elsewhere and must not be stored as canonical meaning:
-
 ```text
 mastery
-current_mastery
-student_score
 automation
 complexity_ceiling
+student_score
 recent_training
 last_trained
 needs_improvement
@@ -193,10 +215,10 @@ question_status
 
 Correct homes:
 
-- personal state -> `LearnerNodeState`;
-- performance evidence -> `TrainingAttempt`;
-- task/source metadata -> `Material`, `Question`, `TaskType`;
-- scheduling -> `TrainingMove` / training queue.
+- personal state → `LearnerNodeState`;
+- performance evidence → `TrainingAttempt`;
+- task/source metadata → `Material`, `Question`, `TaskType`;
+- scheduling → `TrainingMove` / training queue.
 
 ---
 
@@ -204,16 +226,14 @@ Correct homes:
 
 ### 7.1 Knowledge
 
-Use `knowledge` when the central semantic question is:
+Use `knowledge` when the primary question is:
 
-> **What must the learner know, recognize, distinguish, recall or understand?**
-
-Knowledge names should normally be noun phrases or distinctions.
+> What stable fact, concept, distinction, convention or rule must the learner know/recognize/understand?
 
 Good:
 
 ```text
-比喻的构成与常见作用
+比喻的构成
 宾语前置
 古今异义
 回忆性散文的文体特征
@@ -223,298 +243,252 @@ Good:
 Bad as Knowledge:
 
 ```text
-分析比喻表达效果       # observable operation -> ability
-准确翻译文言句子       # operation -> ability
-辨-定-证-推-答-检      # procedure -> strategy
+分析比喻表达效果       # ability
+准确翻译文言句子       # ability
+辨-定-证-推-答-检      # strategy
 ```
-
-A knowledge node may have memory/recognition evidence, but forgetting state belongs in the learner profile.
 
 ### 7.2 Ability
 
-Use `ability` when the central semantic question is:
+Use `ability` when the primary question is:
 
-> **What can the learner observably do with language, text, information or an artifact?**
+> What can the learner observably do with language, text, information or an artifact?
 
-Ability names should normally use an action verb plus an object/quality condition.
+Prefer `动词 + 对象 + 成功约束`.
 
 Good:
 
 ```text
 定位与题目相关的关键信息
-压缩信息且保持原意
+压缩信息且保持必要条件
 建立有效比较维度
 解释证据为何支持人物判断
 根据语境推断文言实词义
 准确翻译文言句子
-用文本证据判断文体
+根据现代文本证据判断文体
 选择能集中表现中心的典型材料
 ```
 
-Avoid vague topics:
-
-```text
-人物形象          # topic, not observable operation
-修辞              # knowledge family
-开放题            # task type
-作文               # domain
-```
-
-Composite abilities are allowed when they are stable, useful reporting outcomes, but they should connect to decomposed prerequisite abilities rather than hide all subskills inside one score.
+Composite abilities may exist as reporting outcomes, but canonical leaves must remain sufficiently diagnosable.
 
 ### 7.3 Strategy
 
-Use `strategy` when the central semantic question is:
+Use `strategy` when the primary question is:
 
-> **What reusable ordered procedure helps the learner coordinate multiple knowledge/ability nodes?**
+> What reusable ordered procedure coordinates multiple operations across questions/materials?
 
-A strategy must satisfy all of:
+A Strategy must:
 
-1. contains at least two meaningful operations or decision steps;
-2. applies to more than one concrete question/material, preferably more than one Task Type;
-3. can be explicitly reminded, partially faded, independently invoked and automated;
-4. is not merely an answer sentence template.
+1. contain at least two meaningful operations/decisions;
+2. apply to multiple concrete questions/materials;
+3. be explicitly promptable and fadeable;
+4. be independently invokable/automatable;
+5. not be a fixed answer sentence template.
 
 Good:
 
 ```text
-证据 -> 解释 -> 结论
-比较维度 -> 分别取证 -> 同异 -> 意义
-内容 -> 位置 -> 上下文关系 -> 作用
-圈关键词 -> 逐词落实 -> 调整句式 -> 补省略 -> 通读校验
+证据 → 解释 → 结论
+比较维度 → 分别取证 → 同异 → 意义
+内容 → 位置 → 上下文关系 → 作用
+圈关键词 → 逐词落实 → 调整句式 → 补省略 → 通读校验
 ```
-
-Bad:
-
-```text
-“这句话运用了……生动形象地……”
-```
-
-The latter is an answer shell, not a reasoning strategy.
 
 ---
 
-## 8. Split and merge rules
+## 8. Split, merge and generalization rules
 
 ### Split when
 
-- one current label contains both knowledge and operation (`修辞与表达效果`);
-- one label contains multiple knowledge families with different prerequisites (`词类活用与特殊句式`);
-- one label mixes a Task Type with underlying abilities (`标题含义与作用`);
-- evidence requirements differ materially (`作文语言与修改`).
+- one label mixes Knowledge and Ability (`修辞与表达效果`);
+- one label hides different knowledge families/prerequisites (`词类活用与特殊句式`);
+- one label is mainly a Task Type (`标题含义与作用`);
+- evidence/intervention/review behavior differs materially (`作文语言与修改`).
 
-### Merge or generalize when
+### Generalize when
 
-- the observable operation is semantically identical across text domains;
-- separate v1 labels exist only because one occurs in modern prose and one in classical prose;
-- shared abstraction improves transfer without losing important domain prerequisites.
+- the observable operation is semantically identical across source domains;
+- shared identity improves transfer while source-specific prerequisites remain explicit.
 
 Example:
 
 ```text
-现代人物形象判断
-文言人物形象判断
+现代人物判断
+文言人物判断
+        ↓
+CN-A-evidence-to-character-judgment   domain=META
 ```
 
-should share a cross-domain ability such as:
-
-```text
-CN-A-META-evidence-to-character-trait
-由文本事实与情境推断人物稳定特征
-```
-
-while classical decoding remains a prerequisite for classical material.
+Modern/classical decoding remains separate prerequisite context.
 
 ### Do not merge when
 
-- the operation has materially different knowledge/production demands;
-- the same Chinese label hides different success criteria;
-- merging would make profile diagnosis unable to locate the actual failure.
+- representation-specific knowledge differs materially;
+- error patterns/interventions differ;
+- one merged score would hide the actionable failure.
 
 ---
 
 ## 9. Parent hierarchy rules
 
-`parent_node_id` describes decomposition/navigation, not learning order.
+`parent_node_id` answers:
 
-Example:
+> This node is a kind/part of what broader node of the same semantic type?
 
-```text
-文言句法知识
-  ├─ 判断句
-  ├─ 省略句
-  ├─ 被动句
-  └─ 倒装句
-```
-
-Do **not** encode:
+Valid:
 
 ```text
-文言实词 -> parent -> 文言翻译
+Knowledge: 宾语前置 → 文言倒装句知识
+Ability: 选择语境义 → 文言词义解码能力族
 ```
 
-That is a prerequisite relationship and belongs to a graph edge such as `requires`.
+Invalid:
 
-A node has at most one canonical taxonomic parent in B1. Cross-cutting relationships use graph edges/tags instead of multiple parents.
+```text
+文言翻译 parent=文言实词
+```
+
+That is a prerequisite relation and belongs in B2.
+
+B1 uses at most one canonical taxonomic parent. Cross-cutting relations use graph edges.
 
 ---
 
 ## 10. Naming convention
 
 ### Knowledge
-
-Prefer canonical concept names:
-
-```text
-古今异义
-条件关系
-小说叙事视角
-论据类型
-```
+Prefer stable concept/distinction nouns.
 
 ### Ability
-
-Prefer `动词 + 对象 + 成功约束`:
-
-```text
-识别因果与条件关系
-按同一维度比较两个文本
-解释细节对人物塑造的作用
-压缩多处信息且不遗漏核心条件
-```
+Prefer action + object + success constraint.
 
 ### Strategy
+Prefer a short conceptual name; keep procedural steps in `definition`.
 
-Prefer a short conceptual name plus the procedural chain in the definition:
+Avoid:
 
-```text
-证据—解释—结论
-比较分析链
-结构作用链
-文言翻译五步法
-```
-
-### Avoid
-
-- grade labels: `初二人物形象`;
-- source labels: `周亚夫人物分析`;
-- score labels: `中考8分题`;
-- broad containers as leaf nodes: `现代文阅读`;
-- question wording as node identity: `为什么选这件事`;
-- vague competence adjectives: `阅读理解能力`.
+- grade labels (`初二人物形象`);
+- source labels (`周亚夫人物分析`);
+- score labels (`中考8分题`);
+- broad containers as leaf nodes (`现代文阅读`);
+- question wording as identity (`为什么选这件事`);
+- vague labels (`阅读理解能力`).
 
 ---
 
-## 11. Representative canonical examples
+## 11. Representative reviewed examples
 
-### Modern reading
+### Cross-domain character reasoning
 
 ```yaml
-node_id: CN-A-MRD-evidence-to-character-trait
+node_id: CN-A-evidence-to-character-judgment
 name_zh: 由事实、情境与选择推断人物特征
 node_type: ability
-domain: MRD
-subdomain: 人物与叙事
-definition: 从文本中的事件、细节和特殊情境出发，解释人物选择为何能支持某项相对稳定的人物特征判断。
-observable_success: 面对陌生叙事文本，能给出文本事实，并显性写出证据到人物判断之间的理由，不只贴品质标签。
-scope_in: 人物形象、人物评价、典型事件中的人物选择解释。
-scope_out: 仅识别描写方法；仅概括事件；无证据的价值判断。
+domain: META
+subdomain: META.evidence
+definition: 从人物言行、事件与所处情境出发，解释关键选择为何足以支持某项相对稳定的人物特征判断。
+observable_success: 在现代文或文言陌生材料中，能给出事实证据并显性完成证据到人物判断之间的推理。
+scope_in: 人物形象、人物评价、典型事件中的人格判断。
+scope_out: 文言词句解码；仅概括事件；无证据价值判断。
 parent_node_id: null
 gaokao_relevance: core
-status: active
-aliases_zh: [人物形象分析]
-source_basis: [现有学校人物叙事单元, 近年文学阅读]
+status: draft
+aliases_zh: []
+source_basis: [现有学校人物叙事单元, 周亚夫军细柳训练记录, 文学阅读真题]
 ```
 
-### Classical Chinese
+### Genre knowledge
 
 ```yaml
-node_id: CN-A-CLA-infer-contextual-word-sense
+node_id: CN-K-memoir-genre-features
+name_zh: 回忆性散文的文体特征
+node_type: knowledge
+domain: LIT
+subdomain: LIT.genre
+definition: 回忆性散文在视角、材料组织、叙事与抒情关系、写作目的等方面的稳定体裁特征。
+observable_success: 能说明主要特征并与传记、小说等相邻体裁作概念区分。
+scope_in: 体裁稳定特征。
+scope_out: 对某篇现代文本作最终文体判断。
+parent_node_id: null
+gaokao_relevance: supporting
+status: draft
+aliases_zh: [回忆性散文特征]
+source_basis: [现有人物叙事学习设计]
+```
+
+### Evidence-based modern genre judgment
+
+```yaml
+node_id: CN-A-judge-modern-genre-from-evidence
+name_zh: 根据现代文本证据判断文体
+node_type: ability
+domain: MRD
+subdomain: MRD.genre
+definition: 调用体裁知识，从叙事视角、材料组织、表达方式与写作目的等证据判断现代文本的文体属性并说明理由。
+observable_success: 面对陌生现代文本时，能给出相关证据并解释其与文体特征的对应关系。
+scope_in: 回忆性散文、传记、小说等现代文本辨析。
+scope_out: 仅背体裁定义；文学史记忆。
+parent_node_id: null
+gaokao_relevance: supporting
+status: draft
+aliases_zh: [文体辨析]
+source_basis: [现有人物叙事学习设计]
+```
+
+### Classical contextual word sense
+
+```yaml
+node_id: CN-A-infer-classical-contextual-word-sense
 name_zh: 根据语境判断文言词语义项
 node_type: ability
 domain: CLA
-subdomain: 词义与解码
-definition: 在已知或部分已知词义网络基础上，根据句法、上下文事件和搭配选择当前语境中的合理义项。
-observable_success: 在陌生短篇中能说明词义选择与句意相容，并避免只凭背诵机械套义。
-scope_in: 实词义项、一词多义语境选择、部分活用后的语义判断。
-scope_out: 单纯背诵词条；虚词语法功能；完整句子翻译。
+subdomain: CLA.lexicon
+definition: 在词义知识网络基础上，根据搭配、句法和上下文事件关系选择或推断当前文言语境中的合理义项。
+observable_success: 在陌生短篇中能给出与句意一致的词义判断，并在需要时说明语境依据。
+scope_in: 实词语境义、一词多义义项选择、部分活用后语义理解。
+scope_out: 单纯背诵词条；虚词功能；完整句子翻译。
 parent_node_id: null
 gaokao_relevance: core
-status: active
+status: draft
 aliases_zh: [文言实词语境义]
-source_basis: [文言教材与课外迁移题]
+source_basis: [现有文言教材与课外迁移设计]
 ```
 
-### Poetry
+### Writing material selection
 
 ```yaml
-node_id: CN-A-POE-link-image-to-emotion
-name_zh: 解释意象、画面与情感之间的关系
-node_type: ability
-domain: POE
-subdomain: 意象与情感
-definition: 从具体景物、事件和关键词出发，解释画面特征如何形成情绪方向并指向情感对象。
-observable_success: 不只给出“思乡/悲伤”等标签，而能用诗中词句说明情绪为何成立。
-scope_in: 意象、意境、景情关系、诗歌情感。
-scope_out: 默写；单纯定义意象；只判断修辞名称。
-parent_node_id: null
-gaokao_relevance: core
-status: active
-aliases_zh: [诗词思想感情, 意象与意境分析]
-source_basis: [古诗词真题与教材]
-```
-
-### Writing
-
-```yaml
-node_id: CN-A-WRT-select-typical-material
+node_id: CN-A-select-typical-writing-material
 name_zh: 选择能集中表现中心的典型材料
 node_type: ability
 domain: WRT
-subdomain: 选材
-definition: 根据题目限制和中心问题，从候选经历/材料中选择具有情境压力、关键选择或辨识度的事件，使有限篇幅能够有效呈现中心。
-observable_success: 能解释“为什么选这件而不选另一件”，且选择与文章中心存在清晰因果关系。
+subdomain: WRT.material
+definition: 根据题目限制和中心问题，在候选经历或材料中选择最能通过情境压力、关键选择或辨识度服务中心的内容。
+observable_success: 能比较多个候选素材并解释最终选择为什么更能服务中心。
 scope_in: 叙事作文选材、素材迁移、典型事件选择。
-scope_out: 具体细节展开；全文语言润色；仅列素材清单。
+scope_out: 细节展开；全文结构；单纯列素材。
 parent_node_id: null
 gaokao_relevance: core
-status: active
-aliases_zh: [作文选材与典型事件]
-source_basis: [学校人物故事会写作任务, 高考写作构思要求]
-```
-
-### Language use
-
-```yaml
-node_id: CN-A-LAN-revise-sentence-logic
-name_zh: 诊断并最小修改句子逻辑或语法问题
-node_type: ability
-domain: LAN
-subdomain: 句子准确性
-definition: 判断句子中的成分、搭配、指代或逻辑关系问题，在尽量保留原意的前提下作最小修改。
-observable_success: 能指出问题类型，修改后语义、结构和逻辑均成立，且不过度改写。
-scope_in: 病句修改、表达准确性、局部改写。
-scope_out: 全段重写；文学语言审美；标点专项。
-parent_node_id: null
-gaokao_relevance: supporting
-status: active
-aliases_zh: [语病与句子表达]
-source_basis: [语言运用题]
+status: draft
+aliases_zh: []
+source_basis: [人物故事会写作任务, 周亚夫典型事件训练]
 ```
 
 ---
 
 ## 12. B1 invariants
 
-A canonical registry is valid only if all invariants hold:
+A canonical registry is valid only if:
 
-1. Every active node has a stable `CN-*` ID.
-2. Every node has exactly one `node_type` and one primary domain.
-3. No node contains personal mastery/review/training-state fields.
-4. No node's meaning depends on a grade/year label.
-5. `parent_node_id` never substitutes for prerequisite semantics.
-6. Ability nodes have observable success criteria.
-7. Strategy nodes define reusable procedures, not fixed answer wording.
-8. Task labels are not promoted to abilities when their only meaning is “this exam asks this way”.
-9. Mixed v1 labels must be explicitly split or mapped through multiple v2 entities.
-10. Deprecated nodes retain identity and point to replacement guidance; IDs are never reused.
+1. every active node has stable `CN-<TYPE>-<SLUG>` identity;
+2. domain/subdomain changes do not change identity;
+3. every node has exactly one semantic type and one primary domain;
+4. `subdomain` uses a stable machine code;
+5. no personal learning state leaks into canonical nodes;
+6. no node meaning depends on grade/year;
+7. taxonomic parent has the same node type and normally the same primary domain;
+8. Ability nodes have observable success criteria;
+9. Strategy nodes are reusable procedures, not answer wording;
+10. aliases are one-to-one synonyms, never a shortcut for split legacy labels;
+11. Task Type labels are not promoted to Abilities merely because exams use them;
+12. mixed v1 labels have explicit split/merge/migration decisions;
+13. deprecated IDs are never reused.
