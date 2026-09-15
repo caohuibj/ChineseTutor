@@ -25,7 +25,9 @@ No evidence must produce:
 mastery: null
 automation: null
 verified_complexity_band: null
-evidence_strength: none
+mastery_evidence_strength: none
+automation_evidence_strength: none
+complexity_evidence_strength: none
 ```
 
 Fail if newly added nodes default to M0/A0/C0.
@@ -67,12 +69,12 @@ C2 will define exact evidence aggregation, but C1 must preserve this invariant.
 
 ---
 
-## Gate 5 — Complexity ceiling is verified, not attempted maximum
+## Gate 5 — Complexity band is verified, not attempted maximum
 
 Fail:
 
 ```text
-learner attempted one C4 item -> complexity_ceiling = C4
+learner attempted one C4 item -> verified_complexity_band = C4
 ```
 
 Pass only when evidence sufficiently supports successful performance at the band.
@@ -81,24 +83,33 @@ Complexity may later downgrade when evidence becomes stale/contradictory.
 
 ---
 
-## Gate 6 — Evidence strength is explicit
+## Gate 6 — Evidence strength is explicit and axis-specific
 
 The system must distinguish:
 
 ```text
-M2 + weak evidence
-M2 + strong evidence
+mastery M2 + mastery evidence strong
+automation A1 + automation evidence weak
 ```
 
-Fail if both appear identical in Profile or recommendation logic.
+Fail if one global evidence-strength field makes confidence on Mastery, Automation and Complexity indistinguishable.
 
 ---
 
-## Gate 7 — `last_trained_at` and `last_verified_at` are separate
+## Gate 7 — Training recency and axis verification recency are separate
 
 Training exposure is not verification.
 
-Fail if every practice session automatically updates `last_verified_at`.
+Required timestamps:
+
+```text
+last_trained_at
+mastery_verified_at
+automation_verified_at
+complexity_verified_at
+```
+
+Fail if an untimed practice answer refreshes automation verification automatically, or every practice session refreshes all dimensions.
 
 ---
 
@@ -181,25 +192,33 @@ Edges guide testing/recommendation, not evidence substitution.
 
 ---
 
-## Gate 13 — Counts are not mastery formulas
+## Gate 13 — Counts are nullable caches, not mastery formulas
 
-Fail:
+During legacy migration:
+
+```text
+attempt_count: null
+```
+
+means “historical count unknown”.
+
+It must not be normalized to zero.
+
+Also fail:
 
 ```text
 attempt_count >= 5 => M2
 ```
 
-unless C2 later defines a richer evidence rule incorporating independence, diversity, complexity, recency and hints.
-
-Counts are cached summaries only.
+unless later evidence logic also considers independence, diversity, complexity, recency and hints.
 
 ---
 
-## Gate 14 — Error pattern requires repetition or explicit evidence
+## Gate 14 — Error pattern requires repetition and confidence
 
-One error may be recorded at Attempt level but must not automatically become the profile's `primary_error_pattern`.
+One mistake may exist at Attempt level but must not automatically become profile `primary_error_pattern`.
 
-Pass only when pattern is stable enough to guide intervention.
+A profile error pattern should carry `error_pattern_evidence_strength` and be stable enough to guide intervention.
 
 ---
 
@@ -236,7 +255,7 @@ Historical task performance must later map through Question/Attempt evidence.
 
 If modern and classical character reasoning merge into one shared Ability, success in one domain may support the shared estimate but cannot by itself prove cross-domain M3 transfer.
 
-Legacy-only merge backfill should normally cap at M2 and expose weak/moderate evidence.
+Legacy-only merge backfill should normally cap at M2 and expose weak/moderate confidence.
 
 ---
 
@@ -284,16 +303,17 @@ as canonical LearnerNodeState evidence fields.
 
 # Representative acceptance scenarios
 
-## Scenario A — current student character reasoning
+## Scenario A — character reasoning
 
-Historical evidence shows correct direction after prompting, but written inferential link and automatic invocation remain weak.
+Evidence shows correct reasoning after activation, but automatic invocation and written inferential bridge remain weaker.
 
-Plausible C1 state:
+Valid state:
 
 ```text
-M1/A1/C2
-weak evidence
-primary error: E
+mastery M2 / mastery evidence moderate
+automation A1 / automation evidence weak
+complexity C2 / complexity evidence moderate
+primary error E / error-pattern evidence moderate
 ```
 
 This must not be interpreted as “does not understand character analysis”.
@@ -314,7 +334,7 @@ not M0.
 
 ```text
 mastery M2
-last_verified old
+mastery_verified_at old
 forgetting high
 review due
 ```
@@ -339,12 +359,14 @@ Tutor should diagnose lexical prerequisite rather than re-teach the five-step st
 - [x] M0-M3 semantics defined with node-type interpretation;
 - [x] A0-A3 semantics defined independently from mastery;
 - [x] verified complexity band semantics defined;
-- [x] evidence strength/provenance defined without false precision;
-- [x] recency/forgetting fields defined;
-- [x] stable/developing/bottleneck/review-due semantics normalized into orthogonal dimensions;
-- [x] error-pattern summary rules defined;
+- [x] evidence confidence defined per M/A/C axis;
+- [x] verification recency defined per M/A/C axis;
+- [x] nullable legacy counters distinguished from zero;
+- [x] recency/forgetting semantics defined;
+- [x] stable/developing/bottleneck/review-due normalized into orthogonal dimensions;
+- [x] error-pattern summary confidence defined;
 - [x] v1 backfill rules cover one-to-one, split, task-only and merge/generalize cases;
 - [x] grade/stage fields excluded from ability state;
-- [x] profile downgrade and uncertainty are supported;
-- [ ] semantic self-review completed;
+- [x] profile downgrade and uncertainty supported;
+- [x] semantic self-review completed;
 - [ ] stacked PR opened.
