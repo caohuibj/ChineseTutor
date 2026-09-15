@@ -354,6 +354,8 @@ Minimum pilot before declaring v2 MVP operational:
 - at least one scaffold-fade or automation move;
 - at least one review/re-verification decision or an explicit finding that insufficient time has elapsed to test F3 naturally.
 
+These counts are **engineering release floors for exposing integration defects**, not psychometric sample-size claims and not mastery thresholds. They must not be reused as automatic C3 promotion rules.
+
 Every pilot Attempt used as Profile evidence must be traceable to:
 
 ```text
