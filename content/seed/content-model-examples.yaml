@@ -1,0 +1,251 @@
+# D1 content-model fixtures. Metadata examples only; no copyrighted source text is committed.
+
+# -----------------------------------------------------------------------------
+# One source Material -> several Questions
+# -----------------------------------------------------------------------------
+materials:
+  - material_id: MAT-zhouyafu-school-occurrence
+    title: 周亚夫军细柳（当前学习材料版本）
+    material_kind: atomic
+    work_group_id: WORK-zhouyafu-junxiliu
+    content_group_id: null
+    material_type: classical
+    language_form: classical_chinese
+    content_ref: project-upload-or-notion-ref
+    content_hash: null
+    content_complete: true
+    content_fidelity: lightly_normalized
+    adaptation_note: 以当前校内学习材料版本为准；D1 fixture不提交正文。
+    component_material_ids: []
+    author: 司马迁
+    era: 西汉
+    genre_label: 史传文
+    work_title: 周亚夫军细柳
+    collection_title: 史记
+    source_type: school_material
+    source_title: 八上第二单元“人物故事会”学习设计相关材料
+    source_year: 2026
+    source_region_exam: null
+    source_grade: 八年级
+    source_publisher_or_org: null
+    source_url: null
+    source_file_ref: project-upload
+    source_reliability: school
+    reprint_source: null
+    retrieved_at: null
+    provenance_note: 当前项目已有真实学习材料；fixture只描述实体关系。
+    rights_note: 原文/学习材料保留在项目文件中，不复制进GitHub规范文件。
+    curation_status: active
+
+questions:
+  - question_id: Q-zhouyafu-45-character-evidence
+    material_id: MAT-zhouyafu-school-occurrence
+    primary_task_type_id: TT-typical-event-characterization
+    secondary_task_type_ids: [TT-character-analysis]
+    prompt: 为什么“劳军”一事足以塑造“真将军”形象？
+    parent_question_id: null
+    source_question_number: "4.5"
+    question_group_id: GROUP-zhouyafu-school
+    variant_group_id: null
+    question_origin: school_provided
+    prompt_fidelity: verbatim
+    adaptation_note: null
+    question_source_url: null
+    question_source_file_ref: project-upload
+    question_provenance_note: 来源于当前人物故事会学习设计。
+    reference_answer: null
+    reference_answer_source: none
+    rubric: null
+    rubric_source: none
+    official_score: null
+    scoring_note: null
+    knowledge_node_ids: []
+    ability_node_ids: [CN-A-evidence-to-character-judgment]
+    strategy_node_ids: [CN-S-special-context-key-choice-significance, CN-S-evidence-explanation-conclusion]
+    primary_target_node_ids: [CN-A-evidence-to-character-judgment]
+    complexity_band: C2
+    complexity_vector: null
+    complexity_status: provisional
+    curation_status: active
+    curation_note: 已有真实学习记录与C2重建Attempt。
+    transfer_probe_candidate: false
+
+  - question_id: Q-zhouyafu-46-comparison-function
+    material_id: MAT-zhouyafu-school-occurrence
+    primary_task_type_id: TT-comparison-foil-function
+    secondary_task_type_ids: []
+    prompt: 霸上、棘门军与细柳营的对比有何作用？
+    parent_question_id: null
+    source_question_number: "4.6"
+    question_group_id: GROUP-zhouyafu-school
+    variant_group_id: null
+    question_origin: school_provided
+    prompt_fidelity: verbatim
+    adaptation_note: null
+    question_source_url: null
+    question_source_file_ref: project-upload
+    question_provenance_note: 来源于当前人物故事会学习设计。
+    reference_answer: null
+    reference_answer_source: none
+    rubric: null
+    rubric_source: none
+    official_score: null
+    scoring_note: null
+    knowledge_node_ids: []
+    ability_node_ids: [CN-A-establish-comparison-dimension, CN-A-explain-comparison-significance]
+    strategy_node_ids: []
+    primary_target_node_ids: [CN-A-explain-comparison-significance]
+    complexity_band: C2
+    complexity_vector: null
+    complexity_status: provisional
+    curation_status: active
+    curation_note: 已有真实学习记录与C2重建Attempt。
+    transfer_probe_candidate: false
+
+# -----------------------------------------------------------------------------
+# Bundle example: two poems presented together for comparison.
+# -----------------------------------------------------------------------------
+  - material_id: MAT-example-poem-a
+    title: 示例诗A
+    material_kind: atomic
+    work_group_id: null
+    content_group_id: null
+    material_type: poem
+    language_form: poetry
+    content_ref: external-ref-a
+    content_hash: null
+    content_complete: true
+    content_fidelity: verbatim
+    adaptation_note: null
+    component_material_ids: []
+    author: null
+    era: null
+    genre_label: null
+    work_title: null
+    collection_title: null
+    source_type: district_exam
+    source_title: 示例来源
+    source_year: 2025
+    source_region_exam: 北京某区期末
+    source_grade: null
+    source_publisher_or_org: null
+    source_url: null
+    source_file_ref: null
+    source_reliability: reputable_reprint
+    reprint_source: 示例第三方汇编
+    retrieved_at: null
+    provenance_note: 仅示范reprint不等于official。
+    rights_note: null
+    curation_status: candidate
+
+  - material_id: MAT-example-poem-b
+    title: 示例诗B
+    material_kind: atomic
+    work_group_id: null
+    content_group_id: null
+    material_type: poem
+    language_form: poetry
+    content_ref: external-ref-b
+    content_hash: null
+    content_complete: true
+    content_fidelity: verbatim
+    adaptation_note: null
+    component_material_ids: []
+    author: null
+    era: null
+    genre_label: null
+    work_title: null
+    collection_title: null
+    source_type: district_exam
+    source_title: 示例来源
+    source_year: 2025
+    source_region_exam: 北京某区期末
+    source_grade: null
+    source_publisher_or_org: null
+    source_url: null
+    source_file_ref: null
+    source_reliability: reputable_reprint
+    reprint_source: 示例第三方汇编
+    retrieved_at: null
+    provenance_note: 仅示范reprint不等于official。
+    rights_note: null
+    curation_status: candidate
+
+  - material_id: MAT-example-poem-comparison-bundle
+    title: 示例诗歌比较材料包
+    material_kind: bundle
+    work_group_id: null
+    content_group_id: null
+    material_type: poem_set
+    language_form: poetry
+    content_ref: null
+    content_hash: null
+    content_complete: true
+    content_fidelity: verbatim
+    adaptation_note: null
+    component_material_ids: [MAT-example-poem-a, MAT-example-poem-b]
+    author: null
+    era: null
+    genre_label: null
+    work_title: null
+    collection_title: null
+    source_type: district_exam
+    source_title: 示例来源
+    source_year: 2025
+    source_region_exam: 北京某区期末
+    source_grade: null
+    source_publisher_or_org: null
+    source_url: null
+    source_file_ref: null
+    source_reliability: reputable_reprint
+    reprint_source: 示例第三方汇编
+    retrieved_at: null
+    provenance_note: bundle保留两个原子材料的独立身份并固定呈现顺序。
+    rights_note: null
+    curation_status: candidate
+
+task_types:
+  - task_type_id: TT-character-analysis
+    name_zh: 人物形象分析题
+    domain: MRD
+    subdomain: MRD.narrative
+    status: active
+    definition: 基于人物言行、事件、情境等证据作人物特征判断并说明理由。
+    recognition_signals: 分析/概括人物形象、性格、品质，结合内容说明。
+    core_question: 哪些文本事实在什么情境下足以支持怎样的人物判断？
+    output_skeleton: 人物特征 + 关键证据 + 证据为何足以支持该判断。
+    self_checks: 是否只有品质标签？是否有文本事实？是否写出证据到判断的理由？
+    boundaries: 不等于仅概括事件，也不等于描写方法识别。
+    default_knowledge_node_ids: []
+    default_ability_node_ids: [CN-A-evidence-to-character-judgment]
+    recommended_strategy_node_ids: [CN-S-evidence-explanation-conclusion]
+
+  - task_type_id: TT-typical-event-characterization
+    name_zh: 典型事件与选材作用题
+    domain: MRD
+    subdomain: MRD.narrative
+    status: active
+    definition: 分析某事件为什么具有辨识度并能集中表现人物/主题。
+    recognition_signals: 为什么写这件事、为什么选这一小事、事件有何典型性/作用。
+    core_question: 这个事件中的特殊情境和关键选择为什么比普通事件更能证明人物/中心？
+    output_skeleton: 特殊情境 + 关键选择/差异 + 人物/中心意义。
+    self_checks: 是否说明特殊性？是否解释人物选择？是否回扣表现效果？
+    boundaries: 不等于普通事件概括。
+    default_knowledge_node_ids: []
+    default_ability_node_ids: [CN-A-evidence-to-character-judgment]
+    recommended_strategy_node_ids: [CN-S-special-context-key-choice-significance]
+
+  - task_type_id: TT-comparison-foil-function
+    name_zh: 对比与衬托作用题
+    domain: MRD
+    subdomain: MRD.structure
+    status: active
+    definition: 建立共同维度比较两个对象，并解释差异如何突出主要对象、人物或主旨。
+    recognition_signals: 对比、衬托、写另一对象有什么作用。
+    core_question: 比什么、差异是什么、这种差异突出谁的什么特点？
+    output_skeleton: 比较维度 + 双方证据/差异 + 突出对象与意义。
+    self_checks: 是否只说“形成对比”？是否具体写出差异和突出效果？
+    boundaries: 不等于只列两个对象事实。
+    default_knowledge_node_ids: []
+    default_ability_node_ids: [CN-A-establish-comparison-dimension, CN-A-explain-comparison-significance]
+    recommended_strategy_node_ids: []
