@@ -117,5 +117,5 @@ Future authentic questions that cannot be represented should reopen architecture
 - [x] recurring Ability/TaskType/Knowledge/material gaps registered;
 - [x] each recurring unmapped gap linked to an explicit issue;
 - [x] architecture-level verdict recorded;
-- [ ] semantic self-review complete;
+- [x] semantic self-review complete;
 - [ ] stacked PR opened.
