@@ -2,7 +2,7 @@
 
 Status: **C2 normative draft — semantic self-review complete**
 
-`TrainingAttempt` is the lightweight event representing one submitted learner response to one concrete Question/task instance under known support conditions.
+`TrainingAttempt` is the lightweight historical event representing one submitted learner response to one concrete Question/task instance under known support conditions.
 
 It is the primary event source for learner evidence. It is intentionally much smaller than a durable learning recap.
 
@@ -23,26 +23,9 @@ previous_attempt_id: string | null
 session_id: string | null
 ```
 
-### `attempt_series_id`
-Groups successive responses to the **same concrete question/task instance** during one learning cycle.
+`attempt_series_id` groups successive responses to the same concrete question/task instance during one learning cycle. A different Question creates a new series even in the same tutoring session.
 
-Example:
-
-```text
-SERIES-001
-  ATT-001 attempt_number=1  first answer
-  ATT-002 attempt_number=2  after one guiding question
-  ATT-003 attempt_number=3  after a strategy reminder
-```
-
-A different Question creates a new series even in the same tutoring session.
-
-### `question_id`
-References the canonical Question entity once the Material/Question PR exists.
-
-During migration/legacy reconstruction, `question_id` may be null only if `legacy_question_ref` is present.
-
-At least one of `question_id` or `legacy_question_ref` is required.
+At least one of `question_id` or `legacy_question_ref` is required. Native events should use canonical `question_id` once the Question entity exists; legacy reconstruction may use a traceable historical reference.
 
 ---
 
@@ -60,34 +43,20 @@ node_evidence:
     note: string | null
 ```
 
-### Consistency rules
+Consistency rules:
 
-- every `primary_target` / `secondary_target` in `node_evidence` must appear in `target_node_ids`;
-- prerequisite/strategy/incidental evidence may reference additional canonical nodes;
-- one attempt may contain at most one `node_evidence` entry per `(node_id, role)`;
-- a target node with insufficient valid evidence may still appear as `not_observed`.
+- every `primary_target` / `secondary_target` in `node_evidence` appears in `target_node_ids`;
+- prerequisite/strategy/incidental observations may reference additional canonical nodes;
+- at most one entry per `(node_id, role)`;
+- `not_observed` means insufficient valid evidence, not failure.
 
-### Why per-node evidence exists
-
-A multi-node question might show:
-
-- correct text location;
-- weak reasoning;
-- strong written expression;
-- successful Strategy invocation;
-- missing prerequisite knowledge.
-
-The system must not copy one attempt-level correctness score to every target node.
-
-For low-overhead routine use, a single-target attempt usually needs only one or two entries.
-
-`not_observed` is not negative evidence.
+Question-level correctness must never be copied blindly to every node.
 
 ---
 
 ## 3. Attempt context snapshot
 
-Evidence quality depends on task conditions, so the event records a lightweight snapshot rather than relying only on mutable Question metadata.
+Evidence meaning depends on conditions. The event snapshots relevant context instead of relying only on mutable Question metadata.
 
 ```yaml
 completed_at: datetime
@@ -109,51 +78,26 @@ response_mode: written | typed_chat | oral | artifact | mixed | unknown
 artifact_ref: string | null
 ```
 
-### `material_id_snapshot` / `task_type_id_snapshot`
-Preserve historical material/task diversity even if Question metadata is later retagged.
+`material_id_snapshot` and `task_type_id_snapshot` preserve historical diversity/context even if canonical metadata is retagged later.
 
-For legacy records these may be null if canonical entities do not yet exist.
+`material_familiarity` and `transfer_probe` are required to interpret generalization evidence. A different exam/grade is not automatically an unfamiliar transfer.
 
-### `material_familiarity`
-Critical for transfer evidence. Familiar textbook success cannot be silently treated as unfamiliar transfer.
+`question_variant_group_id` lets later aggregation discount superficial variants.
 
-### `transfer_probe`
-True only when the attempt was intentionally suitable for testing transfer/generalization of one or more target nodes.
-
-This does not itself prove transfer success; `node_evidence` and performance still matter.
-
-### `legacy_reconstructed`
-Marks events reconstructed from old learning records rather than captured live. These can seed evidence but should not be treated as equally precise to native C2 telemetry.
-
-### `question_variant_group_id`
-Optional family identifier for near-identical variants. Later aggregation can avoid counting superficial rewrites as independent demonstrations.
-
-### `response_mode`
-Prevents modality from being mistaken for ability failure.
-
-Examples:
-
-- an oral reasoning attempt should not automatically receive `written_expression=0`;
-- a full composition may be stored as an artifact/version and referenced through `artifact_ref`;
-- typed chat may legitimately expose organization/expression but differs from timed handwritten production.
-
-### `artifact_ref`
-Optional reference to a writing draft/version or other production artifact. Long-form evidence should not require duplicating the whole artifact into every attempt event.
+`response_mode` prevents modality from being mistaken for ability failure. Oral reasoning does not automatically imply `written_expression=0`. Long-form writing may reference a versioned artifact through `artifact_ref` rather than being duplicated into the event.
 
 ---
 
 ## 4. Hint / intervention model
 
-### 4.1 Support before this response
-
 ```yaml
 max_hint_level_before_response: null | H0 | H1 | H2 | H3 | H4 | H5 | H6 | H7
 hint_count_before_response: int | null
+intervention_type: null | none | task_reminder | strategy_reminder | guiding_question | text_location | evidence_supply | partial_reasoning | near_answer
+intervention_summary: string | null
 ```
 
-Native C2 events should always record H0-H7. `null` hint level is allowed only for legacy reconstructed evidence where historical support is unknown.
-
-`hint_count_before_response` is optional but useful when multiple hints at the same ordinal level were needed.
+Native C2 events record H0-H7. `null` is allowed only for legacy reconstructed evidence where support is unknown.
 
 ```text
 H0  no hint
@@ -166,18 +110,7 @@ H6  partial reasoning supplied
 H7  near-answer / model answer exposure
 ```
 
-`max_hint_level_before_response` records the strongest support available **before the response represented by this event**.
-
-It is not “how much help was given anywhere in the session”.
-
-### 4.2 Intervention immediately before the attempt
-
-```yaml
-intervention_type: null | none | task_reminder | strategy_reminder | guiding_question | text_location | evidence_supply | partial_reasoning | near_answer
-intervention_summary: string | null
-```
-
-Keep `intervention_summary` short. Do not paste the whole tutor conversation into every event.
+The hint fields describe support available **before this response**, not maximum help anywhere in the session. `hint_count_before_response` is optional but distinguishes repeated prompts at the same ordinal level when useful.
 
 ---
 
@@ -192,8 +125,6 @@ null = not assessed / not applicable
 2    = successful for this attempt condition
 ```
 
-Fields:
-
 ```yaml
 question_understanding: null | 0 | 1 | 2
 task_type_recognition: null | 0 | 1 | 2
@@ -205,39 +136,9 @@ written_expression: null | 0 | 1 | 2
 answer_correctness: null | 0 | 1 | 2
 ```
 
-### Why `null` is mandatory
+`null` is mandatory for N/A/not-observed dimensions. For example, an oral response normally leaves `written_expression` null unless written output was also observed.
 
-A narrative-writing task may not have `text_location`.
-
-An oral attempt should normally leave `written_expression` null unless written output was actually required/observed.
-
-An open composition does not have simple answer correctness comparable to a vocabulary item.
-
-`null` prevents “not applicable” from being misread as failure.
-
-### `question_understanding`
-Separates Q-type failure from downstream reading/reasoning failure.
-
-### `task_type_recognition`
-Whether the learner independently identified what operation/task family was required when meaningfully observable.
-
-### `text_location`
-Whether the learner located/selectively returned to the relevant text region/material.
-
-### `evidence_selection`
-Whether relevant and sufficient evidence was chosen.
-
-### `reasoning`
-Whether explicit inferential/relational steps validly connect evidence to conclusion.
-
-### `terminology`
-Whether useful subject terminology/concepts were accurate where required.
-
-### `written_expression`
-Whether observed written output converts reasoning into complete, concise, scoreable language.
-
-### `answer_correctness`
-Overall result quality where meaningful. It never replaces diagnostic dimensions.
+These are local observations under the recorded conditions, not global M0-M3 Profile levels.
 
 ---
 
@@ -249,8 +150,6 @@ primary_error_code: null | K | R | I | E | Q | M | C
 error_note: string | null
 ```
 
-Codes:
-
 ```text
 K knowledge
 R reading/location
@@ -261,39 +160,49 @@ M method/strategy invocation
 C carelessness/execution
 ```
 
-Multiple codes may coexist.
-
-`primary_error_code` identifies the earliest or most causally important failure when that can be judged.
-
-One attempt-level error does not automatically become C1 `primary_error_pattern`.
+Multiple codes may coexist. `primary_error_code` identifies the earliest/most causal failure when that is supportable. One Attempt error never automatically becomes the C1 stable error pattern.
 
 ---
 
-## 7. Attempt-to-attempt delta
+## 7. Assessment provenance
 
-Do **not** store “next attempt delta” on an earlier event because it requires future knowledge.
+The learner response is historical evidence; the diagnostic labels are an assessment of that evidence. Assessment provenance must therefore be auditable.
 
-Each later response stores change from the previous response:
+```yaml
+assessed_by: tutor_ai | teacher | learner_self | mixed | legacy_unknown
+assessment_confidence: unknown | low | medium | high
+assessment_policy_version: string | null
+```
+
+### `assessed_by`
+Who produced the diagnostic scores/node observations for this event.
+
+### `assessment_confidence`
+Confidence in the **assessment/tagging**, not the learner's mastery. A low-confidence assessment should not be treated like a high-confidence one in later Profile aggregation.
+
+### `assessment_policy_version`
+Optional identifier for the rubric/scoring policy used. This future-proofs recalibration without pretending old judgments were generated under today's policy.
+
+For native AI-tutored events, `assessed_by=tutor_ai` is normal. Teacher review can later create an auditable correction/reassessment rather than silently erasing the original response history.
+
+---
+
+## 8. Attempt-to-attempt delta
+
+Do not store future `next_attempt_delta` on an earlier event.
+
+Each later response stores:
 
 ```yaml
 delta_from_previous: null | worse | unchanged | partial_improvement | major_improvement | resolved
 delta_summary: string | null
 ```
 
-Example:
-
-```text
-ATT-001 reasoning=1, expression=0
-ATT-002 reasoning=2, expression=2
-        max_hint=H3
-        delta_from_previous=resolved
-```
-
-This makes second-attempt learning visible without turning events into long narratives.
+This preserves append-oriented history.
 
 ---
 
-## 8. Learner response / tutor feedback payload
+## 9. Learner response / tutor feedback payload
 
 Optional lightweight fields:
 
@@ -302,125 +211,78 @@ raw_answer: string | null
 feedback_summary: string | null
 ```
 
-Operational systems may retain raw answers where appropriate. GitHub fixtures should avoid committing private learner content unnecessarily.
-
-For long-form writing, prefer `artifact_ref` to duplicating the full draft.
-
-`feedback_summary` records the key diagnosis/intervention outcome, not the whole recap.
+Operational systems may retain raw answers where appropriate. GitHub fixtures should avoid committing private learner content unnecessarily. For long writing, prefer `artifact_ref` to copying the whole draft.
 
 ---
 
-## 9. Evidence interpretation principles
+## 10. Evidence interpretation principles
 
-C2 defines event semantics but does not yet implement a full C1 Profile scoring formula.
+C2 defines evidence-event semantics, not the final C1 Profile scoring formula.
 
-### 9.1 Final correctness under heavy support is not independent mastery
-
-```text
-H5-H7 + correctness 2
-```
-
-can show learning/progress but cannot by itself justify M2 independent performance.
-
-### 9.2 Hint reduction is positive automation evidence
-
-Comparable tasks showing:
-
-```text
-H5 -> H3 -> H1/H0
-```
-
-with stable quality are strong evidence of decreasing scaffold dependence.
-
-`hint_count_before_response` can refine this when several same-level hints were needed.
-
-### 9.3 First and second attempts have different evidence meanings
-
-A second attempt after an H3 prompt can demonstrate successful repair/learning, but its independence differs from an H0 first attempt.
-
-### 9.4 Familiarity/transfer must be explicit
-
-M3-like claims need unfamiliar/diverse evidence; textbook familiarity cannot be ignored.
-
-### 9.5 Similarity matters
-
-Many attempts from the same variant group should not be treated as independent diversity evidence.
-
-### 9.6 Modality matters
-
-Oral insight is valid evidence of thinking but not automatically evidence of written organization. Timed writing is stronger automation/expression evidence than untimed chat.
-
-### 9.7 Diagnostic dimensions can contradict overall correctness
-
-Example:
-
-```text
-correctness 2
-reasoning 0
-```
-
-may indicate guessing, copied wording, or an answer with no visible required reasoning.
-
-Profile updates should use relevant dimensions/node evidence, not correctness alone.
+1. `H5-H7 + correctness=2` can show learning/progress but not independent M2 by itself.
+2. Stable quality while support drops (`H5→H3→H1/H0`) is strong automation evidence.
+3. A repaired second attempt has different evidentiary meaning from an H0 first attempt.
+4. M3-like transfer needs unfamiliar/diverse evidence; familiar textbook success is insufficient.
+5. Near-identical variant groups do not create independent diversity merely by count.
+6. Modality matters: oral thinking and written production provide different evidence.
+7. Assessment confidence/provenance matters; uncertain legacy/AI labels should remain distinguishable.
+8. Overall correctness may disagree with reasoning/evidence dimensions; Profile aggregation uses the relevant local evidence rather than correctness alone.
 
 ---
 
-## 10. Low-overhead logging profile
+## 11. Low-overhead logging profile
 
-For a routine short-answer attempt, minimum operational capture can be:
+For routine short-answer work, most context should be auto-filled from Question/session state. Minimum human/AI capture is approximately:
 
 ```yaml
 question/legacy ref
-attempt_series_id + attempt_number
-target_node_ids
-response_mode
-max_hint_level_before_response
-4-8 applicable diagnostic scores
-error_codes/primary error if any
-one or two node_evidence entries
+attempt series + number
+target nodes
+response mode
+hint level
+a few applicable 0/1/2 diagnostics
+primary error if any
+one or two node-evidence observations
 completed_at
+assessment provenance
 ```
 
-Material/task/complexity metadata should normally be auto-filled from Question and snapshotted by the system.
-
-All long prose fields are optional.
-
-The goal is a few structured selections plus a short note when needed, not a new essay about every question.
+Long prose is optional. The system should not require a recap essay per question.
 
 ---
 
-## 11. Relationship to durable Session Summary
+## 12. Relationship to durable Session Summary
 
 ```text
-TrainingAttempt = raw structured event
+TrainingAttempt = raw structured evidence event
 Session Summary / 学习记录 = promoted durable synthesis
 ```
 
-Promote to durable summary only when there is something worth preserving:
-
-- new reusable strategy;
-- stable error pattern;
-- major breakthrough;
-- transfer success/failure;
-- unit/topic closure;
-- significant writing revision.
-
-Do not create a long Learning Record for every Attempt.
+Promote only meaningful breakthroughs, stable patterns, transfer results, method formation, writing revisions or topic closure.
 
 ---
 
-## 12. C2 invariants
+## 13. Event-history integrity
+
+Native Attempt history should be append-oriented. If a later reviewer changes the diagnostic interpretation, implementation should preserve an audit trail (e.g. assessment revision/correction record) rather than silently rewriting the learner response history.
+
+Exact storage mechanics are implementation scope; semantic history must remain reconstructable.
+
+---
+
+## 14. C2 invariants
 
 1. One submitted response = one TrainingAttempt event.
-2. Successive responses to one question share `attempt_series_id` and increment `attempt_number`.
+2. Successive responses to one Question share series ID and increment attempt number.
 3. `null` diagnostic score means not observed/applicable, never failure.
-4. Native events record H0-H7; legacy reconstructions may have unknown hint level.
+4. Native events record H0-H7; legacy reconstruction may have unknown hint level.
 5. Strong hints reduce independence evidence even when final answer is correct.
-6. Attempt-level scores do not automatically apply equally to every target node.
-7. Per-node evidence is explicit when Profile updates need node-specific interpretation.
-8. Target-role node evidence is consistent with `target_node_ids`.
-9. Second-attempt improvement is stored on the later event as delta-from-previous.
-10. Material/task/familiarity/complexity context is snapshotted with evidence.
-11. Response modality prevents oral/artifact work from being mis-scored as written failure.
-12. Long-form production may reference an artifact/version instead of duplicating content.
-13. TrainingAttempt remains lightweight and does not replace durable recap artifacts.
+6. Attempt-level scores do not automatically apply equally to every involved node.
+7. Per-node evidence is explicit and target-role mapping is internally consistent.
+8. Second-attempt change is stored on the later event.
+9. Material/task/familiarity/complexity/variant context is snapshotted.
+10. Response modality prevents oral/artifact work from being mis-scored as written failure.
+11. Assessment provenance/confidence remains distinct from learner-state confidence.
+12. Long-form production can reference artifacts instead of duplicating them.
+13. TrainingAttempt stays lightweight and does not replace durable recap artifacts.
+14. Historical evidence and later assessment corrections remain auditable.
