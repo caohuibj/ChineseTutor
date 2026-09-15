@@ -1,0 +1,38 @@
+# I1 gap-closure seed for Issue #31.
+# Canonical LearningNode only; no learner state or TaskType identity is stored here.
+
+- node_id: CN-A-evaluate-evidence-sufficiency-for-claim
+  name_zh: 评估证据对主张的支持是否充分
+  node_type: ability
+  domain: META
+  subdomain: META.evidence
+  definition: >-
+    面对一个解释、判断、观点或结论及其候选证据/理由，判断证据是否与主张相关、能否通过合理的中间论证支持主张、整体上是否足以覆盖主张的关键部分，以及主张是否需要限定边界；在证据不足、证据不相关或结论过度外推时指出缺口并说明理由。
+  observable_success: >-
+    在现代/信息类阅读、文言解释判断或议论表达等不同任务中，能够区分“有证据”和“证据足够”，明确指出证据与主张的对应关系、覆盖范围和必要限定，并能在多个候选解释/主张之间基于证据质量作出可辩护判断。
+  scope_in: >-
+    证据相关性与充分性评价；证据—主张中间论证是否成立；多条证据能否共同覆盖主张；结论是否超出证据边界；竞争性解释/说法的证据比较；指出还缺什么证据才能成立。
+  scope_out: >-
+    单纯定位或摘抄证据；文言/现代文本基础解码；从零完成一整篇论证；形式逻辑中的严格演绎有效性判定；泛化的“批判性思维”总能力；仅凭个人态度判断观点好坏。
+  parent_node_id: null
+  gaokao_relevance: core
+  status: active
+  aliases_zh:
+    - 证据充分性评价
+    - 证据对主张的支持充分性判断
+  source_basis:
+    - I1-BJ2023-CLASSICAL-INTERPRETATION
+    - I1-BJ2024-MULTITEXT-RULE
+    - I1-NAT2025II-THEORY-EVALUATION
+    - I1 Gap Register GAP-EVIDENCE-SUFFICIENCY
+    - GitHub Issue #31
+  canonical_examples:
+    - 多处文言证据分别支持两个解释中的哪些部分，哪一种解释得到更充分支持？
+    - 一组材料能否支持“总是如此”的规律，还是只能支持带条件的结论？
+    - 给出的事例与理论标准相关，但是否足以推出题目中的评价结论？
+    - 议论段中的两个例子都相关，但只覆盖主张的一部分，因此需要补充证据或收窄主张。
+  common_confusions:
+    - 找到了相关证据就认为证据已经充分。
+    - 证据能支持较弱结论，却直接推出更强、更绝对的主张。
+    - 只评价证据真假，不检查证据与当前主张是否相关。
+    - 只列多条证据，不解释它们分别覆盖主张的哪些部分。
