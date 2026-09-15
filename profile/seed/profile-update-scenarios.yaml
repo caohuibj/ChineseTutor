@@ -1,0 +1,271 @@
+# C3 representative evidence→profile scenarios.
+# These are semantic fixtures, not production learner writes.
+
+- scenario_id: C3-S01-zhouyafu-legacy-character
+  title: legacy familiar guided character reasoning remains low-confidence
+  node_id: CN-A-evidence-to-character-judgment
+  before:
+    mastery: null
+    automation: null
+    verified_complexity_band: null
+  evidence:
+    attempt_ids: [ATT-legacy-zhouyafu-45-01]
+    legacy_reconstructed: true
+    familiarity: familiar
+    complexity: C2
+    observation: positive
+    independence: unknown
+    hint_level: null
+    primary_error: E
+  expected:
+    mastery:
+      action: initialize
+      to: M1
+      evidence_strength: weak
+    automation:
+      action: no_evidence
+      to: null
+      evidence_strength: none
+    complexity:
+      action: initialize
+      to: C2
+      evidence_strength: weak
+    notes:
+      - The historical reasoning direction is useful evidence, but unknown hint dependence blocks M2/A2 claims.
+      - Legacy-only evidence cannot establish strong confidence or M3/A3.
+
+- scenario_id: C3-S02-guided-repair
+  title: H3 second attempt repairs reasoning but does not prove independent mastery
+  node_id: CN-A-evidence-to-character-judgment
+  before:
+    mastery: M1
+    automation: A1
+    verified_complexity_band: C2
+  evidence:
+    attempt_ids: [ATT-synthetic-character-01, ATT-synthetic-character-02]
+    sequence:
+      - hint: H0
+        observation: mixed
+        independence: independent
+        reasoning: 1
+      - hint: H3
+        observation: positive
+        independence: partial
+        reasoning: 2
+        delta: resolved
+  expected:
+    mastery:
+      action: hold
+      to: M1
+      confidence_effect: increase
+    automation:
+      action: hold
+      to: A1
+      confidence_effect: increase
+    complexity:
+      action: hold
+      to: C2
+    recommendation_signal: repeat same canonical operation on a distinct C2 context with H0/H1
+
+- scenario_id: C3-S03-independent-routine-promotion
+  title: distinct independent routine successes promote M1 to M2
+  node_id: CN-A-explain-comparison-significance
+  before:
+    mastery: M1
+    automation: A1
+    verified_complexity_band: C2
+  evidence:
+    attempts:
+      - {material: MAT-A, task_type: TT-comparison-function, variant: VAR-A, familiarity: unfamiliar, complexity: C2, hint: H0, observation: positive, independence: independent}
+      - {material: MAT-B, task_type: TT-comparison-function, variant: VAR-B, familiarity: unfamiliar, complexity: C2, hint: H1, observation: positive, independence: independent}
+      - {material: MAT-C, task_type: TT-comparison-function, variant: VAR-C, familiarity: partially_familiar, complexity: C2, hint: H0, observation: positive, independence: independent}
+  expected:
+    mastery:
+      action: upgrade
+      from: M1
+      to: M2
+      evidence_strength: moderate
+    automation:
+      action: upgrade
+      from: A1
+      to: A2
+      evidence_strength: moderate
+    complexity:
+      action: hold
+      to: C2
+      evidence_strength: moderate
+    notes:
+      - Item count is not the cause of promotion; diversity and independence are.
+
+- scenario_id: C3-S04-near-duplicate-no-M3
+  title: many near-identical successes cannot fabricate transfer mastery
+  node_id: CN-A-evidence-to-character-judgment
+  before:
+    mastery: M2
+    automation: A2
+    verified_complexity_band: C2
+  evidence:
+    attempts:
+      - {variant: VAR-SAME, familiarity: unfamiliar, complexity: C2, hint: H0, observation: positive, independence: independent}
+      - {variant: VAR-SAME, familiarity: unfamiliar, complexity: C2, hint: H0, observation: positive, independence: independent}
+      - {variant: VAR-SAME, familiarity: unfamiliar, complexity: C2, hint: H0, observation: positive, independence: independent}
+      - {variant: VAR-SAME, familiarity: unfamiliar, complexity: C2, hint: H0, observation: positive, independence: independent}
+  expected:
+    mastery:
+      action: hold
+      to: M2
+      confidence_effect: increase
+    notes:
+      - Surface item count rises, but semantic diversity remains insufficient for M3.
+
+- scenario_id: C3-S05-transfer-promotion
+  title: distinct unfamiliar H0 transfer proves M3 eligibility
+  node_id: CN-A-evidence-to-character-judgment
+  before:
+    mastery: M2
+    automation: A2
+    verified_complexity_band: C2
+    mastery_evidence_strength: strong
+  evidence:
+    attempts:
+      - {material_family: modern-biography, task_type: TT-character-analysis, variant: VAR-1, familiarity: unfamiliar, transfer_probe: true, complexity: C2, hint: H0, observation: positive, independence: independent}
+      - {material_family: classical-biography, task_type: TT-classical-character, variant: VAR-2, familiarity: unfamiliar, transfer_probe: true, complexity: C2, hint: H0, observation: positive, independence: independent}
+  expected:
+    mastery:
+      action: upgrade
+      from: M2
+      to: M3
+      evidence_strength: strong
+    automation:
+      action: hold
+      to: A2
+    complexity:
+      action: hold
+      to: C2
+    notes:
+      - M3 is produced by stable transfer across meaningfully different contexts, not by C4 complexity.
+
+- scenario_id: C3-S06-high-complexity-failure-no-downgrade
+  title: one C4 failure does not erase stable C2 mastery
+  node_id: CN-A-integrate-multiple-sources
+  before:
+    mastery: M2
+    automation: A2
+    verified_complexity_band: C2
+    mastery_evidence_strength: strong
+  evidence:
+    attempts:
+      - {complexity: C4, familiarity: unfamiliar, transfer_probe: true, hint: H0, observation: negative, independence: independent}
+  expected:
+    mastery:
+      action: hold
+      to: M2
+      confidence_effect: none
+    complexity:
+      action: hold
+      to: C2
+    notes:
+      - Record a higher-complexity gap; do not downgrade lower-band mastery.
+
+- scenario_id: C3-S07-recent-comparable-regression
+  title: repeated recent C2 contradictions can downgrade an old M2 estimate
+  node_id: CN-A-translate-classical-sentence-accurately
+  before:
+    mastery: M2
+    automation: A2
+    verified_complexity_band: C2
+    mastery_evidence_strength: moderate
+    last_verified_age: old
+  evidence:
+    attempts:
+      - {material: MAT-new-1, variant: VAR-1, complexity: C2, hint: H0, observation: negative, independence: independent, prerequisite_blocked: false}
+      - {material: MAT-new-2, variant: VAR-2, complexity: C2, hint: H1, observation: mixed, independence: independent, prerequisite_blocked: false}
+      - {material: MAT-new-3, variant: VAR-3, complexity: C1, hint: H0, observation: negative, independence: independent, prerequisite_blocked: false}
+  expected:
+    mastery:
+      action: downgrade
+      from: M2
+      to: M1
+      evidence_strength: moderate
+    automation:
+      action: downgrade_or_verify
+      from: A2
+      to: A1
+    complexity:
+      action: downgrade
+      from: C2
+      to: C1
+    notes:
+      - Recent comparable contradictions across distinct contexts outweigh stale moderate evidence.
+
+- scenario_id: C3-S08-prerequisite-blocked-downstream
+  title: lexical failure blocks translation evidence rather than creating downstream negative evidence
+  node_id: CN-A-translate-classical-sentence-accurately
+  before:
+    mastery: M2
+    automation: A1
+    verified_complexity_band: C2
+  evidence:
+    attempt:
+      classical_word_sense:
+        observation: negative
+        role: prerequisite
+      translation:
+        observation: not_observed
+        role: primary_target
+      final_answer_correctness: 0
+  expected:
+    mastery:
+      action: no_evidence
+      to: M2
+    notes:
+      - Update the prerequisite node, not translation mastery, until translation is validly observable.
+
+- scenario_id: C3-S09-expression-bottleneck-does-not-downgrade-reasoning
+  title: strong reasoning plus weak written expression updates different nodes differently
+  node_id: CN-A-evidence-to-character-judgment
+  before:
+    mastery: M2
+    automation: A2
+    verified_complexity_band: C2
+  evidence:
+    attempt:
+      reasoning: 2
+      evidence_selection: 2
+      written_expression: 0
+      answer_correctness: 1
+      target_observation: positive
+      independence: independent
+      primary_error: E
+  expected:
+    mastery:
+      action: hold
+      to: M2
+      confidence_effect: increase
+    error_pattern:
+      action: candidate
+      code: E
+    notes:
+      - Reasoning Profile must not be downgraded because expression output is weak; expression-related node receives the negative evidence.
+
+- scenario_id: C3-S10-untimed-success-no-A3
+  title: strong untimed H0 work cannot verify A3
+  node_id: CN-S-evidence-explanation-conclusion
+  before:
+    mastery: M2
+    automation: A2
+  evidence:
+    attempts:
+      - {hint: H0, timed: false, observation: positive, independence: independent}
+      - {hint: H0, timed: false, observation: positive, independence: independent}
+  expected:
+    mastery:
+      action: hold
+      to: M2
+      confidence_effect: increase
+    automation:
+      action: hold
+      to: A2
+      confidence_effect: increase
+    notes:
+      - A3 needs actual pressure/fluency evidence, not merely accurate untimed work.
