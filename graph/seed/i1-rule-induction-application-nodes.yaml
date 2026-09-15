@@ -1,0 +1,42 @@
+# R1.3 canonical Ability fixtures for Issue #30.
+# These close only the semantic minimum slice required before v2 MVP pilot.
+
+- node_id: CN-A-induce-rule-from-examples
+  name_zh: 从实例或材料中归纳可使用的规则
+  node_type: ability
+  domain: META
+  subdomain: META.rule
+  definition: >-
+    从多个实例、事实或材料关系中抽取共同条件与稳定关系，形成能够解释已给材料并可用于后续判断的规则、原则或模式；必要时保留适用条件与例外，不把个别现象误写成无条件规律。
+  observable_success: >-
+    能把分散实例压缩为一条语义明确、覆盖主要证据且不过度外推的规则，并指出关键条件或边界；换一组材料后仍能执行同一归纳操作。
+  scope_in: 规律概括、原则提取、从多个例子抽取共同条件/关系。
+  scope_out: 仅复述材料；直接套用题目已给规则；评价证据是否足够支持某主张；生成完整多约束方案。
+  parent_node_id: null
+  gaokao_relevance: core
+  status: draft
+  aliases_zh: [规律归纳, 原则提取]
+  source_basis:
+    - 2024北京卷 从材料概括规律并说明复杂性
+    - 2025全国I卷 从材料抽取种植原则
+    - I1 Gaokao coverage audit
+
+- node_id: CN-A-apply-rule-to-case
+  name_zh: 将已理解的规则应用于具体案例
+  node_type: ability
+  domain: META
+  subdomain: META.rule
+  definition: >-
+    在规则、原则或理论已经可用的前提下，识别具体案例中与规则条件对应的事实，判断规则如何约束、解释或评价该案例，并在条件变化时调整结论而不是机械套用。
+  observable_success: >-
+    当规则由题目提供或已被正确归纳时，能明确匹配规则条件与案例事实，得出与条件一致的判断/操作，并说明条件不满足时为何不能直接套用。
+  scope_in: 原则到案例、理论到语言现象、规则到新情境判断或局部决策。
+  scope_out: 从材料本身归纳规则；仅背诵规则；综合多个约束形成完整方案；评价支撑某主张的证据是否充分。
+  parent_node_id: null
+  gaokao_relevance: core
+  status: draft
+  aliases_zh: [规则应用, 原则应用, 理论应用]
+  source_basis:
+    - 2025全国I卷 原则应用于新的牡丹种植情境
+    - 2025全国II卷 用材料理论评价实际语言表达
+    - I1 Gaokao coverage audit
