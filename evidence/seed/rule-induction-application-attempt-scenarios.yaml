@@ -1,0 +1,104 @@
+# C2/C3 semantic fixtures for Issue #30. Synthetic unless an I1 audit_id is named.
+
+- scenario_id: R13-S01-induction-fails-application-not-observed
+  title: learner cannot derive the rule, so downstream application is not validly observed
+  question_context: derive-then-apply
+  evidence:
+    - node_id: CN-A-induce-rule-from-examples
+      role: primary_target
+      observation: negative
+      independence: independent
+      note: 列出实例但没有形成共同条件/关系。
+    - node_id: CN-A-apply-rule-to-case
+      role: secondary_target
+      observation: not_observed
+      independence: unknown
+      note: 下游答案建立在错误/缺失规则上，不能直接判为规则应用失败。
+  expected_profile_effect:
+    induction: valid_negative_evidence
+    application: no_evidence
+
+- scenario_id: R13-S02-correct-induction-wrong-application
+  title: correct rule abstraction but incorrect mapping to the new case
+  question_context: derive-then-apply
+  evidence:
+    - node_id: CN-A-induce-rule-from-examples
+      observation: positive
+      independence: independent
+      note: 规则覆盖主要实例且保留必要条件。
+    - node_id: CN-A-apply-rule-to-case
+      observation: negative
+      independence: independent
+      note: 学生忽略新案例中的条件差异，机械套用规则。
+  expected_profile_effect:
+    induction: positive
+    application: negative
+
+- scenario_id: R13-S03-supplied-rule-isolates-application
+  title: supplied theory permits clean application diagnosis without induction evidence
+  audit_id: R13-NAT2025II-SUPPLIED-THEORY-APPLICATION
+  evidence:
+    - node_id: CN-A-induce-rule-from-examples
+      observation: not_observed
+      independence: unknown
+      note: 规则由材料直接提供。
+    - node_id: CN-A-apply-rule-to-case
+      observation: positive
+      independence: independent
+      note: 能将规则条件逐项对应到语言案例并得出成立的判断。
+  expected_profile_effect:
+    induction: no_evidence
+    application: positive
+
+- scenario_id: R13-S04-guided-rule-cue-does-not-prove-automation
+  title: H3 question repairs rule induction but remains guided evidence
+  sequence:
+    - attempt: 1
+      hint: H0
+      node_id: CN-A-induce-rule-from-examples
+      observation: mixed
+      independence: independent
+    - intervention: H3
+      prompt_semantics: 这些实例共同满足的条件是什么？哪些只是个别现象？
+    - attempt: 2
+      hint: H3
+      node_id: CN-A-induce-rule-from-examples
+      observation: positive
+      independence: partial
+  expected_profile_effect:
+    mastery: may_support_M1_or_confidence_increase
+    automation: does_not_establish_A2
+    next_probe: distinct material with H0/H1
+
+- scenario_id: R13-S05-distinct-independent-routine-supports-M2
+  title: meaningfully different independent contexts can support routine mastery
+  node_id: CN-A-apply-rule-to-case
+  before: {mastery: M1, automation: A1}
+  attempts:
+    - {context_family: language-expression, rule_source: supplied, variant: VAR-A, complexity: C2, hint: H0, observation: positive, independence: independent}
+    - {context_family: reading-principle, rule_source: supplied, variant: VAR-B, complexity: C2, hint: H1, observation: positive, independence: independent}
+    - {context_family: practical-condition, rule_source: supplied, variant: VAR-C, complexity: C2, hint: H0, observation: positive, independence: independent}
+  expected:
+    mastery: eligible_for_M2
+    automation: eligible_for_A2_if_strategy_trigger_was_unprompted
+
+- scenario_id: R13-S06-near-duplicate-does-not-prove-transfer
+  title: repeated surface variants cannot fabricate M3
+  node_id: CN-A-induce-rule-from-examples
+  attempts:
+    - {variant_group: VAR-SAME, familiarity: unfamiliar, transfer_probe: true, hint: H0, observation: positive}
+    - {variant_group: VAR-SAME, familiarity: unfamiliar, transfer_probe: true, hint: H0, observation: positive}
+    - {variant_group: VAR-SAME, familiarity: unfamiliar, transfer_probe: true, hint: H0, observation: positive}
+  expected:
+    mastery: hold_below_M3_without_semantic_diversity
+
+- scenario_id: R13-S07-cross-domain-transfer-eligible
+  title: stable rule application across different representation families can contribute to M3
+  node_id: CN-A-apply-rule-to-case
+  before: {mastery: M2, automation: A2}
+  attempts:
+    - {context_family: informational-reading, familiarity: unfamiliar, transfer_probe: true, complexity: C3, hint: H0, observation: positive, independence: independent}
+    - {context_family: language-use, familiarity: unfamiliar, transfer_probe: true, complexity: C2, hint: H0, observation: positive, independence: independent}
+  expected:
+    mastery: eligible_for_M3_when_prior_M2_evidence_is_strong
+    note: M3 comes from generalization across meaningfully different contexts, not from a particular C-band.
