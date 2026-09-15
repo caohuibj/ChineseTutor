@@ -43,6 +43,14 @@ gaps:
     issue: 31
     proposed_resolution: canonicalize evidence sufficiency / claim-validity evaluation Ability
     architecture_change_required: false
+    resolution_status: semantic_closure_in_pr
+    canonical_node_id: CN-A-evaluate-evidence-sufficiency-for-claim
+    resolution_pr: 40
+    remaining_follow_up:
+      - GAP-AUTHENTIC-COMPLEXITY-LADDERS
+      - GAP-GAOKAO-KNOWLEDGE-POPULATION
+    resolution_note: >-
+      PR #40 closes the canonical Ability/Strategy/evidence semantics. It does not claim that the full Knowledge population or authentic complexity ladder is complete.
 
   - gap_id: GAP-QUESTION-FORMULATION
     category: ability

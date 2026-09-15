@@ -1,0 +1,160 @@
+# Synthetic C2/C3 compatibility fixtures for Issue #31.
+# No production learner identity or private answer text is included.
+
+- scenario_id: ES-C2-01-relevant-but-insufficient
+  title: relevant evidence is not automatically sufficient evidence
+  node_id: CN-A-evaluate-evidence-sufficiency-for-claim
+  attempt:
+    task_context: multi-text claim evaluation
+    material_familiarity: unfamiliar
+    transfer_probe: false
+    complexity_band_snapshot: C3
+    max_hint_level_before_response: H0
+    response_mode: typed_chat
+    node_evidence:
+      role: primary_target
+      observation: mixed
+      independence: independent
+      note: 找到与主张相关的材料，但只覆盖主张的一部分，仍把结论写成全称判断。
+    evidence_selection: 2
+    reasoning: 1
+    written_expression: 2
+    answer_correctness: 1
+    error_codes: [I]
+    primary_error_code: I
+  profile_interpretation:
+    mastery: hold_or_initialize_below_M2
+    automation: no_positive_self_trigger_claim
+    note: >-
+      “证据找对”不能把本 Ability 标为 positive；本节点观察的是支持充分性与边界判断。
+
+- scenario_id: ES-C2-02-irrelevant-evidence-fluent-expression
+  title: fluent writing cannot mask invalid evidence support
+  node_id: CN-A-evaluate-evidence-sufficiency-for-claim
+  attempt:
+    task_context: classical interpretation adjudication
+    material_familiarity: unfamiliar
+    transfer_probe: true
+    complexity_band_snapshot: C4
+    max_hint_level_before_response: H0
+    response_mode: written
+    node_evidence:
+      role: primary_target
+      observation: negative
+      independence: independent
+      note: 证据本身表述准确，但与需要裁决的解释差异无关。
+    evidence_selection: 1
+    reasoning: 0
+    written_expression: 2
+    answer_correctness: 0
+    error_codes: [I]
+    primary_error_code: I
+  profile_interpretation:
+    mastery: valid_negative_evidence
+    expression_state: do_not_downgrade_from_this_attempt
+    note: 表达完整不等于论证成立；理解/推理和书面表达继续分层。
+
+- scenario_id: ES-C2-03-guided-boundary-repair
+  title: one guiding question repairs overclaim but remains guided evidence
+  node_id: CN-A-evaluate-evidence-sufficiency-for-claim
+  before_profile:
+    mastery: M1
+    automation: A1
+    verified_complexity_band: C3
+  sequence:
+    - attempt_number: 1
+      hint: H0
+      observation: mixed
+      independence: independent
+      reasoning: 1
+      learner_pattern: 两条证据都相关，但结论写得比证据范围更绝对。
+    - attempt_number: 2
+      hint: H3
+      intervention: 这两条证据能证明“所有情况”吗，还是只能证明带什么条件的结论？
+      observation: positive
+      independence: partial
+      reasoning: 2
+      delta_from_previous: resolved
+  expected_profile_update:
+    mastery:
+      action: hold
+      to: M1
+      confidence_effect: increase
+    automation:
+      action: hold
+      to: A1
+    recommendation_signal: 用不同材料、同等推理需求的 H0/H1 任务重新验证边界判断
+
+- scenario_id: ES-C3-04-independent-cross-domain-M2
+  title: diverse independent evidence can establish routine mastery
+  node_id: CN-A-evaluate-evidence-sufficiency-for-claim
+  before_profile:
+    mastery: M1
+    automation: A1
+  evidence_set:
+    - context: classical competing interpretation
+      variant_group: VAR-CLA-1
+      complexity: C3
+      familiarity: unfamiliar
+      hint: H0
+      observation: positive
+      independence: independent
+    - context: information-reading claim evaluation
+      variant_group: VAR-MRD-1
+      complexity: C3
+      familiarity: unfamiliar
+      hint: H1
+      observation: positive
+      independence: independent
+    - context: argumentative paragraph revision
+      variant_group: VAR-WRT-1
+      complexity: C3
+      familiarity: unfamiliar
+      hint: H0
+      observation: positive
+      independence: independent
+  expected_profile_update:
+    mastery:
+      action: eligible_for_upgrade
+      from: M1
+      to: M2
+      rationale: 独立、跨情境且非同构的证据显示能稳定完成“相关性—充分性—边界”判断。
+    automation:
+      action: evaluate_separately
+      note: 是否升到 A2 取决于任务中是否需要自行识别并启动该评价操作，而不是仅看答案正确。
+
+- scenario_id: ES-C3-05-same-variant-no-transfer
+  title: repeated claim-evaluation variants cannot fabricate M3
+  node_id: CN-A-evaluate-evidence-sufficiency-for-claim
+  before_profile:
+    mastery: M2
+    automation: A2
+  evidence_set:
+    - {variant_group: VAR-SAME, domain: MRD, familiarity: unfamiliar, hint: H0, observation: positive, independence: independent}
+    - {variant_group: VAR-SAME, domain: MRD, familiarity: unfamiliar, hint: H0, observation: positive, independence: independent}
+    - {variant_group: VAR-SAME, domain: MRD, familiarity: unfamiliar, hint: H0, observation: positive, independence: independent}
+  expected_profile_update:
+    mastery:
+      action: hold
+      to: M2
+    note: 表面题数增加，但证据结构没有产生足够语义多样性，不能据此声明 M3 迁移。
+
+- scenario_id: ES-C3-06-distinct-transfer-M3-eligibility
+  title: established M2 plus distinct unfamiliar transfer can support M3
+  node_id: CN-A-evaluate-evidence-sufficiency-for-claim
+  before_profile:
+    mastery: M2
+    automation: A2
+    mastery_evidence_strength: strong
+  evidence_set:
+    - {domain: CLA, task: competing-interpretation, variant_group: VAR-CLA-X, familiarity: unfamiliar, transfer_probe: true, complexity: C3, hint: H0, observation: positive, independence: independent}
+    - {domain: WRT, task: argumentative-evidence-revision, variant_group: VAR-WRT-X, familiarity: unfamiliar, transfer_probe: true, complexity: C3, hint: H0, observation: positive, independence: independent}
+  expected_profile_update:
+    mastery:
+      action: eligible_for_upgrade
+      from: M2
+      to: M3
+      rationale: 同一评价操作在表示形式、任务目的和内容领域均明显变化的陌生情境中保持稳定。
+    complexity:
+      action: evaluate_separately
+      note: M3 来自迁移证据，不要求题目本身是 C4。

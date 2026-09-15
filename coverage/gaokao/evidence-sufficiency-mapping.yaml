@@ -1,0 +1,104 @@
+# Issue #31 closure fixtures.
+# Authentic fixtures are paraphrased at demand level and inherit I1 source discipline.
+# They do not invent missing question numbers or official wording.
+
+ability_node_id: CN-A-evaluate-evidence-sufficiency-for-claim
+
+fixtures:
+  - fixture_id: ES-BJ2023-CLASSICAL-INTERPRETATION
+    source_ref: I1-BJ2023-CLASSICAL-INTERPRETATION
+    provenance: authentic-demand-paraphrase
+    domain: CLA
+    task_semantics: 在不同文言解释之间作判断，并调用多处材料论证
+    evidence_sufficiency_role: primary_target
+    success_signature:
+      - 分别说明各处证据支持哪个解释的哪一部分
+      - 不把“出现一条相关证据”等同于“该解释整体成立”
+      - 综合证据覆盖面与反证后作出判断
+    partial_patterns:
+      relevant_but_insufficient: 找到支持某解释的一条证据，但未处理其他关键证据或冲突证据
+      evidence_list_without_warrant: 列出多处原文，但没有解释它们为什么支持/削弱某解释
+      overclaim: 局部证据只支持较弱判断，却推出更强结论
+    recommended_strategies:
+      - CN-S-evidence-explanation-conclusion
+      - CN-S-compare-dimension-evidence-significance
+      - CN-S-claim-reason-evidence-warrant-boundary
+    complexity_band: C4
+
+  - fixture_id: ES-BJ2024-MULTITEXT-RULE-BOUNDARY
+    source_ref: I1-BJ2024-MULTITEXT-RULE
+    provenance: authentic-demand-paraphrase
+    domain: MRD
+    task_semantics: 从多文本归纳规律，并控制规律的适用条件与边界
+    evidence_sufficiency_role: secondary_target
+    coexisting_gap_refs: [GAP-RULE-INDUCTION]
+    success_signature:
+      - 检查材料证据是否覆盖拟提出规律的关键条件
+      - 对例外或复杂情况进行限定
+      - 证据只支持条件性规律时，不写成绝对规律
+    partial_patterns:
+      relevant_but_insufficient: 多则材料方向一致，但不足以支持“所有情况都如此”
+      missing_boundary: 规律主体正确，但遗漏材料明确给出的限制条件
+    recommended_strategies:
+      - CN-S-locate-classify-merge-compress
+      - CN-S-claim-reason-evidence-warrant-boundary
+    complexity_band: C4
+
+  - fixture_id: ES-NAT2025II-THEORY-EVALUATION
+    source_ref: I1-NAT2025II-THEORY-EVALUATION
+    provenance: authentic-demand-paraphrase
+    domain: META
+    task_semantics: 用材料中的理论/原则评价一个具体语言案例
+    evidence_sufficiency_role: primary_target
+    coexisting_gap_refs: [GAP-RULE-APPLICATION]
+    success_signature:
+      - 先明确理论中的评价标准
+      - 找到案例中与标准真正相关的证据
+      - 解释证据与标准的对应关系
+      - 判断这些证据是否足以支持最终评价，而不是只做表面类比
+    partial_patterns:
+      criterion_match_only: 能找到相似点，但未证明该相似点满足理论的关键条件
+      one_sided_support: 只找支持证据，未处理材料中的限制或反例
+    recommended_strategies:
+      - CN-S-evidence-explanation-conclusion
+      - CN-S-claim-reason-evidence-warrant-boundary
+    complexity_band: C4
+
+  - fixture_id: ES-NAT2026II-CLAIM-REASONABLENESS
+    source_ref: Issue #31 / I1 gap register
+    provenance: authentic-demand-paraphrase
+    domain: MRD
+    task_semantics: 判断两个说法是否合理并说明依据
+    evidence_sufficiency_role: primary_target
+    success_signature:
+      - 对每个说法分别建立证据支持链
+      - 区分“有一定依据”与“足以成立”
+      - 在证据不足时明确缺口，而不是强行二选一
+    partial_patterns:
+      evidence_counting: 以证据条数代替证据质量/覆盖判断
+      unsupported_binary_judgment: 只写合理/不合理而无支持链
+    recommended_strategies:
+      - CN-S-compare-dimension-evidence-significance
+      - CN-S-claim-reason-evidence-warrant-boundary
+    complexity_band: C4
+
+compatibility_examples:
+  - fixture_id: ES-WRT-ARGUMENT-PARAGRAPH
+    provenance: synthetic-cross-domain-compatibility
+    domain: WRT
+    task_semantics: 评价议论段中的两个例子是否足以支持较宽泛的中心观点，并决定补证据还是收窄观点
+    why_included: >-
+      验证该 Ability 不只属于阅读判断；同一可观察操作也能用于议论写作中的论据选择、论证边界和修改。
+    success_signature:
+      - 判断例子与观点是否相关
+      - 检查两个例子共同覆盖了观点的哪些部分
+      - 若只能支持较弱命题，能主动收窄观点或补充不同类型证据
+    recommended_strategies:
+      - CN-S-claim-reason-evidence-warrant-boundary
+      - CN-S-evidence-explanation-conclusion
+
+boundary_notes:
+  - 本节点不是“找到证据”；材料可以直接给出候选证据后仍然测试本 Ability。
+  - 本节点不是“规则应用”；2025全国II示例同时涉及 #30，两种失败必须分别记录。
+  - 本节点不是“完整议论文写作”；写作只是该评价操作的一个真实应用环境。
+  - 本节点不是泛化 critical thinking 总分；观察对象始终是证据/理由对一个明确主张的支持质量。
