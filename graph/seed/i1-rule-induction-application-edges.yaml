@@ -1,0 +1,56 @@
+# B2-compatible relations for the R1.3 Issue #30 minimum slice.
+
+- edge_id: LE-strategy_for-locate-classify-merge-compress--induce-rule-from-examples
+  from_node_id: CN-S-locate-classify-merge-compress
+  relation_type: strategy_for
+  to_node_id: CN-A-induce-rule-from-examples
+  rationale: >-
+    Locating, grouping and compressing comparable evidence is a reusable route for exposing recurring conditions before rule abstraction.
+  scope_note: Advisory only; some compact materials make explicit classification unnecessary.
+  evidence_level: supported
+  source_basis: [I1 Gaokao coverage audit, G1 mother strategies]
+  status: draft
+
+- edge_id: LE-strategy_for-relation-chain--induce-rule-from-examples
+  from_node_id: CN-S-relation-chain
+  relation_type: strategy_for
+  to_node_id: CN-A-induce-rule-from-examples
+  rationale: >-
+    Causal, conditional and other relation chains help distinguish a genuine rule from a list of co-occurring facts.
+  scope_note: Advisory procedure, not a hard prerequisite.
+  evidence_level: supported
+  source_basis: [I1 Gaokao coverage audit, G1 mother strategies]
+  status: draft
+
+- edge_id: LE-strategy_for-parse-constraints-and-fit--apply-rule-to-case
+  from_node_id: CN-S-parse-constraints-and-fit
+  relation_type: strategy_for
+  to_node_id: CN-A-apply-rule-to-case
+  rationale: >-
+    Applying a rule requires checking whether the concrete case actually satisfies the rule's conditions instead of matching by surface similarity.
+  scope_note: Advisory only; simple cases may not need explicit constraint parsing.
+  evidence_level: supported
+  source_basis: [I1 Gaokao coverage audit, G1 mother strategies]
+  status: draft
+
+- edge_id: LE-strategy_for-relation-chain--apply-rule-to-case
+  from_node_id: CN-S-relation-chain
+  relation_type: strategy_for
+  to_node_id: CN-A-apply-rule-to-case
+  rationale: >-
+    The relation-chain procedure helps map rule conditions and consequences onto facts in the target case.
+  scope_note: Advisory procedure, not a hard prerequisite.
+  evidence_level: supported
+  source_basis: [I1 Gaokao coverage audit, G1 mother strategies]
+  status: draft
+
+- edge_id: LE-supports-induce-rule-from-examples--apply-rule-to-case
+  from_node_id: CN-A-induce-rule-from-examples
+  relation_type: supports
+  to_node_id: CN-A-apply-rule-to-case
+  rationale: >-
+    When a task requires the learner to derive the governing rule before using it, successful induction supplies a usable representation for application; however application can also be tested with a rule supplied by the task.
+  scope_note: Never treat this as a global hard prerequisite. If the rule is explicitly supplied, application remains independently observable while induction is not observed.
+  evidence_level: supported
+  source_basis: [2025全国I卷 principle-to-case demand, 2025全国II卷 supplied-theory demand]
+  status: draft
