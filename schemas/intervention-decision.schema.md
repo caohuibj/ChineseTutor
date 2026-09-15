@@ -1,6 +1,6 @@
 # InterventionDecision canonical schema
 
-Status: **F2 normative draft**
+Status: **F2 normative draft — semantic self-review corrections applied**
 
 An `InterventionDecision` records one tutor decision made **after a learner response and before the next learner response** inside a concrete tutoring series.
 
@@ -38,12 +38,19 @@ secondary_layers: [Q | K | R | I | M | E | C]
 diagnosis_confidence: low | medium | high
 causal_rationale: string
 
+alternative_hypotheses:
+  - layer: Q | K | R | I | M | E | C
+    rationale: string
+    discriminator: string | null
+
 preserved_strengths: string[]
 missing_link: string | null
 blocked_node_ids: string[]
 observed_target_node_ids: string[]
 not_observed_node_ids: string[]
 ```
+
+`secondary_layers` means additional observed weaknesses that are not the immediate intervention target. `alternative_hypotheses` means competing causal explanations when diagnosis is uncertain; do not conflate the two.
 
 The decision must preserve what the learner already did correctly. It should not restart the entire solution when only one link is missing.
 
@@ -142,6 +149,7 @@ Examples:
 
 - H4 supplies text location → location Ability loses independent evidence, but downstream reasoning may remain independently observable.
 - H2 reminds the evidence→explanation strategy → Strategy automation evidence is weakened, while the learner's actual reasoning execution may still be independently observable.
+- H5 supplies an exact task-specific word meaning → independent retrieval evidence for that Knowledge node is invalidated, but sentence-level reasoning may become observable.
 - H6 supplies the missing warrant → independent evidence for that reasoning node is invalidated for the next response.
 
 C2 should snapshot the actual `max_hint_level_before_response`; C3 interprets node-specific independence using these causal effects.
@@ -186,12 +194,15 @@ answer_content_exposure:
   none | structure_only | partial_content | near_complete | complete
 
 same_item_independence_recoverable: bool
+same_item_independence_scope_note: string | null
 ```
+
+`same_item_independence_recoverable` refers to the **intervention target/supplied content**, not every node involved in the Question. Other unaffected nodes may still remain independently observable as captured in `node_effects`.
 
 Rules:
 
 - after `near_complete` / `complete` exposure, the same item cannot later provide independent mastery evidence for the supplied content;
-- a new sufficiently distinct Question is required for independent verification;
+- a new sufficiently distinct Question is required for independent verification of that supplied content;
 - standardizing an answer **after** the learner has independently supplied the reasoning does not retroactively erase the prior Attempt evidence.
 
 ---
@@ -215,6 +226,7 @@ manual_note: string | null
 5. Hint level is causal/node-specific, not a global deduction score.
 6. F1 hint ceiling may be exceeded when teaching requires it; actual support is logged.
 7. Reasoning-correct/expression-weak routes to expression conversion, not comprehension reteaching.
-8. H6/H7/model exposure cannot later masquerade as same-item independent evidence.
+8. H6/H7/model exposure cannot later masquerade as same-item independent evidence for supplied content.
 9. Second response is the normal repair mechanism.
-10. Every intervention decision is auditable and can explain why this prompt, at this level, was chosen now.
+10. Uncertain diagnosis may remain explicit through alternative hypotheses and a discriminator.
+11. Every intervention decision is auditable and can explain why this prompt, at this level, was chosen now.
