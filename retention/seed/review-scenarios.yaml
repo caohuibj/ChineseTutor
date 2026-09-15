@@ -1,4 +1,25 @@
 scenarios:
+  - id: F3-ZHOU-YAFU-DELAYED-INDEPENDENT-VERIFY
+    context: "《周亚夫军细柳》之后的人物证据推理训练"
+    node: CN-A-evidence-to-character-judgment
+    retention_family: reasoning_ability
+    history:
+      - "在周亚夫题中能够抓住特殊情境、行为和人物品质"
+      - "曾需要关键追问补出‘为什么该选择特别能检验人物品质’这一层"
+    temporal_need:
+      reason: post_repair_recheck
+      note: "不重复同一题，而是在延迟后换陌生人物材料验证同一推理链。"
+    review_plan:
+      move_type: independent_practice
+      max_hint: H0
+      complexity_band: C2
+      probe: "新人物材料：事实/特殊情境→关键选择→为什么有意义→稳定品质"
+    expected:
+      same_item_repetition: false
+      successful_attempt_can_refresh_mastery: true
+      successful_attempt_can_support_automation: true
+      note: "F3负责产生延迟验证需要；F1根据当前状态决定 independent_practice 而非强行标 review。"
+
   - id: F3-CLASSICAL-LEXICON-DUE-PASS
     node: CN-K-classical-content-word-meaning
     retention_family: exact_retrieval
@@ -161,6 +182,26 @@ scenarios:
     expected:
       mastery_may_gain_evidence: true
       c4_complexity_clock_refresh: false
+
+  - id: F3-UNKNOWN-IS-DIAGNOSE-NOT-REVIEW
+    node: newly_added_gaokao_ability
+    profile_before:
+      mastery: null
+      mastery_verified_at: null
+    expected:
+      review_status: unknown
+      review_move: false
+      f1_move_if_needed: diagnose
+      reason: "no historical claim exists to retain"
+
+  - id: F3-M0-IS-ESTABLISH-NOT-MAINTENANCE
+    node: argument_evidence_explanation
+    profile_before:
+      mastery: M0
+    expected:
+      ordinary_review_move: false
+      f1_move: establish
+      reason: "the construct is not yet established; this is development, not forgotten maintenance"
 
   - id: F3-REVIEW-FLOOD-CONTROL
     due_nodes: 18
