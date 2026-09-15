@@ -21,6 +21,14 @@ gaps:
     issue: 30
     proposed_resolution: canonicalize rule/principle induction Ability
     architecture_change_required: false
+    resolution_status: semantic_closure_in_pr
+    canonical_node_id: CN-A-induce-rule-from-examples
+    resolution_pr: pending
+    remaining_follow_up:
+      - GAP-AUTHENTIC-COMPLEXITY-LADDERS
+      - GAP-GAOKAO-KNOWLEDGE-POPULATION
+    resolution_note: >-
+      R1.3 closes the pre-launch semantic minimum for rule induction. TaskType inventory and full authentic ladders remain separate release/content work.
 
   - gap_id: GAP-RULE-APPLICATION
     category: ability
@@ -29,8 +37,17 @@ gaps:
       - 2025全国I卷 原则迁移到新的牡丹种植方案
       - 2025全国II卷 用理论评价实际语言表达
     issue: 30
-    proposed_resolution: canonicalize novel-case rule application Ability distinct from induction
+    proposed_resolution: canonicalize rule application Ability distinct from induction
     architecture_change_required: false
+    resolution_status: semantic_closure_in_pr
+    canonical_node_id: CN-A-apply-rule-to-case
+    resolution_pr: pending
+    remaining_follow_up:
+      - GAP-AUTHENTIC-COMPLEXITY-LADDERS
+      - GAP-GAOKAO-KNOWLEDGE-POPULATION
+      - GAP-CONSTRAINT-SOLUTION-SYNTHESIS
+    resolution_note: >-
+      R1.3 separates application from induction and keeps novelty in Attempt context. Multi-constraint solution synthesis remains Issue #33.
 
   - gap_id: GAP-EVIDENCE-SUFFICIENCY
     category: ability
