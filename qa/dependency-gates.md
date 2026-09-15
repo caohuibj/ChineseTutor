@@ -93,7 +93,7 @@ Canonical grammar:
 SUPPORT_NODE supports TARGET
 ```
 
-A missing support node may influence scaffold/recommendation but cannot make TARGET categorically unavailable.
+A missing support node may influence scaffold/recommendation, but cannot make TARGET categorically unavailable.
 
 Fail reversed records whose prose says “B supports A” while storage encodes `A supports B`.
 
@@ -300,4 +300,4 @@ Analysis and production are different Abilities but share reusable structural in
 - [x] current-asset seed edges added;
 - [x] QA gates added;
 - [x] first semantic self-review corrected support direction and cross-type transfer ambiguity;
-- [ ] stacked PR opened.
+- [x] stacked PR opened (#12).
