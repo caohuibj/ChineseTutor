@@ -92,6 +92,27 @@ Use S13 + S4 instead of a dedicated new strategy.
 ## Gate 30 — Strategy count remains disciplined
 Any proposed strategy beyond the catalog must document why existing composition cannot express it without diagnostic loss.
 
+## Gate 31 — Knowledge-centric tasks may have no default mother Strategy
+Do not force 文言实词、虚词/句式、断句等 tasks into a Strategy merely to fill the mapping table.
+
+## Gate 32 — Strategy seed records conform to B1 LearningNode schema
+Required fields such as `parent_node_id`, `aliases_zh`, and `source_basis` must be present.
+
+## Gate 33 — Existing Strategy IDs remain semantically consistent
+If an ID already appears in B1 examples, G1 may refine display wording but cannot silently change its semantic identity.
+
+## Gate 34 — TaskType IDs are not fabricated
+Until canonical TaskType-row backfill exists, G1 may map stable TaskType semantics/names but must not invent fake permanent IDs.
+
+## Gate 35 — Domain is navigation, not Strategy-use boundary
+A Strategy may transfer to another domain if its procedure remains valid; do not clone only because the source domain changed.
+
+## Gate 36 — Strategy transfer is flexible, not rigid
+Forcing irrelevant steps in a new task is not M3 transfer even if the learner reproduces the memorized template.
+
+## Gate 37 — Ability/Strategy near-neighbors stay separate
+Examples such as prompt parsing, sentence revision, poetic emotion and character judgment must preserve outcome-vs-procedure distinction.
+
 ---
 
 # Definition of done
@@ -103,5 +124,6 @@ Any proposed strategy beyond the catalog must document why existing composition 
 - [x] canonical Strategy seed fixture added;
 - [x] TaskType mapping schema refined;
 - [x] automation/hint evidence boundary documented;
-- [ ] semantic self-review complete;
+- [x] F1 Strategy-target integration documented;
+- [x] semantic self-review complete;
 - [ ] stacked PR opened.
