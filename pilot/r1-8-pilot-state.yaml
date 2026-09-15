@@ -1,0 +1,34 @@
+release: R1.8
+status: awaiting_real_learner_response
+issue: 51
+
+counters:
+  native_attempts: 0
+  native_attempts_minimum: 20
+  native_attempts_maximum: 40
+  task_or_domain_families_observed: 0
+  task_or_domain_families_minimum: 4
+  intervention_retry_sequences: 0
+  intervention_retry_sequences_minimum: 5
+  native_transfer_successes: 0
+
+current_runtime:
+  session_id: SESSION-r18-pilot-01
+  series_id: SERIES-r18-01-zhouyafu-46
+  next_attempt_id: ATT-r18-01-zhouyafu-46-01
+  next_attempt_number: 1
+  selected_training_move: TM-r16-01-comparison-significance-h0-baseline
+  question_id: Q-zhouyafu-46-comparison-function
+  support_before_response: H0
+  hint_count_before_response: 0
+  material_familiarity: familiar
+  transfer_probe: false
+
+native_attempt_exists_for_current_series: false
+synthetic_attempts_counted: false
+source_of_truth_switch: not_started
+v1_rollback_safe: true
+
+human_input_required_now:
+  type: real_learner_response
+  prompt: "霸上、棘门军与细柳营的对比有何作用？"
