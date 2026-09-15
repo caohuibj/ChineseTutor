@@ -1,1 +1,0 @@
-ADR-010 summary: task complexity is learner-independent; learner novelty/transfer is Attempt context; source grade is metadata only; C4 no longer means unfamiliar transfer.
