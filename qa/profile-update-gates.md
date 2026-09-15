@@ -201,5 +201,5 @@ Word-sense failure with translation `not_observed`: no negative translation mast
 - [x] error-pattern promotion defined;
 - [x] audit decision schema defined;
 - [x] representative scenarios added;
-- [ ] semantic self-review completed;
-- [ ] stacked PR opened.
+- [x] semantic self-review completed;
+- [x] stacked PR opened.
