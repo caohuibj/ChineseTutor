@@ -49,18 +49,23 @@ scenarios:
       diagnosis: I
       next_action: guiding_question_on_sentence_relation
 
-  - id: F2-CLASSICAL-LOCATION-NOT-RELEVANT
+  - id: F2-CLASSICAL-KNOWLEDGE-SUPPLY
     context: 文言内容理解
-    learner_response: "人物结论错误，因为关键句未读懂。"
+    learner_response: "人物结论错误，因为关键句中的关键实词/句式确实不会。"
     assessment:
       primary_causal_layer: K
       downstream_node: character_judgment
       downstream_observation: not_observed
     intervention:
       action_family: micro_explanation
-      intended_hint_level: H2
-      prompt_summary: "只补这个句中关键实词/句式，再让学生重新还原事件。"
-    evidence_rule: "不得因为最终人物题错误就给人物推理负证据"
+      intended_hint_level: H5
+      prompt_summary: "只补这个句中任务所必需的关键实词/句式，再让学生重新还原事件。"
+      node_effects:
+        - node: supplied_classical_knowledge
+          effect: invalidates_independent_observation
+        - node: downstream_event_reconstruction
+          effect: enables_observation
+    evidence_rule: "不得因为最终人物题错误就给人物推理负证据；被直接提供的知识也不能算独立检索。"
 
   - id: F2-POETRY-EVIDENCE-TO-EMOTION
     context: 古诗情感
