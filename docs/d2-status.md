@@ -1,0 +1,1 @@
+D2 semantic design and first self-review are complete. Ready to open as stacked PR on `feat/d1-material-question-task`.
