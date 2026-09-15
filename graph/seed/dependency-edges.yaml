@@ -1,0 +1,102 @@
+# B2 seed edges using B1 canonical fixtures.
+# These are design fixtures, not a claim that the full graph is populated.
+
+- edge_id: LE-requires-infer-classical-contextual-word-sense--classical-content-word-meaning-network
+  from_node_id: CN-A-infer-classical-contextual-word-sense
+  relation_type: requires
+  to_node_id: CN-K-classical-content-word-meaning-network
+  rationale: >-
+    Contextual selection cannot be performed reliably without access to a usable network of candidate meanings; the ability chooses/infer among lexical possibilities rather than inventing meaning from nothing.
+  scope_note: Applies to the whole contextual-word-sense Ability.
+  evidence_level: supported
+  source_basis: [现有文言教材与课外迁移训练, B1 semantic split]
+  status: draft
+
+- edge_id: LE-requires-translate-classical-sentence-accurately--infer-classical-contextual-word-sense
+  from_node_id: CN-A-translate-classical-sentence-accurately
+  relation_type: requires
+  to_node_id: CN-A-infer-classical-contextual-word-sense
+  rationale: >-
+    Accurate translation requires resolving the contextual meanings of key content words; otherwise the proposition being translated is not stably decoded.
+  scope_note: Other translation prerequisites such as syntax will be added when their canonical nodes exist.
+  evidence_level: supported
+  source_basis: [Project Instruction 文言翻译链, 现有文言训练]
+  status: draft
+
+- edge_id: LE-strategy_for-classical-translation-five-step--translate-classical-sentence-accurately
+  from_node_id: CN-S-classical-translation-five-step
+  relation_type: strategy_for
+  to_node_id: CN-A-translate-classical-sentence-accurately
+  rationale: >-
+    The five-step procedure coordinates keyword resolution, literal rendering, syntax adjustment, ellipsis completion and verification for the translation Ability.
+  scope_note: null
+  evidence_level: supported
+  source_basis: [Project Instruction]
+  status: draft
+
+- edge_id: LE-strategy_for-evidence-explanation-conclusion--evidence-to-character-judgment
+  from_node_id: CN-S-evidence-explanation-conclusion
+  relation_type: strategy_for
+  to_node_id: CN-A-evidence-to-character-judgment
+  rationale: >-
+    Character judgment requires not only evidence but an explicit warrant connecting evidence to a stable trait; the strategy directly coordinates this reasoning.
+  scope_note: null
+  evidence_level: validated
+  source_basis: [周亚夫训练记录, 阅读答题总算法, 表达升级算法]
+  status: draft
+
+- edge_id: LE-strategy_for-special-context-key-choice-significance--evidence-to-character-judgment
+  from_node_id: CN-S-special-context-key-choice-significance
+  relation_type: strategy_for
+  to_node_id: CN-A-evidence-to-character-judgment
+  rationale: >-
+    For narrative cases where character quality is revealed by a pressured choice, the strategy makes the warrant from special situation and choice to trait explicit.
+  scope_note: Applies to character judgments built around event/choice evidence; it is not the only valid strategy for all characterization evidence.
+  evidence_level: supported
+  source_basis: [周亚夫军细柳训练, 典型事件方法卡]
+  status: draft
+
+- edge_id: LE-requires-select-typical-writing-material--parse-writing-prompt-constraints
+  from_node_id: CN-A-select-typical-writing-material
+  relation_type: requires
+  to_node_id: CN-A-parse-writing-prompt-constraints
+  rationale: >-
+    Material selection is defined relative to the prompt's constraints and central problem; without identifying those constraints, relevance cannot be judged reliably.
+  scope_note: Applies to prompt-based writing material selection represented by the target node.
+  evidence_level: supported
+  source_basis: [作文训练流程, 人物故事会写作任务]
+  status: draft
+
+- edge_id: LE-strategy_for-special-context-key-choice-significance--select-typical-writing-material
+  from_node_id: CN-S-special-context-key-choice-significance
+  relation_type: strategy_for
+  to_node_id: CN-A-select-typical-writing-material
+  rationale: >-
+    The same pressured-situation/key-choice lens can be used productively to compare candidate narrative materials and select the one with greater character/central-idea discriminative value.
+  scope_note: Relevant mainly to narrative/person-centered material selection, not every form of argumentative evidence selection.
+  evidence_level: supported
+  source_basis: [人物叙事学习设计中的阅读→写作迁移]
+  status: draft
+
+- edge_id: LE-supports-judge-modern-genre-from-evidence--memoir-genre-features
+  from_node_id: CN-A-judge-modern-genre-from-evidence
+  relation_type: supports
+  to_node_id: CN-K-memoir-genre-features
+  rationale: >-
+    Memoir-feature knowledge supports genre judgment when memoir is among the plausible candidate genres, but the broad judgment Ability is not globally dependent on this single genre node.
+  scope_note: Demonstrates why a conditional genre dependency should be supports rather than a global requires edge on the broad Ability.
+  evidence_level: supported
+  source_basis: [人物叙事学习设计]
+  strength: strong
+  status: draft
+
+- edge_id: LE-strategy_for-evidence-explanation-conclusion--link-poetic-image-to-emotion
+  from_node_id: CN-S-evidence-explanation-conclusion
+  relation_type: strategy_for
+  to_node_id: CN-A-link-poetic-image-to-emotion
+  rationale: >-
+    Poetry emotion answers must connect local image/scene evidence to an emotional interpretation rather than merely provide an emotion label.
+  scope_note: The poetry-specific evidence source differs, but the warrant structure is shared.
+  evidence_level: supported
+  source_basis: [古诗情感训练链, 阅读答题总算法]
+  status: draft
