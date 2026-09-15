@@ -1,6 +1,6 @@
 # ADR-006 — Dependency-edge semantics
 
-Status: **proposed in B2; first semantic self-review complete**
+Status: **proposed in B2; two semantic review passes complete**
 
 ## Context
 
@@ -16,7 +16,7 @@ Without typed edges, recommendation would still depend on manual intuition or gr
 
 ## Decision
 
-ChineseTutor uses six canonical graph relations:
+ChineseTutor exposes six graph relation semantics:
 
 ```text
 requires
@@ -27,17 +27,27 @@ transfers_to
 contrasts_with
 ```
 
-### Direction conventions
+However, only five are persisted as authored `LearningEdge` records:
 
-Every directed relation reads naturally from `FROM` to `TO`:
+```text
+requires
+supports
+strategy_for
+transfers_to
+contrasts_with
+```
+
+`part_of` is a **virtual relation** derived exclusively from B1 `LearningNode.parent_node_id`.
+
+### Direction conventions
 
 ```text
 DEPENDENT requires PREREQUISITE
 SUPPORT_NODE supports TARGET
-CHILD part_of PARENT
+CHILD part_of PARENT          # virtual projection only
 STRATEGY strategy_for ABILITY
 SOURCE transfers_to TARGET
-A contrasts_with B   # symmetric canonical pair
+A contrasts_with B            # symmetric canonical pair
 ```
 
 ## Hard prerequisite policy
@@ -54,7 +64,7 @@ The active `requires` subgraph must be acyclic.
 
 ## Taxonomy source of truth
 
-B1 `parent_node_id` remains authoritative taxonomy. `part_of` is a derived graph projection rather than an independently authored relation, avoiding drift between two sources of truth.
+B1 `parent_node_id` remains the sole authoritative taxonomy representation. Graph readers may project `child part_of parent`, but `part_of` is never independently stored as `LearningEdge`, never receives separate rationale/evidence/status, and cannot drift from the B1 parent field.
 
 ## Strategy policy
 
@@ -80,7 +90,7 @@ If two contexts use the **same observable operation**, create one shared Learnin
 
 If they are **different operations of the same semantic type that reuse structure**, keep separate nodes and connect them with `transfers_to`.
 
-B2 therefore restricts `transfers_to` to:
+B2 restricts `transfers_to` to:
 
 ```text
 Ability -> Ability
@@ -101,7 +111,9 @@ analyze typical-event value -> select writing material
 
 ## Edge evidence
 
-Edges carry rationale, source basis and evidence level (`hypothesis`, `supported`, `validated`). This expresses confidence in the graph relation, not learner state.
+Persisted authored edges carry rationale, source basis and evidence level (`hypothesis`, `supported`, `validated`). This expresses confidence in the graph relation, not learner state.
+
+Virtual `part_of` inherits its validity from B1 parent integrity and carries no independent evidence record.
 
 ## Consequences
 
@@ -113,6 +125,7 @@ Edges carry rationale, source basis and evidence level (`hypothesis`, `supported
 - cross-domain transfer becomes explicit;
 - Strategy selection can be individualized later;
 - graph centrality/unlock value can be computed rather than authored;
+- taxonomy has one storage source of truth;
 - grade order is unnecessary for progression.
 
 ### Costs
@@ -120,7 +133,8 @@ Edges carry rationale, source basis and evidence level (`hypothesis`, `supported
 - edge authoring requires strong semantic discipline;
 - overuse of `requires` can create artificial ladders and must be actively prevented;
 - task-specific conditional prerequisites still need Question/Task mappings later;
-- readiness thresholds cannot be finalized until Learner Profile is defined.
+- readiness thresholds cannot be finalized until Learner Profile is defined;
+- graph consumers must combine persisted edges with virtual taxonomy projection at read time.
 
 ## Rejected alternatives
 
@@ -131,16 +145,16 @@ Rejected because it cannot drive readiness, remediation, transfer or scaffold de
 Rejected because teaching order is not semantic necessity and would recreate grade-first progression.
 
 ### Store support as `TARGET supports SUPPORTER`
-Rejected during self-review because the verb becomes directionally counterintuitive. Canonical storage now uses `SUPPORTER supports TARGET`.
+Rejected during self-review because the verb becomes directionally counterintuitive. Canonical storage uses `SUPPORTER supports TARGET`.
 
 ### Permit cross-type `transfers_to`
-Rejected in B2 because Strategy→Ability is better represented by `strategy_for`, and Knowledge→Ability by `supports`/`requires`. Keeping transfer same-type improves interpretability.
+Rejected because Strategy→Ability is better represented by `strategy_for`, and Knowledge→Ability by `supports`/`requires`. Keeping transfer same-type improves interpretability.
+
+### Persist `part_of` as an ordinary LearningEdge
+Rejected during second review. Because taxonomy is already canonical in `parent_node_id`, a stored `part_of` edge would require duplicate metadata and could diverge. It is now virtual-only.
 
 ### Store transitive closure as explicit edges
 Rejected because it creates redundancy and maintenance ambiguity. Traversal should derive indirect prerequisites.
-
-### Let `part_of` duplicate `parent_node_id`
-Rejected because two editable taxonomy sources would drift.
 
 ### Automatically propagate mastery through `transfers_to`
 Rejected. Transfer is a hypothesis to test with authentic target evidence, not a substitute for target evidence.
